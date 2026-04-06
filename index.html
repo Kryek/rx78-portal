@@ -68,6 +68,12 @@
     font-weight: bold;
     color: white;
     font-size: 18px;
+    transition: transform 0.3s ease; /* smooth rotation */
+  }
+
+  /* rotate /// when active */
+  .panel.active::after {
+    transform: translateY(-50%) skew(20deg) rotate(90deg);
   }
 
   .panel:hover {
@@ -93,10 +99,10 @@
   .dropdown .panel {
     background: #222;
     border: 3px solid white;
-    padding: 22px 18px; /* width ~50% of main */
+    padding: 22px 18px; /* half width */
     margin: 5px 0; /* small vertical spacing */
     transform: skew(-20deg);
-    width: 50%; /* half width */
+    width: 50%;
   }
 
   .dropdown .panel span {
