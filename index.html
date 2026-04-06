@@ -14,42 +14,17 @@
     overflow-x: hidden;
   }
 
-  /* Fade-in for hero and menu */
-  .fade-in {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeInUp 0.8s forwards;
-  }
-
-  .fade-in:nth-child(1) {
-    animation-delay: 0.2s; /* hero first */
-  }
-  .fade-in:nth-child(2) {
-    animation-delay: 0.5s; /* buttons after */
-  }
-
-  @keyframes fadeInUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Fade-out class */
-  .fade-out {
-    animation: fadeOut 0.5s forwards;
-  }
-
-  @keyframes fadeOut {
-    to {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-  }
-
+  /* HERO BANNER FADE IN */
   .hero {
     text-align: center;
     padding: 40px 20px;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+    animation-delay: 0.2s;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
   }
 
   .hero h1 {
@@ -62,13 +37,23 @@
     font-size: 16px;
   }
 
+  /* BUTTONS FLY IN FROM LEFT */
   .menu {
     display: flex;
     flex-direction: column;
     padding: 20px;
     gap: 15px;
+    opacity: 0;
+    transform: translateX(-100px);
+    animation: slideIn 1s forwards;
+    animation-delay: 1s;
   }
 
+  @keyframes slideIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Panel styles */
   .panel {
     position: relative;
     display: block;
@@ -110,26 +95,25 @@
     transform: skew(-20deg) translateX(6px);
   }
 
-  /* Dropdown container */
+  /* Dropdown */
   .dropdown {
     display: flex;
     flex-direction: column;
     overflow: hidden;
     max-height: 0;
     transition: max-height 0.3s ease;
-    align-items: center; /* center dropdown panels */
+    align-items: center;
   }
 
   .panel.active + .dropdown {
-    max-height: 500px; /* enough for 3 buttons */
+    max-height: 500px;
   }
 
-  /* Dropdown panels: half width of main buttons, centered */
   .dropdown .panel {
     background: #222;
     border: 3px solid white;
-    padding: 22px 18px; /* half width */
-    margin: 5px 0; /* small vertical spacing */
+    padding: 22px 18px;
+    margin: 5px 0;
     transform: skew(-20deg);
     width: 50%;
   }
@@ -143,18 +127,30 @@
     transform: skew(-20deg) translateX(4px);
   }
 
+  /* FADE OUT FOR NAVIGATION */
+  .fade-out {
+    animation: fadeOut 1s forwards; /* slower fade out */
+  }
+
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
+
   </style>
 </head>
 <body>
 
   <!-- Hero banner -->
-  <div class="hero fade-in">
+  <div class="hero">
     <h1>RX-78-2 GUNDAM</h1>
     <p>Prototype Close Quarters Combat Mobile Suit</p>
   </div>
 
   <!-- Navigation panels -->
-  <div class="menu fade-in">
+  <div class="menu">
     <a class="panel" href="index.html"><span>HOME</span></a>
     <div class="panel" id="gradesPanel"><span>GRADES</span></div>
     <div class="dropdown">
@@ -172,18 +168,18 @@
       gradesPanel.classList.toggle('active');
     });
 
-    // Fade out animation before navigation
+    // Fade out navigation before leaving page
     const links = document.querySelectorAll('.panel[href]');
     links.forEach(link => {
       link.addEventListener('click', function(e){
-        e.preventDefault(); // stop default jump
-        document.querySelectorAll('.fade-in').forEach(el => {
+        e.preventDefault();
+        document.querySelectorAll('.hero, .menu').forEach(el => {
           el.classList.add('fade-out');
         });
         const href = this.getAttribute('href');
         setTimeout(() => {
           window.location = href;
-        }, 500); // match fade-out duration
+        }, 1000); // match 1s fade out
       });
     });
   </script>
