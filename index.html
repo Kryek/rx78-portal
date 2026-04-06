@@ -20,26 +20,21 @@
     padding: 20px;
   }
 
+  /* Panel style */
   .panel {
     position: relative;
     display: block;
     text-decoration: none;
     color: white;
-
-    /* parallelogram shape */
     transform: skew(-20deg);
-
-    /* panel look */
     background: #111;
     border: 3px solid white;
-
     padding: 20px 30px;
     overflow: hidden;
-
     transition: 0.2s;
+    cursor: pointer;
   }
 
-  /* inner frame line */
   .panel::before {
     content: "";
     position: absolute;
@@ -48,17 +43,14 @@
     pointer-events: none;
   }
 
-  /* right-side stripes */
   .panel::after {
     content: "";
     position: absolute;
     right: 10px;
     top: 50%;
     transform: translateY(-50%) skew(20deg);
-
     width: 20px;
     height: 20px;
-
     background: repeating-linear-gradient(
       45deg,
       white,
@@ -66,13 +58,12 @@
       transparent 3px,
       transparent 6px
     );
-
     opacity: 0.7;
   }
 
   .panel span {
     display: block;
-    transform: skew(20deg); /* fix text */
+    transform: skew(20deg);
     font-size: 24px;
     font-weight: bold;
     text-align: center;
@@ -83,7 +74,42 @@
     background: #222;
     transform: skew(-20deg) translateX(6px);
   }
-</style>
+
+  /* Dropdown menu */
+  .dropdown {
+    display: none;
+    flex-direction: column;
+    margin-left: 20px; /* small offset to show hierarchy */
+  }
+
+  .dropdown a {
+    transform: skew(-20deg);
+    display: block;
+    background: #222;
+    border: 2px solid white;
+    margin-top: 6px;
+    padding: 15px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    position: relative;
+  }
+
+  .dropdown a span {
+    transform: skew(20deg);
+    font-weight: bold;
+  }
+
+  .dropdown a:hover {
+    background: #333;
+  }
+
+  /* Show dropdown when active */
+  .panel.active + .dropdown {
+    display: flex;
+  }
+
+  </style>
 </head>
 <body>
 
@@ -95,10 +121,27 @@
 
   <!-- Navigation panels -->
   <div class="menu">
-  <a class="panel" href="index.html"><span>HOME</span></a>
-  <a class="panel" href="hg/index.html"><span>GRADES</span></a>
-  <a class="panel" href="#"><span>EXPLORE</span></a>
-  <a class="panel" href="#"><span>ABOUT</span></a>
-</div>
+    <a class="panel" href="index.html"><span>HOME</span></a>
+
+    <!-- Grades panel with dropdown -->
+    <div class="panel" id="gradesPanel"><span>GRADES</span></div>
+    <div class="dropdown">
+      <a href="hg/index.html"><span>HG</span></a>
+      <a href="rg/index.html"><span>RG</span></a>
+      <a href="mg/index.html"><span>MG</span></a>
+    </div>
+
+    <a class="panel" href="#"><span>EXPLORE</span></a>
+    <a class="panel" href="#"><span>ABOUT</span></a>
+  </div>
+
+  <script>
+    // Toggle dropdown
+    const gradesPanel = document.getElementById('gradesPanel');
+    gradesPanel.addEventListener('click', () => {
+      gradesPanel.classList.toggle('active');
+    });
+  </script>
+
 </body>
 </html>
