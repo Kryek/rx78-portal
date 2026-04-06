@@ -2,21 +2,77 @@
 <html>
 <head>
   <title>RX-78 Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: black;
+      color: white;
+    }
+
+    .hero {
+      background: linear-gradient(to right, #1a1a1a, #2b2f4a);
+      padding: 30px 20px;
+    }
+
+    .hero h1 {
+      font-size: 32px;
+      margin: 0;
+    }
+
+    .hero p {
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    .menu {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .panel {
+      border: 2px solid white;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      text-decoration: none;
+      color: white;
+      display: block;
+      position: relative;
+    }
+
+    .panel::after {
+      content: "///";
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.6;
+    }
+
+    .panel:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+  </style>
 </head>
 
-<body style="font-family: Arial; margin: 40px; background-color: #f5f5f5;">
+<body>
 
-  <h1>RX-78 Portal</h1>
-  <p>A structured exploration of the RX-78 platform</p>
+  <div class="hero">
+    <h1>RX-78-2 GUNDAM</h1>
+    <p>Prototype Close Quarters Combat Mobile Suit</p>
+  </div>
 
-  <h2>Grades</h2>
-
-<ul>
-  <li><a href="hg/index.html">HG (High Grade)</a></li>
-  <li><a href="rg/index.html">RG (Real Grade)</a></li>
-</ul>
-
-  <p>More entries coming soon.</p>
+  <div class="menu">
+    <a class="panel" href="hg/index.html">GRADES</a>
+    <a class="panel" href="#">EXPLORE</a>
+    <a class="panel" href="#">ABOUT</a>
+  </div>
 
 </body>
 </html>
