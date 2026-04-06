@@ -16,7 +16,6 @@
   .menu {
     display: flex;
     flex-direction: column;
-    gap: 20px;
     padding: 20px;
   }
 
@@ -33,6 +32,7 @@
     overflow: hidden;
     transition: 0.2s;
     cursor: pointer;
+    margin: 0; /* remove extra spacing */
   }
 
   .panel::before {
@@ -69,12 +69,10 @@
     transform: skew(-20deg) translateX(6px);
   }
 
-  /* Dropdown wrapper with animation */
+  /* Dropdown wrapper with smooth slide */
   .dropdown {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-left: 0; /* remove indentation to fix spacing */
     overflow: hidden;
     max-height: 0;
     transition: max-height 0.3s ease;
@@ -82,17 +80,18 @@
 
   /* Show dropdown when active */
   .panel.active + .dropdown {
-    max-height: 500px; /* large enough to fit all items */
+    max-height: 500px;
   }
 
-  /* Dropdown panels */
+  /* Dropdown panels aligned perfectly */
   .dropdown .panel {
     background: #222;
-    border: 2px solid white;
-    padding: 15px 25px;
+    border: 3px solid white;
+    padding: 20px 30px;
     transform: skew(-20deg);
     font-size: 20px;
     position: relative;
+    margin: 0; /* remove gaps */
   }
 
   .dropdown .panel span {
@@ -105,9 +104,6 @@
     right: 10px;
     top: 50%;
     transform: translateY(-50%) skew(20deg);
-    width: auto;
-    height: auto;
-    background: none;
     color: white;
     font-weight: bold;
     font-size: 18px;
