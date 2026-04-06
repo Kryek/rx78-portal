@@ -34,6 +34,7 @@
     padding: 20px;
   }
 
+  /* Main panel style */
   .panel {
     position: relative;
     display: block;
@@ -41,12 +42,12 @@
     color: white;
     background: #111;
     border: 3px solid white;
-    padding: 22px 36px; /* increase padding to prevent skew clipping */
+    padding: 22px 36px;
     transform: skew(-20deg);
     overflow: visible;
     transition: 0.2s;
     cursor: pointer;
-    margin: 0; /* no extra margin */
+    margin: 0;
   }
 
   .panel span {
@@ -87,11 +88,13 @@
     max-height: 500px; /* enough for 3 buttons */
   }
 
+  /* Dropdown panels slightly shorter */
   .dropdown .panel {
     background: #222;
     border: 3px solid white;
-    padding: 22px 36px; /* match main button padding */
-    margin: 0; /* no gaps */
+    padding: 22px 28px; /* reduced horizontal padding */
+    margin: 0;
+    transform: skew(-20deg);
   }
 
   .dropdown .panel span {
@@ -117,6 +120,7 @@
   <div class="menu">
     <a class="panel" href="index.html"><span>HOME</span></a>
 
+    <!-- Grades panel -->
     <div class="panel" id="gradesPanel"><span>GRADES</span></div>
     <div class="dropdown">
       <a class="panel" href="hg/index.html"><span>HG</span></a>
