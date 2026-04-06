@@ -3,64 +3,77 @@
 <head>
   <title>RX-78 Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: black;
+      font-family: 'Orbitron', sans-serif;
+      background: #0a0a0a;
       color: white;
     }
 
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
     .hero {
-      background: linear-gradient(to right, #1a1a1a, #2b2f4a);
-      padding: 30px 20px;
+      background: url('gundam.png') no-repeat center center/cover;
+      height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     .hero h1 {
-      font-size: 32px;
+      font-size: 28px;
       margin: 0;
+      text-shadow: 0 0 5px #000;
     }
 
     .hero p {
       font-size: 12px;
-      opacity: 0.7;
+      opacity: 0.8;
+      margin-top: 5px;
+      text-shadow: 0 0 3px #000;
     }
 
     .menu {
-      padding: 20px;
       display: flex;
       flex-direction: column;
       gap: 20px;
+      padding: 20px;
     }
 
     .panel {
-      border: 2px solid white;
-      padding: 20px;
-      font-size: 24px;
+      position: relative;
+      background: #111;
+      border: 3px solid white;
+      padding: 20px 25px;
+      font-size: 22px;
       font-weight: bold;
       text-decoration: none;
       color: white;
-      display: block;
-      position: relative;
+      clip-path: polygon(
+        10px 0%, 100% 0%, 100% 100%, 10px 100%, 0% 50%
+      );
+      transition: 0.2s;
     }
 
     .panel::after {
-      content: "///";
+      content: '///';
       position: absolute;
       right: 15px;
       top: 50%;
       transform: translateY(-50%);
       opacity: 0.6;
+      font-weight: bold;
     }
 
     .panel:hover {
-      background: rgba(255,255,255,0.1);
+      background: #222;
+      transform: translateX(3px);
     }
-
   </style>
 </head>
-
 <body>
 
   <div class="hero">
