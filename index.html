@@ -237,14 +237,27 @@
             }, 0);
           });
 
-        } else {
-          // stagger OUT first
-          items.forEach((item, i) => {
-            item.style.animation = '';
-            setTimeout(() => {
-              item.style.animation = `flyOut 0.3s forwards ${i * 0.05}s`;
-            }, 0);
-          });
+        else {
+  // keep it open during animation
+  dropdown.style.maxHeight = dropdown.scrollHeight + "px";
+
+  // play stagger OUT
+  items.forEach((item, i) => {
+    item.style.animation = '';
+    setTimeout(() => {
+      item.style.animation = `flyOut 0.3s forwards ${i * 0.08}s`;
+    }, 0);
+  });
+
+  // calculate total animation time
+  const totalDelay = items.length * 80 + 300;
+
+  // collapse AFTER animation
+  setTimeout(() => {
+    dropdown.style.maxHeight = "0";
+    dropdown.classList.remove('open');
+  }, totalDelay);
+}
 
           // wait for animation to finish before collapsing
           const totalDelay = items.length * 50 + 300;
