@@ -20,12 +20,10 @@
     left: 0;
     width: 100%;
     height: 100%;
-
     background-image: url('images/rx78-bg.png');
     background-size: cover;
     background-position: top center;
     background-repeat: no-repeat;
-
     z-index: -2;
   }
 
@@ -49,9 +47,6 @@
     to { opacity: 1; }
   }
 
-  .hero h1 { margin: 0; font-size: 32px; }
-  .hero p { margin: 5px 0 0; font-size: 16px; }
-
   /* MENU */
   .menu {
     display: flex;
@@ -62,28 +57,21 @@
   .panel {
     position: relative;
     display: block;
-    text-decoration: none;
     color: white;
     background: rgba(17,17,17,0.9);
     border: 3px solid white;
     padding: 22px 36px;
     transform: skew(-20deg) translateX(-100px);
     opacity: 0;
-    transition: 0.2s;
-    cursor: pointer;
     margin-bottom: 25px;
-  }
-
-  .panel:last-child {
-    margin-bottom: 0;
+    cursor: pointer;
   }
 
   .panel span {
     display: block;
     transform: skew(20deg);
-    font-size: 24px;
-    font-weight: bold;
     text-align: center;
+    font-size: 24px;
     letter-spacing: 2px;
   }
 
@@ -93,12 +81,6 @@
     right: 12px;
     top: 50%;
     transform: translateY(-50%) skew(20deg);
-    font-size: 18px;
-  }
-
-  .panel:hover {
-    background: rgba(34,34,34,0.95);
-    transform: skew(-20deg) translateX(6px);
   }
 
   /* DROPDOWN */
@@ -106,12 +88,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
     max-height: 0;
     overflow: hidden;
-
     transition: max-height 0.4s ease;
-    margin-bottom: 0;
   }
 
   .dropdown.open {
@@ -123,26 +102,15 @@
     margin: 8px 0;
     padding: 18px 45px 18px 25px;
     background: rgba(34,34,34,0.9);
-
     transform: skew(-20deg) translateX(-50px);
     opacity: 0;
   }
 
-  /* MOBILE FIX */
   @media (max-width: 600px) {
     .dropdown .panel {
       width: 65%;
       padding: 16px 40px 16px 20px;
     }
-  }
-
-  .dropdown .panel span {
-    font-size: 20px;
-  }
-
-  .dropdown .panel:hover {
-    background: rgba(51,51,51,0.95);
-    transform: skew(-20deg) translateX(4px);
   }
 
   /* ANIMATIONS */
@@ -155,7 +123,7 @@
 
   @keyframes flyOut {
     to {
-      transform: skew(-20deg) translateX(-50px);
+      transform: skew(-20deg) translateX(-80px);
       opacity: 0;
     }
   }
@@ -175,42 +143,39 @@
 </head>
 <body>
 
-  <!-- BACKGROUND -->
   <div class="bg-image"></div>
 
-  <!-- HERO -->
   <div class="hero">
     <h1>RX-78-2 GUNDAM</h1>
     <p>Prototype Close Quarters Combat Mobile Suit</p>
   </div>
 
-  <!-- MENU -->
   <div class="menu">
 
     <!-- SCALE -->
     <div class="panel" id="scalePanel"><span>SCALE</span></div>
     <div class="dropdown" id="scaleDropdown">
-      <a class="panel" href="#"><span>1/144</span></a>
-      <a class="panel" href="#"><span>1/100</span></a>
+      <div class="panel"><span>1/144</span></div>
+      <div class="panel"><span>1/100</span></div>
     </div>
 
     <!-- GRADES -->
     <div class="panel" id="gradesPanel"><span>GRADES</span></div>
     <div class="dropdown" id="gradesDropdown">
-      <a class="panel" href="hg/index.html"><span>HG</span></a>
-      <a class="panel" href="#"><span>RG</span></a>
-      <a class="panel" href="#"><span>MG</span></a>
-      <a class="panel" href="#"><span>PG</span></a>
-      <a class="panel" href="#"><span>MEGASIZE</span></a>
+      <div class="panel"><span>HG</span></div>
+      <div class="panel"><span>RG</span></div>
+      <div class="panel"><span>MG</span></div>
+      <div class="panel"><span>PG</span></div>
+      <div class="panel"><span>MEGASIZE</span></div>
     </div>
 
-    <a class="panel" href="#"><span>EXPLORE</span></a>
-    <a class="panel" href="#"><span>ABOUT</span></a>
+    <div class="panel"><span>EXPLORE</span></div>
+    <div class="panel"><span>ABOUT</span></div>
 
   </div>
 
   <script>
-    // MAIN BUTTON STAGGER
+    // MAIN BUTTONS
     const mainButtons = document.querySelectorAll('.menu > .panel');
     mainButtons.forEach((btn, i) => {
       btn.style.animation = `flyIn 0.7s forwards ${i * 0.15 + 1}s`;
@@ -228,7 +193,7 @@
 
         if (open) {
           dropdown.classList.add('open');
-          dropdown.style.maxHeight = "500px";
+          dropdown.style.maxHeight = dropdown.scrollHeight + "px";
 
           items.forEach((item, i) => {
             item.style.animation = '';
@@ -237,31 +202,21 @@
             }, 0);
           });
 
-        else {
-  // keep it open during animation
-  dropdown.style.maxHeight = dropdown.scrollHeight + "px";
+        } else {
+          // KEEP OPEN so animation is visible
+          dropdown.style.maxHeight = dropdown.scrollHeight + "px";
 
-  // play stagger OUT
-  items.forEach((item, i) => {
-    item.style.animation = '';
-    setTimeout(() => {
-      item.style.animation = `flyOut 0.3s forwards ${i * 0.08}s`;
-    }, 0);
-  });
+          // animate out
+          items.forEach((item, i) => {
+            item.style.animation = '';
+            setTimeout(() => {
+              item.style.animation = `flyOut 0.3s forwards ${i * 0.08}s`;
+            }, 0);
+          });
 
-  // calculate total animation time
-  const totalDelay = items.length * 80 + 300;
+          const totalDelay = items.length * 80 + 300;
 
-  // collapse AFTER animation
-  setTimeout(() => {
-    dropdown.style.maxHeight = "0";
-    dropdown.classList.remove('open');
-  }, totalDelay);
-}
-
-          // wait for animation to finish before collapsing
-          const totalDelay = items.length * 50 + 300;
-
+          // collapse AFTER animation
           setTimeout(() => {
             dropdown.style.maxHeight = "0";
             dropdown.classList.remove('open');
@@ -272,23 +227,6 @@
 
     setupDropdown('scalePanel', 'scaleDropdown');
     setupDropdown('gradesPanel', 'gradesDropdown');
-
-    // FADE OUT NAV
-    const links = document.querySelectorAll('.panel[href]');
-    links.forEach(link => {
-      link.addEventListener('click', function(e){
-        e.preventDefault();
-        const href = this.getAttribute('href');
-
-        document.querySelectorAll('.hero, .menu, .panel').forEach(el => {
-          el.classList.add('fade-out');
-        });
-
-        setTimeout(() => {
-          window.location = href;
-        }, 1000);
-      });
-    });
   </script>
 
 </body>
