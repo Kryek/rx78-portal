@@ -19,32 +19,41 @@
     padding: 20px;
   }
 
+  /* Panel wrapper: prevents clipping */
+  .panel-wrapper {
+    margin: 0;
+    overflow: visible; /* allow skew to render outside without cutting */
+  }
+
   /* Main panel style */
   .panel {
     position: relative;
     display: block;
     text-decoration: none;
     color: white;
-    transform: skew(-20deg);
     background: #111;
     border: 3px solid white;
-    padding: 20px 30px;
-    overflow: hidden;
-    transition: 0.2s;
     cursor: pointer;
-    margin: 0; /* remove extra spacing */
+    overflow: visible;
+    transition: 0.2s;
   }
 
-  .panel::before {
-    content: "";
-    position: absolute;
-    inset: 6px;
-    border: 1px solid rgba(255,255,255,0.4);
-    pointer-events: none;
+  .panel-inner {
+    transform: skew(-20deg);
+    padding: 20px 30px;
+    position: relative;
   }
 
-  /* Replace striped box with /// */
-  .panel::after {
+  .panel-inner span {
+    display: block;
+    transform: skew(20deg);
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 2px;
+  }
+
+  .panel-inner::after {
     content: "///";
     position: absolute;
     right: 10px;
@@ -55,21 +64,12 @@
     font-size: 18px;
   }
 
-  .panel span {
-    display: block;
-    transform: skew(20deg);
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    letter-spacing: 2px;
-  }
-
-  .panel:hover {
+  .panel-inner:hover {
     background: #222;
     transform: skew(-20deg) translateX(6px);
   }
 
-  /* Dropdown wrapper with smooth slide */
+  /* Dropdown wrapper with animation */
   .dropdown {
     display: flex;
     flex-direction: column;
@@ -79,37 +79,31 @@
   }
 
   /* Show dropdown when active */
-  .panel.active + .dropdown {
+  .panel-wrapper.active + .dropdown {
     max-height: 500px;
   }
 
-  /* Dropdown panels aligned perfectly */
-  .dropdown .panel {
+  /* Dropdown panels */
+  .dropdown .panel-wrapper {
+    margin: 0;
+  }
+
+  .dropdown .panel-inner {
     background: #222;
     border: 3px solid white;
     padding: 20px 30px;
-    transform: skew(-20deg);
     font-size: 20px;
-    position: relative;
-    margin: 0; /* remove gaps */
   }
 
-  .dropdown .panel span {
-    transform: skew(20deg);
+  .dropdown .panel-inner span {
     font-weight: bold;
   }
 
-  .dropdown .panel::after {
+  .dropdown .panel-inner::after {
     content: "///";
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%) skew(20deg);
-    color: white;
-    font-weight: bold;
-    font-size: 18px;
   }
 
-  .dropdown .panel:hover {
+  .dropdown .panel-inner:hover {
     background: #333;
     transform: skew(-20deg) translateX(4px);
   }
@@ -118,35 +112,40 @@
 </head>
 <body>
 
-  <!-- Hero banner -->
-  <div class="hero">
-    <h1>RX-78-2 GUNDAM</h1>
-    <p>Prototype Close Quarters Combat Mobile Suit</p>
-  </div>
-
-  <!-- Navigation panels -->
   <div class="menu">
-    <a class="panel" href="index.html"><span>HOME</span></a>
-
-    <!-- Grades panel with dropdown -->
-    <div class="panel" id="gradesPanel"><span>GRADES</span></div>
-    <div class="dropdown">
-      <a class="panel" href="hg/index.html"><span>HG</span></a>
-      <a class="panel" href="rg/index.html"><span>RG</span></a>
-      <a class="panel" href="mg/index.html"><span>MG</span></a>
+    <div class="panel-wrapper">
+      <div class="panel-inner"><span>HOME</span></div>
     </div>
 
-    <a class="panel" href="#"><span>EXPLORE</span></a>
-    <a class="panel" href="#"><span>ABOUT</span></a>
+    <!-- Grades panel -->
+    <div class="panel-wrapper" id="gradesPanel">
+      <div class="panel-inner"><span>GRADES</span></div>
+    </div>
+    <div class="dropdown">
+      <div class="panel-wrapper">
+        <div class="panel-inner"><span>HG</span></div>
+      </div>
+      <div class="panel-wrapper">
+        <div class="panel-inner"><span>RG</span></div>
+      </div>
+      <div class="panel-wrapper">
+        <div class="panel-inner"><span>MG</span></div>
+      </div>
+    </div>
+
+    <div class="panel-wrapper">
+      <div class="panel-inner"><span>EXPLORE</span></div>
+    </div>
+    <div class="panel-wrapper">
+      <div class="panel-inner"><span>ABOUT</span></div>
+    </div>
   </div>
 
   <script>
-    // Toggle dropdown
     const gradesPanel = document.getElementById('gradesPanel');
     gradesPanel.addEventListener('click', () => {
       gradesPanel.classList.toggle('active');
     });
   </script>
-
 </body>
 </html>
