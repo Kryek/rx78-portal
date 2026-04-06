@@ -13,19 +13,27 @@
     color: white;
   }
 
+  .hero {
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .hero h1 {
+    margin: 0;
+    font-size: 32px;
+  }
+
+  .hero p {
+    margin: 5px 0 0;
+    font-size: 16px;
+  }
+
   .menu {
     display: flex;
     flex-direction: column;
     padding: 20px;
   }
 
-  /* Panel wrapper: prevents clipping */
-  .panel-wrapper {
-    margin: 0;
-    overflow: visible; /* allow skew to render outside without cutting */
-  }
-
-  /* Main panel style */
   .panel {
     position: relative;
     display: block;
@@ -33,18 +41,15 @@
     color: white;
     background: #111;
     border: 3px solid white;
-    cursor: pointer;
+    padding: 22px 36px; /* increase padding to prevent skew clipping */
+    transform: skew(-20deg);
     overflow: visible;
     transition: 0.2s;
+    cursor: pointer;
+    margin: 0; /* no extra margin */
   }
 
-  .panel-inner {
-    transform: skew(-20deg);
-    padding: 20px 30px;
-    position: relative;
-  }
-
-  .panel-inner span {
+  .panel span {
     display: block;
     transform: skew(20deg);
     font-size: 24px;
@@ -53,10 +58,10 @@
     letter-spacing: 2px;
   }
 
-  .panel-inner::after {
+  .panel::after {
     content: "///";
     position: absolute;
-    right: 10px;
+    right: 12px;
     top: 50%;
     transform: translateY(-50%) skew(20deg);
     font-weight: bold;
@@ -64,12 +69,12 @@
     font-size: 18px;
   }
 
-  .panel-inner:hover {
+  .panel:hover {
     background: #222;
     transform: skew(-20deg) translateX(6px);
   }
 
-  /* Dropdown wrapper with animation */
+  /* Dropdown container */
   .dropdown {
     display: flex;
     flex-direction: column;
@@ -78,32 +83,22 @@
     transition: max-height 0.3s ease;
   }
 
-  /* Show dropdown when active */
-  .panel-wrapper.active + .dropdown {
-    max-height: 500px;
+  .panel.active + .dropdown {
+    max-height: 500px; /* enough for 3 buttons */
   }
 
-  /* Dropdown panels */
-  .dropdown .panel-wrapper {
-    margin: 0;
-  }
-
-  .dropdown .panel-inner {
+  .dropdown .panel {
     background: #222;
     border: 3px solid white;
-    padding: 20px 30px;
+    padding: 22px 36px; /* match main button padding */
+    margin: 0; /* no gaps */
+  }
+
+  .dropdown .panel span {
     font-size: 20px;
   }
 
-  .dropdown .panel-inner span {
-    font-weight: bold;
-  }
-
-  .dropdown .panel-inner::after {
-    content: "///";
-  }
-
-  .dropdown .panel-inner:hover {
+  .dropdown .panel:hover {
     background: #333;
     transform: skew(-20deg) translateX(4px);
   }
@@ -112,33 +107,25 @@
 </head>
 <body>
 
+  <!-- Hero banner -->
+  <div class="hero">
+    <h1>RX-78-2 GUNDAM</h1>
+    <p>Prototype Close Quarters Combat Mobile Suit</p>
+  </div>
+
+  <!-- Navigation panels -->
   <div class="menu">
-    <div class="panel-wrapper">
-      <div class="panel-inner"><span>HOME</span></div>
-    </div>
+    <a class="panel" href="index.html"><span>HOME</span></a>
 
-    <!-- Grades panel -->
-    <div class="panel-wrapper" id="gradesPanel">
-      <div class="panel-inner"><span>GRADES</span></div>
-    </div>
+    <div class="panel" id="gradesPanel"><span>GRADES</span></div>
     <div class="dropdown">
-      <div class="panel-wrapper">
-        <div class="panel-inner"><span>HG</span></div>
-      </div>
-      <div class="panel-wrapper">
-        <div class="panel-inner"><span>RG</span></div>
-      </div>
-      <div class="panel-wrapper">
-        <div class="panel-inner"><span>MG</span></div>
-      </div>
+      <a class="panel" href="hg/index.html"><span>HG</span></a>
+      <a class="panel" href="rg/index.html"><span>RG</span></a>
+      <a class="panel" href="mg/index.html"><span>MG</span></a>
     </div>
 
-    <div class="panel-wrapper">
-      <div class="panel-inner"><span>EXPLORE</span></div>
-    </div>
-    <div class="panel-wrapper">
-      <div class="panel-inner"><span>ABOUT</span></div>
-    </div>
+    <a class="panel" href="#"><span>EXPLORE</span></a>
+    <a class="panel" href="#"><span>ABOUT</span></a>
   </div>
 
   <script>
