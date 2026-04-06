@@ -1,22 +1,116 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>HG Line</title>
+  <title>HG Line - RX-78 Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+  body {
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    background: #0a0a0a;
+    color: white;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .hero h1 {
+    margin: 0;
+    font-size: 32px;
+  }
+
+  .hero p {
+    margin: 5px 0 0;
+    font-size: 16px;
+  }
+
+  .menu {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 15px;
+  }
+
+  .panel {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    color: white;
+    background: #111;
+    border: 3px solid white;
+    padding: 22px 36px;
+    transform: skew(-20deg);
+    overflow: visible;
+    transition: 0.2s;
+    cursor: pointer;
+    margin: 0;
+  }
+
+  .panel span {
+    display: block;
+    transform: skew(20deg);
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 2px;
+  }
+
+  .panel::after {
+    content: "///";
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%) skew(20deg);
+    font-weight: bold;
+    color: white;
+    font-size: 18px;
+    transition: transform 0.3s ease;
+  }
+
+  .panel:hover {
+    background: #222;
+    transform: skew(-20deg) translateX(6px);
+  }
+
+  /* Kit list container */
+  .kit-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+    gap: 10px;
+  }
+
+  .kit-list .panel {
+    width: 60%; /* slightly narrower than main buttons */
+    padding: 20px 24px;
+    font-size: 20px;
+  }
+
+  </style>
 </head>
+<body>
 
-<body style="font-family: Arial; margin: 40px;">
+  <!-- Hero banner -->
+  <div class="hero">
+    <h1>HG (High Grade)</h1>
+    <p>RX-78-2 Mobile Suit Kits</p>
+  </div>
 
-  <a href="../index.html">← Back to Home</a>
+  <!-- Navigation panel: Home -->
+  <div class="menu">
+    <a class="panel" href="../index.html"><span>← HOME</span></a>
+  </div>
 
-  <h1>HG (High Grade)</h1>
-
-  <ul>
-    <li>
-      <a href="revive-standard.html">
-        RX-78-2 Revive – Standard
-      </a>
-    </li>
-  </ul>
+  <!-- Kit list -->
+  <div class="kit-list">
+    <a class="panel" href="revive-standard.html"><span>RX-78-2 Revive – Standard</span></a>
+    <!-- future HG kits can be added here -->
+  </div>
 
 </body>
 </html>
