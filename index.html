@@ -79,7 +79,7 @@
     transform: skew(-20deg) translateX(6px);
   }
 
-  /* DROPDOWN BASE */
+  /* DROPDOWN */
   .dropdown {
     display: flex;
     flex-direction: column;
@@ -97,11 +97,11 @@
   }
 
   .dropdown .panel {
-    width: 50%;
+    width: 75%; /* ✅ FIXED */
     margin: 8px 0;
-    padding: 18px 20px;
-    background: #222;
+    padding: 18px 45px 18px 25px; /* ✅ extra right padding for /// */
 
+    background: #222;
     transform: skew(-20deg) translateX(-50px);
     opacity: 0;
   }
@@ -219,7 +219,6 @@
       });
     }
 
-    // INIT BOTH DROPDOWNS
     setupDropdown('scalePanel', 'scaleDropdown');
     setupDropdown('gradesPanel', 'gradesDropdown');
 
