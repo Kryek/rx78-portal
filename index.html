@@ -11,6 +11,40 @@
     font-family: 'Orbitron', sans-serif;
     background: #0a0a0a;
     color: white;
+    overflow-x: hidden;
+  }
+
+  /* Fade-in for hero and menu */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s forwards;
+  }
+
+  .fade-in:nth-child(1) {
+    animation-delay: 0.2s; /* hero first */
+  }
+  .fade-in:nth-child(2) {
+    animation-delay: 0.5s; /* buttons after */
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Fade-out class */
+  .fade-out {
+    animation: fadeOut 0.5s forwards;
+  }
+
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
   }
 
   .hero {
@@ -32,9 +66,9 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
+    gap: 15px;
   }
 
-  /* Main panel style */
   .panel {
     position: relative;
     display: block;
@@ -68,12 +102,7 @@
     font-weight: bold;
     color: white;
     font-size: 18px;
-    transition: transform 0.3s ease; /* smooth rotation */
-  }
-
-  /* rotate /// when active */
-  .panel.active::after {
-    transform: translateY(-50%) skew(20deg) rotate(90deg);
+    transition: transform 0.3s ease;
   }
 
   .panel:hover {
@@ -119,23 +148,20 @@
 <body>
 
   <!-- Hero banner -->
-  <div class="hero">
+  <div class="hero fade-in">
     <h1>RX-78-2 GUNDAM</h1>
     <p>Prototype Close Quarters Combat Mobile Suit</p>
   </div>
 
   <!-- Navigation panels -->
-  <div class="menu">
+  <div class="menu fade-in">
     <a class="panel" href="index.html"><span>HOME</span></a>
-
-    <!-- Grades panel -->
     <div class="panel" id="gradesPanel"><span>GRADES</span></div>
     <div class="dropdown">
       <a class="panel" href="hg/index.html"><span>HG</span></a>
       <a class="panel" href="rg/index.html"><span>RG</span></a>
       <a class="panel" href="mg/index.html"><span>MG</span></a>
     </div>
-
     <a class="panel" href="#"><span>EXPLORE</span></a>
     <a class="panel" href="#"><span>ABOUT</span></a>
   </div>
@@ -144,6 +170,21 @@
     const gradesPanel = document.getElementById('gradesPanel');
     gradesPanel.addEventListener('click', () => {
       gradesPanel.classList.toggle('active');
+    });
+
+    // Fade out animation before navigation
+    const links = document.querySelectorAll('.panel[href]');
+    links.forEach(link => {
+      link.addEventListener('click', function(e){
+        e.preventDefault(); // stop default jump
+        document.querySelectorAll('.fade-in').forEach(el => {
+          el.classList.add('fade-out');
+        });
+        const href = this.getAttribute('href');
+        setTimeout(() => {
+          window.location = href;
+        }, 500); // match fade-out duration
+      });
     });
   </script>
 </body>
