@@ -11,20 +11,26 @@
     font-family: 'Orbitron', sans-serif;
     color: white;
     overflow-x: hidden;
+
+    /* 🔥 prevents mobile bounce shifting */
+    overscroll-behavior: none;
   }
 
-  /* BACKGROUND */
+  /* ✅ BULLETPROOF BACKGROUND */
   .bg-image {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
+
     background-image: url('images/rx78-bg.png');
     background-size: cover;
     background-position: top center;
     background-repeat: no-repeat;
+
     z-index: -2;
+
+    /* 🔥 mobile stability fix */
+    transform: translateZ(0);
+    will-change: transform;
   }
 
   .bg-image::after {
@@ -106,7 +112,7 @@
     align-items: center;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.25s ease; /* faster collapse */
+    transition: max-height 0.25s ease;
   }
 
   .dropdown.open {
@@ -162,13 +168,16 @@
 </head>
 <body>
 
+  <!-- BACKGROUND -->
   <div class="bg-image"></div>
 
+  <!-- HERO -->
   <div class="hero">
     <h1>RX-78-2 GUNDAM</h1>
     <p>Prototype Close Quarters Combat Mobile Suit</p>
   </div>
 
+  <!-- MENU -->
   <div class="menu">
 
     <!-- SCALE -->
@@ -222,11 +231,10 @@
           });
 
         } else {
-          // INSTANT COLLAPSE
+          // INSTANT COLLAPSE (clean system feel)
           dropdown.style.maxHeight = "0";
           dropdown.classList.remove('open');
 
-          // quick reset (no visible stagger)
           items.forEach((item) => {
             item.style.animation = 'none';
             item.style.opacity = '0';
@@ -238,23 +246,6 @@
 
     setupDropdown('scalePanel', 'scaleDropdown');
     setupDropdown('gradesPanel', 'gradesDropdown');
-
-    // FADE OUT NAV
-    const links = document.querySelectorAll('.panel[href]');
-    links.forEach(link => {
-      link.addEventListener('click', function(e){
-        e.preventDefault();
-        const href = this.getAttribute('href');
-
-        document.querySelectorAll('.hero, .menu, .panel').forEach(el => {
-          el.classList.add('fade-out');
-        });
-
-        setTimeout(() => {
-          window.location = href;
-        }, 1000);
-      });
-    });
   </script>
 
 </body>
