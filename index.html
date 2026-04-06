@@ -49,7 +49,6 @@
     opacity: 0;
     transition: 0.2s;
     cursor: pointer;
-
     margin-bottom: 25px;
   }
 
@@ -80,7 +79,7 @@
     transform: skew(-20deg) translateX(6px);
   }
 
-  /* DROPDOWN */
+  /* DROPDOWN BASE */
   .dropdown {
     display: flex;
     flex-direction: column;
@@ -90,13 +89,11 @@
     overflow: hidden;
 
     transition: max-height 0.4s ease;
-
-    margin-bottom: 0; /* closed = no space */
+    margin-bottom: 0;
   }
 
   .dropdown.open {
-    max-height: 300px;
-    margin-bottom: 25px; /* MATCH panel spacing */
+    margin-bottom: 25px;
   }
 
   .dropdown .panel {
@@ -156,17 +153,27 @@
 
   <!-- MENU -->
   <div class="menu">
-    <a class="panel" href="index.html"><span>HOME</span></a>
 
+    <!-- SCALE -->
+    <div class="panel" id="scalePanel"><span>SCALE</span></div>
+    <div class="dropdown" id="scaleDropdown">
+      <a class="panel" href="#"><span>1/144</span></a>
+      <a class="panel" href="#"><span>1/100</span></a>
+    </div>
+
+    <!-- GRADES -->
     <div class="panel" id="gradesPanel"><span>GRADES</span></div>
-    <div class="dropdown">
+    <div class="dropdown" id="gradesDropdown">
       <a class="panel" href="hg/index.html"><span>HG</span></a>
-      <a class="panel" href="rg/index.html"><span>RG</span></a>
-      <a class="panel" href="mg/index.html"><span>MG</span></a>
+      <a class="panel" href="#"><span>RG</span></a>
+      <a class="panel" href="#"><span>MG</span></a>
+      <a class="panel" href="#"><span>PG</span></a>
+      <a class="panel" href="#"><span>MEGASIZE</span></a>
     </div>
 
     <a class="panel" href="#"><span>EXPLORE</span></a>
     <a class="panel" href="#"><span>ABOUT</span></a>
+
   </div>
 
   <script>
@@ -176,37 +183,45 @@
       btn.style.animation = `flyIn 0.7s forwards ${i * 0.15 + 1}s`;
     });
 
-    // DROPDOWN CONTROL
-    const gradesPanel = document.getElementById('gradesPanel');
-    const dropdown = document.querySelector('.dropdown');
-    const dropdownItems = document.querySelectorAll('.dropdown .panel');
+    function setupDropdown(triggerId, dropdownId) {
+      const trigger = document.getElementById(triggerId);
+      const dropdown = document.getElementById(dropdownId);
+      const items = dropdown.querySelectorAll('.panel');
 
-    let open = false;
+      let open = false;
 
-    gradesPanel.addEventListener('click', () => {
-      open = !open;
+      trigger.addEventListener('click', () => {
+        open = !open;
 
-      if (open) {
-        dropdown.classList.add('open');
+        if (open) {
+          dropdown.classList.add('open');
+          dropdown.style.maxHeight = "500px";
 
-        dropdownItems.forEach((item, index) => {
-          item.style.animation = '';
-          setTimeout(() => {
-            item.style.animation = `flyIn 0.5s forwards ${index * 0.1}s`;
-          }, 0);
-        });
+          items.forEach((item, i) => {
+            item.style.animation = '';
+            setTimeout(() => {
+              item.style.animation = `flyIn 0.5s forwards ${i * 0.1}s`;
+            }, 0);
+          });
 
-      } else {
-        dropdown.classList.remove('open');
+        } else {
+          dropdown.style.maxHeight = "0";
 
-        dropdownItems.forEach((item, index) => {
-          item.style.animation = '';
-          setTimeout(() => {
-            item.style.animation = `flyOut 0.3s forwards ${index * 0.05}s`;
-          }, 0);
-        });
-      }
-    });
+          items.forEach((item, i) => {
+            item.style.animation = '';
+            setTimeout(() => {
+              item.style.animation = `flyOut 0.3s forwards ${i * 0.05}s`;
+            }, 0);
+          });
+
+          dropdown.classList.remove('open');
+        }
+      });
+    }
+
+    // INIT BOTH DROPDOWNS
+    setupDropdown('scalePanel', 'scaleDropdown');
+    setupDropdown('gradesPanel', 'gradesDropdown');
 
     // FADE OUT NAVIGATION
     const links = document.querySelectorAll('.panel[href]');
