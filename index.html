@@ -1,101 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RX-78 Portal Dropdown</title>
-<style>
+  <title>RX-78 Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
   body {
-    background: #111;
+    margin: 0;
     font-family: 'Orbitron', sans-serif;
+    background: #0a0a0a;
     color: white;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    padding: 2rem;
   }
 
-  /* Panel container */
+  .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  }
+
   .panel {
     position: relative;
-    background: #222;
-    border: 3px solid white;
-    transform: skew(-20deg);
-    margin: 1rem 0;
-    cursor: pointer;
-    overflow: hidden;
-    width: 200px;
-  }
-
-  /* Panel text */
-  .panel span {
     display: block;
-    padding: 1rem;
-    transform: skew(20deg);
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.2rem;
+    text-decoration: none;
+    color: white;
+
+    /* parallelogram shape */
+    transform: skew(-20deg);
+
+    /* panel look */
+    background: #111;
+    border: 3px solid white;
+
+    padding: 20px 30px;
+    overflow: hidden;
+
+    transition: 0.2s;
   }
 
-  /* Right-side /// detail */
-  .panel::after {
-    content: "///";
+  /* inner frame line */
+  .panel::before {
+    content: "";
     position: absolute;
-    right: 1rem;
+    inset: 6px;
+    border: 1px solid rgba(255,255,255,0.4);
+    pointer-events: none;
+  }
+
+  /* right-side stripes */
+  .panel::after {
+    content: "";
+    position: absolute;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%) skew(20deg);
+
+    width: 20px;
+    height: 20px;
+
+    background: repeating-linear-gradient(
+      45deg,
+      white,
+      white 3px,
+      transparent 3px,
+      transparent 6px
+    );
+
+    opacity: 0.7;
+  }
+
+  .panel span {
+    display: block;
+    transform: skew(20deg); /* fix text */
+    font-size: 24px;
     font-weight: bold;
-    color: #fff;
-  }
-
-  /* Dropdown menu */
-  .dropdown {
-    display: none;
-    flex-direction: column;
-    background: #333;
-    border-top: 2px solid white;
-  }
-
-  .dropdown a {
-    padding: 0.75rem;
     text-align: center;
-    color: white;
-    text-decoration: none;
-    border-bottom: 1px solid #555;
-    transform: skew(20deg);
+    letter-spacing: 2px;
   }
 
-  .dropdown a:hover {
-    background: #444;
-  }
-
-  /* Show dropdown when active */
-  .panel.active + .dropdown {
-    display: flex;
+  .panel:hover {
+    background: #222;
+    transform: skew(-20deg) translateX(6px);
   }
 </style>
 </head>
 <body>
 
-<!-- Grades Panel -->
-<div class="panel" id="gradesPanel">
-  <span>Grades</span>
+  <!-- Hero banner -->
+  <div class="hero">
+    <h1>RX-78-2 GUNDAM</h1>
+    <p>Prototype Close Quarters Combat Mobile Suit</p>
+  </div>
+
+  <!-- Navigation panels -->
+  <div class="menu">
+  <a class="panel" href="index.html"><span>HOME</span></a>
+  <a class="panel" href="hg/index.html"><span>GRADES</span></a>
+  <a class="panel" href="#"><span>EXPLORE</span></a>
+  <a class="panel" href="#"><span>ABOUT</span></a>
 </div>
-
-<!-- Dropdown Menu -->
-<div class="dropdown">
-  <a href="hg/index.html">HG</a>
-  <a href="rg/index.html">RG</a>
-  <a href="mg/index.html">MG</a>
-</div>
-
-<script>
-  const panel = document.getElementById('gradesPanel');
-  panel.addEventListener('click', () => {
-    panel.classList.toggle('active');
-  });
-</script>
-
 </body>
 </html>
