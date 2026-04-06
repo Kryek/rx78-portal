@@ -13,29 +13,6 @@
 
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
-    .hero {
-      background: url('gundam.png') no-repeat center center/cover;
-      height: 250px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .hero h1 {
-      font-size: 28px;
-      margin: 0;
-      text-shadow: 0 0 5px #000;
-    }
-
-    .hero p {
-      font-size: 12px;
-      opacity: 0.8;
-      margin-top: 5px;
-      text-shadow: 0 0 3px #000;
-    }
-
     .menu {
       display: flex;
       flex-direction: column;
@@ -46,45 +23,55 @@
     .panel {
       position: relative;
       background: #111;
-      border: 3px solid white;
-      padding: 20px 25px;
+      border: 2px solid white;
+      padding: 20px 30px;
       font-size: 22px;
       font-weight: bold;
       text-decoration: none;
       color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
       clip-path: polygon(
-        10px 0%, 100% 0%, 100% 100%, 10px 100%, 0% 50%
+        15px 0%, 100% 0%, 100% 100%, 15px 100%, 0% 50%
       );
       transition: 0.2s;
     }
 
-    .panel::after {
-      content: '///';
+    /* Right-end stripes */
+    .panel::before {
+      content: "///";
       position: absolute;
       right: 15px;
       top: 50%;
       transform: translateY(-50%);
-      opacity: 0.6;
       font-weight: bold;
+      opacity: 0.7;
     }
 
     .panel:hover {
       background: #222;
       transform: translateX(3px);
     }
+
+    .panel-text {
+      z-index: 1;
+    }
   </style>
 </head>
 <body>
 
-  <div class="hero">
-    <h1>RX-78-2 GUNDAM</h1>
-    <p>Prototype Close Quarters Combat Mobile Suit</p>
-  </div>
-
   <div class="menu">
-    <a class="panel" href="hg/index.html">GRADES</a>
-    <a class="panel" href="#">EXPLORE</a>
-    <a class="panel" href="#">ABOUT</a>
+    <a class="panel" href="hg/index.html">
+      <span class="panel-text">GRADES</span>
+    </a>
+    <a class="panel" href="#">
+      <span class="panel-text">EXPLORE</span>
+    </a>
+    <a class="panel" href="#">
+      <span class="panel-text">ABOUT</span>
+    </a>
   </div>
 
 </body>
