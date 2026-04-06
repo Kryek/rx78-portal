@@ -82,20 +82,21 @@
     overflow: hidden;
     max-height: 0;
     transition: max-height 0.3s ease;
+    align-items: center; /* center dropdown panels */
   }
 
   .panel.active + .dropdown {
     max-height: 500px; /* enough for 3 buttons */
   }
 
-  /* Dropdown panels: half width of main buttons */
+  /* Dropdown panels: half width of main buttons, centered */
   .dropdown .panel {
     background: #222;
     border: 3px solid white;
-    padding: 22px 18px; /* half width */
-    margin: 0;
+    padding: 22px 18px; /* width ~50% of main */
+    margin: 5px 0; /* small vertical spacing */
     transform: skew(-20deg);
-    width: 50%; /* explicit half width */
+    width: 50%; /* half width */
   }
 
   .dropdown .panel span {
