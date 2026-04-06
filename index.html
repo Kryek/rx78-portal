@@ -75,21 +75,19 @@
     transform: skew(-20deg) translateX(6px);
   }
 
-  /* GRADES WRAPPER (KEY FIX) */
-  .grades-wrapper {
-    position: relative;
-  }
-
   /* DROPDOWN */
   .dropdown {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    pointer-events: none;
+
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  .dropdown.open {
+    max-height: 300px;
   }
 
   .dropdown .panel {
@@ -149,14 +147,11 @@
   <div class="menu">
     <a class="panel" href="index.html"><span>HOME</span></a>
 
-    <!-- GRADES + DROPDOWN -->
-    <div class="grades-wrapper">
-      <div class="panel" id="gradesPanel"><span>GRADES</span></div>
-      <div class="dropdown">
-        <a class="panel" href="hg/index.html"><span>HG</span></a>
-        <a class="panel" href="rg/index.html"><span>RG</span></a>
-        <a class="panel" href="mg/index.html"><span>MG</span></a>
-      </div>
+    <div class="panel" id="gradesPanel"><span>GRADES</span></div>
+    <div class="dropdown">
+      <a class="panel" href="hg/index.html"><span>HG</span></a>
+      <a class="panel" href="rg/index.html"><span>RG</span></a>
+      <a class="panel" href="mg/index.html"><span>MG</span></a>
     </div>
 
     <a class="panel" href="#"><span>EXPLORE</span></a>
@@ -165,13 +160,14 @@
 
   <script>
     // MAIN BUTTON CASCADE
-    const mainButtons = document.querySelectorAll('.menu > .panel, .grades-wrapper > .panel');
+    const mainButtons = document.querySelectorAll('.menu > .panel');
     mainButtons.forEach((btn, i) => {
       btn.style.animation = `flyIn 0.7s forwards ${i * 0.15 + 1}s`;
     });
 
     // DROPDOWN CONTROL
     const gradesPanel = document.getElementById('gradesPanel');
+    const dropdown = document.querySelector('.dropdown');
     const dropdownItems = document.querySelectorAll('.dropdown .panel');
 
     let open = false;
@@ -179,21 +175,28 @@
     gradesPanel.addEventListener('click', () => {
       open = !open;
 
-      dropdownItems.forEach((item, index) => {
-        item.style.animation = ''; // reset
+      if (open) {
+        dropdown.classList.add('open');
+
+        dropdownItems.forEach((item, index) => {
+          item.style.animation = '';
+          setTimeout(() => {
+            item.style.animation = `flyIn 0.5s forwards ${index * 0.1}s`;
+          }, 0);
+        });
+
+      } else {
+        dropdownItems.forEach((item, index) => {
+          item.style.animation = '';
+          setTimeout(() => {
+            item.style.animation = `flyOut 0.3s forwards ${index * 0.05}s`;
+          }, 0);
+        });
 
         setTimeout(() => {
-          if (open) {
-            item.style.pointerEvents = 'auto';
-            item.style.animation = `flyIn 0.5s forwards ${index * 0.1 + 0.1}s`;
-          } else {
-            item.style.animation = `flyOut 0.4s forwards ${index * 0.05}s`;
-            setTimeout(() => {
-              item.style.pointerEvents = 'none';
-            }, 400 + index * 50);
-          }
-        }, 0);
-      });
+          dropdown.classList.remove('open');
+        }, 300);
+      }
     });
 
     // FADE OUT NAVIGATION
