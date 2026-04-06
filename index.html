@@ -14,7 +14,6 @@
     overflow-x: hidden;
   }
 
-  /* HERO BANNER FADE IN */
   .hero {
     text-align: center;
     padding: 40px 20px;
@@ -22,15 +21,11 @@
     animation: fadeIn 1s forwards;
     animation-delay: 0.2s;
   }
-
-  @keyframes fadeIn {
-    to { opacity: 1; }
-  }
+  @keyframes fadeIn { to { opacity: 1; } }
 
   .hero h1 { margin: 0; font-size: 32px; }
   .hero p { margin: 5px 0 0; font-size: 16px; }
 
-  /* BUTTONS */
   .menu {
     display: flex;
     flex-direction: column;
@@ -79,12 +74,15 @@
     transform: skew(-20deg) translateX(6px);
   }
 
-  /* DROPDOWN ITEMS */
+  /* DROPDOWN FIXED: absolute positioning so it doesn't affect flow */
   .dropdown {
-    position: relative; /* container still in flow */
+    position: absolute;
+    top: 100%; /* below GRADES button */
+    left: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+    pointer-events: none; /* prevent click when hidden */
   }
 
   .dropdown .panel {
@@ -94,7 +92,7 @@
     border: 3px solid white;
     transform: skew(-20deg) translateX(-50px);
     opacity: 0;
-    position: relative;
+    pointer-events: auto;
   }
 
   .dropdown .panel span { font-size: 20px; }
@@ -118,24 +116,26 @@
 
   <div class="menu">
     <a class="panel" href="index.html"><span>HOME</span></a>
+
     <div class="panel" id="gradesPanel"><span>GRADES</span></div>
     <div class="dropdown">
       <a class="panel" href="hg/index.html"><span>HG</span></a>
       <a class="panel" href="rg/index.html"><span>RG</span></a>
       <a class="panel" href="mg/index.html"><span>MG</span></a>
     </div>
+
     <a class="panel" href="#"><span>EXPLORE</span></a>
     <a class="panel" href="#"><span>ABOUT</span></a>
   </div>
 
   <script>
-    // CASCADE FLY-IN FOR MAIN BUTTONS
+    // MAIN BUTTONS FLY-IN
     const mainButtons = document.querySelectorAll('.menu > .panel');
     mainButtons.forEach((btn, i) => {
-      btn.style.animation = `flyIn 0.7s forwards ${i * 0.15 + 1}s`;
+      btn.style.animation = `flyIn 0.7s forwards ${i*0.15+1}s`;
     });
 
-    // DROPDOWN TOGGLE WITH STAGGERED FLY-IN AND FLY-OUT
+    // DROPDOWN STAGGER IN/OUT
     const gradesPanel = document.getElementById('gradesPanel');
     const dropdown = gradesPanel.nextElementSibling;
     const dropdownItems = dropdown.querySelectorAll('.panel');
@@ -144,24 +144,27 @@
       const isActive = gradesPanel.classList.toggle('active');
 
       dropdownItems.forEach((item, index) => {
-        item.style.animation = ''; // reset animation
+        item.style.animation = ''; // reset
 
         setTimeout(() => {
-          item.style.animation = isActive
-            ? `flyIn 0.5s forwards ${index * 0.1 + 0.1}s`
-            : `flyOut 0.4s forwards ${index * 0.05}s`;
+          if (isActive) {
+            item.style.pointerEvents = 'auto';
+            item.style.animation = `flyIn 0.5s forwards ${index*0.1+0.1}s`;
+          } else {
+            item.style.animation = `flyOut 0.4s forwards ${index*0.05}s`;
+            setTimeout(() => { item.style.pointerEvents = 'none'; }, 400 + index*50);
+          }
         }, 0);
       });
     });
 
-    // FADE-OUT BEFORE NAVIGATION
+    // FADE OUT BEFORE NAVIGATION
     const links = document.querySelectorAll('.panel[href]');
     links.forEach(link => {
       link.addEventListener('click', function(e){
         e.preventDefault();
         const href = this.getAttribute('href');
 
-        // add fade-out to hero + menu + all panels
         document.querySelectorAll('.hero, .menu, .menu .panel, .dropdown .panel').forEach(el => {
           el.classList.add('fade-out');
         });
