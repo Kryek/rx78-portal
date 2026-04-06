@@ -27,22 +27,16 @@
     to { opacity: 1; }
   }
 
-  .hero h1 {
-    margin: 0;
-    font-size: 32px;
-  }
+  .hero h1 { margin: 0; font-size: 32px; }
+  .hero p { margin: 5px 0 0; font-size: 16px; }
 
-  .hero p {
-    margin: 5px 0 0;
-    font-size: 16px;
-  }
-
-  /* BUTTONS FLY IN CASCADE */
+  /* BUTTONS */
   .menu {
     display: flex;
     flex-direction: column;
     padding: 20px;
     gap: 15px;
+    position: relative;
   }
 
   .panel {
@@ -78,7 +72,6 @@
     font-weight: bold;
     color: white;
     font-size: 18px;
-    transition: transform 0.3s ease;
   }
 
   .panel:hover {
@@ -86,72 +79,43 @@
     transform: skew(-20deg) translateX(6px);
   }
 
-  /* DROPDOWN */
+  /* DROPDOWN ITEMS */
   .dropdown {
+    position: relative; /* container still in flow */
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.3s ease;
     align-items: center;
-    margin: 0; /* remove extra gap */
-    padding: 0; /* remove padding */
-  }
-
-  .panel.active + .dropdown {
-    max-height: 500px;
   }
 
   .dropdown .panel {
+    width: 50%;
+    margin: 5px 0;
     background: #222;
     border: 3px solid white;
-    padding: 22px 18px;
-    margin: 5px 0; /* spacing between dropdown items */
     transform: skew(-20deg) translateX(-50px);
     opacity: 0;
-    width: 50%;
+    position: relative;
   }
 
-  .dropdown .panel span {
-    font-size: 20px;
-  }
+  .dropdown .panel span { font-size: 20px; }
+  .dropdown .panel:hover { background: #333; transform: skew(-20deg) translateX(4px); }
 
-  .dropdown .panel:hover {
-    background: #333;
-    transform: skew(-20deg) translateX(4px);
-  }
+  /* KEYFRAMES */
+  @keyframes flyIn { to { transform: skew(-20deg) translateX(0); opacity: 1; } }
+  @keyframes flyOut { to { transform: skew(-20deg) translateX(-50px); opacity: 0; } }
+  @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
 
-  /* KEYFRAMES FOR CASCADE */
-  @keyframes flyIn {
-    to {
-      transform: skew(-20deg) translateX(0);
-      opacity: 1;
-    }
-  }
-
-  /* FADE OUT */
-  .fade-out {
-    animation: fadeOut 1s forwards;
-  }
-
-  @keyframes fadeOut {
-    to {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-  }
+  .fade-out { animation: fadeOut 1s forwards; }
 
   </style>
 </head>
 <body>
 
-  <!-- Hero banner -->
   <div class="hero">
     <h1>RX-78-2 GUNDAM</h1>
     <p>Prototype Close Quarters Combat Mobile Suit</p>
   </div>
 
-  <!-- Navigation panels -->
   <div class="menu">
     <a class="panel" href="index.html"><span>HOME</span></a>
     <div class="panel" id="gradesPanel"><span>GRADES</span></div>
@@ -165,36 +129,44 @@
   </div>
 
   <script>
-    // Dropdown toggle
+    // CASCADE FLY-IN FOR MAIN BUTTONS
+    const mainButtons = document.querySelectorAll('.menu > .panel');
+    mainButtons.forEach((btn, i) => {
+      btn.style.animation = `flyIn 0.7s forwards ${i * 0.15 + 1}s`;
+    });
+
+    // DROPDOWN TOGGLE WITH STAGGERED FLY-IN AND FLY-OUT
     const gradesPanel = document.getElementById('gradesPanel');
+    const dropdown = gradesPanel.nextElementSibling;
+    const dropdownItems = dropdown.querySelectorAll('.panel');
+
     gradesPanel.addEventListener('click', () => {
-      gradesPanel.classList.toggle('active');
-      const dropdownItems = gradesPanel.nextElementSibling.querySelectorAll('.panel');
+      const isActive = gradesPanel.classList.toggle('active');
+
       dropdownItems.forEach((item, index) => {
-        item.style.animation = `flyIn 0.5s forwards ${index * 0.1 + 0.1}s`;
+        item.style.animation = ''; // reset animation
+
+        setTimeout(() => {
+          item.style.animation = isActive
+            ? `flyIn 0.5s forwards ${index * 0.1 + 0.1}s`
+            : `flyOut 0.4s forwards ${index * 0.05}s`;
+        }, 0);
       });
     });
 
-    // Cascade fly-in for main menu buttons
-    const mainButtons = document.querySelectorAll('.menu > .panel');
-    mainButtons.forEach((btn, i) => {
-      btn.style.animation = `flyIn 0.7s forwards ${i * 0.15 + 1}s`; // staggered
-    });
-
-    // Fade out navigation before leaving page
+    // FADE-OUT BEFORE NAVIGATION
     const links = document.querySelectorAll('.panel[href]');
     links.forEach(link => {
       link.addEventListener('click', function(e){
         e.preventDefault();
         const href = this.getAttribute('href');
-        // fade out hero, menu, and all panels
+
+        // add fade-out to hero + menu + all panels
         document.querySelectorAll('.hero, .menu, .menu .panel, .dropdown .panel').forEach(el => {
           el.classList.add('fade-out');
         });
-        // wait full 1s fade-out animation before navigating
-        setTimeout(() => {
-          window.location = href;
-        }, 1000);
+
+        setTimeout(() => { window.location = href; }, 1000);
       });
     });
   </script>
