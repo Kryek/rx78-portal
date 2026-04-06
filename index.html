@@ -50,7 +50,7 @@
     transition: 0.2s;
     cursor: pointer;
 
-    margin-bottom: 25px; /* unified spacing */
+    margin-bottom: 25px;
   }
 
   .panel:last-child {
@@ -90,15 +90,18 @@
     overflow: hidden;
 
     transition: max-height 0.4s ease;
+
+    margin-bottom: 0; /* closed = no space */
   }
 
   .dropdown.open {
     max-height: 300px;
+    margin-bottom: 25px; /* MATCH panel spacing */
   }
 
   .dropdown .panel {
     width: 50%;
-    margin: 8px 0; /* internal spacing */
+    margin: 8px 0;
     padding: 18px 20px;
     background: #222;
 
