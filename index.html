@@ -13,7 +13,7 @@
     overflow-x: hidden;
   }
 
-  /* BACKGROUND IMAGE */
+  /* BACKGROUND */
   .bg-image {
     position: fixed;
     top: 0;
@@ -29,7 +29,6 @@
     z-index: -2;
   }
 
-  /* DARK OVERLAY */
   .bg-image::after {
     content: "";
     position: absolute;
@@ -65,7 +64,7 @@
     display: block;
     text-decoration: none;
     color: white;
-    background: rgba(17,17,17,0.9); /* slight transparency */
+    background: rgba(17,17,17,0.9);
     border: 3px solid white;
     padding: 22px 36px;
     transform: skew(-20deg) translateX(-100px);
@@ -127,6 +126,14 @@
 
     transform: skew(-20deg) translateX(-50px);
     opacity: 0;
+  }
+
+  /* MOBILE FIX */
+  @media (max-width: 600px) {
+    .dropdown .panel {
+      width: 65%;
+      padding: 16px 40px 16px 20px;
+    }
   }
 
   .dropdown .panel span {
@@ -203,7 +210,7 @@
   </div>
 
   <script>
-    // MAIN BUTTON CASCADE
+    // MAIN BUTTON STAGGER
     const mainButtons = document.querySelectorAll('.menu > .panel');
     mainButtons.forEach((btn, i) => {
       btn.style.animation = `flyIn 0.7s forwards ${i * 0.15 + 1}s`;
@@ -231,8 +238,7 @@
           });
 
         } else {
-          dropdown.style.maxHeight = "0";
-
+          // stagger OUT first
           items.forEach((item, i) => {
             item.style.animation = '';
             setTimeout(() => {
@@ -240,7 +246,13 @@
             }, 0);
           });
 
-          dropdown.classList.remove('open');
+          // wait for animation to finish before collapsing
+          const totalDelay = items.length * 50 + 300;
+
+          setTimeout(() => {
+            dropdown.style.maxHeight = "0";
+            dropdown.classList.remove('open');
+          }, totalDelay);
         }
       });
     }
@@ -248,7 +260,7 @@
     setupDropdown('scalePanel', 'scaleDropdown');
     setupDropdown('gradesPanel', 'gradesDropdown');
 
-    // FADE OUT NAVIGATION
+    // FADE OUT NAV
     const links = document.querySelectorAll('.panel[href]');
     links.forEach(link => {
       link.addEventListener('click', function(e){
