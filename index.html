@@ -47,6 +47,9 @@
     to { opacity: 1; }
   }
 
+  .hero h1 { margin: 0; font-size: 32px; }
+  .hero p { margin: 5px 0 0; font-size: 16px; }
+
   /* MENU */
   .menu {
     display: flex;
@@ -57,21 +60,28 @@
   .panel {
     position: relative;
     display: block;
+    text-decoration: none;
     color: white;
     background: rgba(17,17,17,0.9);
     border: 3px solid white;
     padding: 22px 36px;
     transform: skew(-20deg) translateX(-100px);
     opacity: 0;
-    margin-bottom: 25px;
+    transition: 0.2s;
     cursor: pointer;
+    margin-bottom: 25px;
+  }
+
+  .panel:last-child {
+    margin-bottom: 0;
   }
 
   .panel span {
     display: block;
     transform: skew(20deg);
-    text-align: center;
     font-size: 24px;
+    font-weight: bold;
+    text-align: center;
     letter-spacing: 2px;
   }
 
@@ -81,6 +91,12 @@
     right: 12px;
     top: 50%;
     transform: translateY(-50%) skew(20deg);
+    font-size: 18px;
+  }
+
+  .panel:hover {
+    background: rgba(34,34,34,0.95);
+    transform: skew(-20deg) translateX(6px);
   }
 
   /* DROPDOWN */
@@ -90,7 +106,7 @@
     align-items: center;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.4s ease;
+    transition: max-height 0.25s ease; /* faster collapse */
   }
 
   .dropdown.open {
@@ -106,6 +122,7 @@
     opacity: 0;
   }
 
+  /* MOBILE FIX */
   @media (max-width: 600px) {
     .dropdown .panel {
       width: 65%;
@@ -113,18 +130,20 @@
     }
   }
 
+  .dropdown .panel span {
+    font-size: 20px;
+  }
+
+  .dropdown .panel:hover {
+    background: rgba(51,51,51,0.95);
+    transform: skew(-20deg) translateX(4px);
+  }
+
   /* ANIMATIONS */
   @keyframes flyIn {
     to {
       transform: skew(-20deg) translateX(0);
       opacity: 1;
-    }
-  }
-
-  @keyframes flyOut {
-    to {
-      transform: skew(-20deg) translateX(-80px);
-      opacity: 0;
     }
   }
 
@@ -155,27 +174,27 @@
     <!-- SCALE -->
     <div class="panel" id="scalePanel"><span>SCALE</span></div>
     <div class="dropdown" id="scaleDropdown">
-      <div class="panel"><span>1/144</span></div>
-      <div class="panel"><span>1/100</span></div>
+      <a class="panel"><span>1/144</span></a>
+      <a class="panel"><span>1/100</span></a>
     </div>
 
     <!-- GRADES -->
     <div class="panel" id="gradesPanel"><span>GRADES</span></div>
     <div class="dropdown" id="gradesDropdown">
-      <div class="panel"><span>HG</span></div>
-      <div class="panel"><span>RG</span></div>
-      <div class="panel"><span>MG</span></div>
-      <div class="panel"><span>PG</span></div>
-      <div class="panel"><span>MEGASIZE</span></div>
+      <a class="panel" href="hg/index.html"><span>HG</span></a>
+      <a class="panel"><span>RG</span></a>
+      <a class="panel"><span>MG</span></a>
+      <a class="panel"><span>PG</span></a>
+      <a class="panel"><span>MEGASIZE</span></a>
     </div>
 
-    <div class="panel"><span>EXPLORE</span></div>
-    <div class="panel"><span>ABOUT</span></div>
+    <a class="panel"><span>EXPLORE</span></a>
+    <a class="panel"><span>ABOUT</span></a>
 
   </div>
 
   <script>
-    // MAIN BUTTONS
+    // MAIN BUTTON STAGGER IN
     const mainButtons = document.querySelectorAll('.menu > .panel');
     mainButtons.forEach((btn, i) => {
       btn.style.animation = `flyIn 0.7s forwards ${i * 0.15 + 1}s`;
@@ -203,30 +222,39 @@
           });
 
         } else {
-          // KEEP OPEN so animation is visible
-          dropdown.style.maxHeight = dropdown.scrollHeight + "px";
+          // INSTANT COLLAPSE
+          dropdown.style.maxHeight = "0";
+          dropdown.classList.remove('open');
 
-          // animate out
-          items.forEach((item, i) => {
-            item.style.animation = '';
-            setTimeout(() => {
-              item.style.animation = `flyOut 0.3s forwards ${i * 0.08}s`;
-            }, 0);
+          // quick reset (no visible stagger)
+          items.forEach((item) => {
+            item.style.animation = 'none';
+            item.style.opacity = '0';
+            item.style.transform = 'skew(-20deg) translateX(-40px)';
           });
-
-          const totalDelay = items.length * 80 + 300;
-
-          // collapse AFTER animation
-          setTimeout(() => {
-            dropdown.style.maxHeight = "0";
-            dropdown.classList.remove('open');
-          }, totalDelay);
         }
       });
     }
 
     setupDropdown('scalePanel', 'scaleDropdown');
     setupDropdown('gradesPanel', 'gradesDropdown');
+
+    // FADE OUT NAV
+    const links = document.querySelectorAll('.panel[href]');
+    links.forEach(link => {
+      link.addEventListener('click', function(e){
+        e.preventDefault();
+        const href = this.getAttribute('href');
+
+        document.querySelectorAll('.hero, .menu, .panel').forEach(el => {
+          el.classList.add('fade-out');
+        });
+
+        setTimeout(() => {
+          window.location = href;
+        }, 1000);
+      });
+    });
   </script>
 
 </body>
