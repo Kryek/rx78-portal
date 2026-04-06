@@ -4,6 +4,8 @@
   <title>RX-78 Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
     body {
       margin: 0;
       font-family: 'Orbitron', sans-serif;
@@ -11,8 +13,32 @@
       color: white;
     }
 
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+    /* Hero banner */
+    .hero {
+      background: url('gundam.png') no-repeat center top;
+      background-size: contain;
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+      box-sizing: border-box;
+    }
 
+    .hero h1 {
+      font-size: 32px;
+      margin: 0;
+      text-shadow: 0 0 5px #000;
+    }
+
+    .hero p {
+      font-size: 12px;
+      margin: 5px 0 0 0;
+      opacity: 0.8;
+      text-shadow: 0 0 3px #000;
+    }
+
+    /* Menu panels */
     .menu {
       display: flex;
       flex-direction: column;
@@ -23,31 +49,28 @@
     .panel {
       position: relative;
       background: #111;
-      border: 2px solid white;
-      padding: 20px 30px;
-      font-size: 22px;
+      border: 3px solid white;
+      padding: 20px 40px;
+      font-size: 24px;
       font-weight: bold;
       text-decoration: none;
       color: white;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      overflow: hidden;
-      clip-path: polygon(
-        15px 0%, 100% 0%, 100% 100%, 15px 100%, 0% 50%
-      );
+      justify-content: center;
+      clip-path: polygon(15px 0%, 100% 0%, 100% 100%, 15px 100%, 0% 50%);
       transition: 0.2s;
+      overflow: hidden;
     }
 
-    /* Right-end stripes */
-    .panel::before {
+    .panel::after {
       content: "///";
       position: absolute;
       right: 15px;
       top: 50%;
       transform: translateY(-50%);
-      font-weight: bold;
       opacity: 0.7;
+      font-weight: bold;
     }
 
     .panel:hover {
@@ -55,23 +78,22 @@
       transform: translateX(3px);
     }
 
-    .panel-text {
-      z-index: 1;
-    }
   </style>
 </head>
 <body>
 
+  <!-- Hero banner -->
+  <div class="hero">
+    <h1>RX-78-2 GUNDAM</h1>
+    <p>Prototype Close Quarters Combat Mobile Suit</p>
+  </div>
+
+  <!-- Navigation panels -->
   <div class="menu">
-    <a class="panel" href="hg/index.html">
-      <span class="panel-text">GRADES</span>
-    </a>
-    <a class="panel" href="#">
-      <span class="panel-text">EXPLORE</span>
-    </a>
-    <a class="panel" href="#">
-      <span class="panel-text">ABOUT</span>
-    </a>
+    <a class="panel" href="index.html">HOME</a>
+    <a class="panel" href="hg/index.html">GRADES</a>
+    <a class="panel" href="#">EXPLORE</a>
+    <a class="panel" href="#">ABOUT</a>
   </div>
 
 </body>
