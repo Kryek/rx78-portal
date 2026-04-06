@@ -20,7 +20,7 @@
     padding: 20px;
   }
 
-  /* Panel style */
+  /* Main panel style */
   .panel {
     position: relative;
     display: block;
@@ -75,38 +75,53 @@
     transform: skew(-20deg) translateX(6px);
   }
 
-  /* Dropdown menu */
+  /* Dropdown wrapper with animation */
   .dropdown {
-    display: none;
+    display: flex;
     flex-direction: column;
-    margin-left: 20px; /* small offset to show hierarchy */
-  }
-
-  .dropdown a {
-    transform: skew(-20deg);
-    display: block;
-    background: #222;
-    border: 2px solid white;
-    margin-top: 6px;
-    padding: 15px;
-    text-align: center;
-    text-decoration: none;
-    color: white;
-    position: relative;
-  }
-
-  .dropdown a span {
-    transform: skew(20deg);
-    font-weight: bold;
-  }
-
-  .dropdown a:hover {
-    background: #333;
+    gap: 12px;
+    margin-left: 20px;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
   }
 
   /* Show dropdown when active */
   .panel.active + .dropdown {
-    display: flex;
+    max-height: 500px; /* large enough to fit all items */
+  }
+
+  /* Dropdown panels */
+  .dropdown .panel {
+    background: #222;
+    border: 2px solid white;
+    padding: 15px 25px;
+    transform: skew(-20deg);
+    font-size: 20px;
+    position: relative;
+  }
+
+  .dropdown .panel span {
+    transform: skew(20deg);
+    font-weight: bold;
+  }
+
+  .dropdown .panel::after {
+    content: "///";
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%) skew(20deg);
+    width: auto;
+    height: auto;
+    background: none;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .dropdown .panel:hover {
+    background: #333;
+    transform: skew(-20deg) translateX(4px);
   }
 
   </style>
@@ -126,9 +141,9 @@
     <!-- Grades panel with dropdown -->
     <div class="panel" id="gradesPanel"><span>GRADES</span></div>
     <div class="dropdown">
-      <a href="hg/index.html"><span>HG</span></a>
-      <a href="rg/index.html"><span>RG</span></a>
-      <a href="mg/index.html"><span>MG</span></a>
+      <a class="panel" href="hg/index.html"><span>HG</span></a>
+      <a class="panel" href="rg/index.html"><span>RG</span></a>
+      <a class="panel" href="mg/index.html"><span>MG</span></a>
     </div>
 
     <a class="panel" href="#"><span>EXPLORE</span></a>
