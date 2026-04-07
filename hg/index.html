@@ -31,7 +31,7 @@
     background-position: top center;
     background-repeat: no-repeat;
     z-index: 0;
-    transform: translateX(50%); /* half gundam position */
+    transform: translateX(50%);
     transition: transform 0.7s ease;
   }
 
@@ -57,10 +57,8 @@
     flex: 1;
     overflow-y: auto;
     padding: 80px 20px 100px;
-
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 60px, black calc(100% - 60px), transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0%, black 60px, black calc(100% - 60px), transparent 100%);
-
     scrollbar-color: white black;
     scrollbar-width: thin;
     transition: opacity 0.6s ease; /* fade-out transition */
@@ -146,12 +144,7 @@
     <div class="hero"></div>
 
     <div class="menu" id="kitList">
-
-      <!-- Example HG kits -->
-      <div class="panel"><span>HG / Revive / Standard</span></div>
-      <div class="panel"><span>HG / Revive / RX-78-3</span></div>
-      <div class="panel"><span>HG / 1990 / Standard</span></div>
-
+      <!-- HG kits will be loaded here dynamically -->
     </div>
 
   </div>
@@ -160,14 +153,30 @@
 
 <script>
   const bg = document.getElementById('bgImage');
-  const kits = document.querySelectorAll('#kitList .panel');
   const kitList = document.getElementById('kitList');
   const homeBtn = document.getElementById('homeBtn');
 
-  // Fly-in stagger animation for kit panels
-  kits.forEach((kit,i)=>{
-    kit.style.animation = `flyIn 0.6s forwards ${i*0.1 + 0.3}s`;
-  });
+  // Load JSON file dynamically
+  fetch('../kits.json')
+    .then(response => response.json())
+    .then(data => {
+      const hgKits = data.kits.filter(kit => kit.meta === "HG");
+      hgKits.forEach((kit, i) => {
+        const panel = document.createElement('div');
+        panel.classList.add('panel');
+        panel.innerHTML = `<span>${kit.name}</span>`;
+        panel.addEventListener('click', () => {
+          window.location.href = kit.page;
+        });
+        kitList.appendChild(panel);
+
+        // staggered fly-in animation
+        setTimeout(() => {
+          panel.style.animation = `flyIn 0.6s forwards ${i*0.1 + 0.3}s`;
+        }, 50);
+      });
+    })
+    .catch(err => console.error("Failed to load kits.json", err));
 
   // Fly-in animation for HOME button
   setTimeout(()=>{
@@ -188,7 +197,7 @@
     // after fade-out animation, navigate back
     setTimeout(()=>{
       window.location.href = '../index.html';
-    }, 650); // matches CSS transition
+    }, 650);
   });
 </script>
 
