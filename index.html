@@ -141,20 +141,20 @@
 
   /* ✅ MOBILE IMPROVEMENT */
   @media (max-width: 600px) {
-    .panel {
-      width: 80%;
-    }
-
-    .dropdown .panel {
-      width: 70%;
-      max-width: 70%;
-    }
-
-    .dropdown .panel span {
-      font-size: 16px;
-      letter-spacing: 1px;
-    }
+  .panel {
+    width: 80%;
   }
+
+  .dropdown .panel {
+    width: 52vw;        /* ← THIS is the real fix */
+    max-width: 52vw;    /* override desktop cap */
+  }
+
+  .dropdown .panel span {
+    font-size: 16px;
+    letter-spacing: 1px;
+  }
+}
 
   @keyframes flyIn {
     to { transform: skew(-20deg) translateX(0); opacity:1; }
