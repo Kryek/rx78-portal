@@ -128,10 +128,9 @@
 
 <script>
 const mainButtons = document.querySelectorAll('.menu > .panel');
-const dropdowns = document.querySelectorAll('.dropdown .panel');
 const bgImage = document.getElementById('bgImage');
 
-// Initial fly-in animation
+// Initial fly-in for main buttons
 mainButtons.forEach((btn,i)=>{ btn.style.animation=`flyIn 0.7s forwards ${i*0.15+0.5}s`; });
 
 function setupDropdown(triggerId, dropdownId) {
@@ -142,7 +141,8 @@ function setupDropdown(triggerId, dropdownId) {
 
   trigger.addEventListener('click',()=>{
     open=!open;
-    trigger.classList.toggle('active');
+    trigger.classList.toggle('active', open);
+
     if(open){
       dropdown.classList.add('open');
       dropdown.style.maxHeight=dropdown.scrollHeight+"px";
@@ -150,7 +150,7 @@ function setupDropdown(triggerId, dropdownId) {
         item.style.animation='';
         setTimeout(()=>{ item.style.animation=`flyIn 0.4s forwards ${i*0.1}s`; },0);
       });
-    }else{
+    } else {
       dropdown.style.maxHeight="0";
       dropdown.classList.remove('open');
       items.forEach(item=>{
@@ -166,23 +166,16 @@ setupDropdown('scalePanel','scaleDropdown');
 setupDropdown('gradesPanel','gradesDropdown');
 
 // Navigation / fadeout + bg slide
-const navItems=document.querySelectorAll('.panel[data-link]');
-navItems.forEach(item=>{
+document.querySelectorAll('.panel[data-link]').forEach(item=>{
   item.addEventListener('click',()=>{
-    // Fade out main buttons
-    mainButtons.forEach((btn,i)=>{
-      btn.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`;
-    });
-    // Fade out dropdown buttons if open
-    const parentDropdown=item.closest('.dropdown');
-    if(parentDropdown){
-      const dItems=parentDropdown.querySelectorAll('.panel');
-      dItems.forEach((d,i)=>{
-        d.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`;
-      });
-    }
 
-    // Slide background to half Gundam for Grades items
+    // Fade out main buttons
+    mainButtons.forEach((btn,i)=>{ btn.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`; });
+
+    // Fade out **all open dropdown buttons**
+    document.querySelectorAll('.dropdown.open .panel').forEach((d,i)=>{ d.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`; });
+
+    // Slide background for Grades items
     if(item.parentElement.id==='gradesDropdown'){ bgImage.style.transform='translateX(50%)'; }
 
     const link=item.getAttribute('data-link');
@@ -190,6 +183,5 @@ navItems.forEach(item=>{
   });
 });
 </script>
-
 </body>
 </html>
