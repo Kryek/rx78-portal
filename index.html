@@ -11,8 +11,8 @@
     height: 100%;
     overflow: hidden;
     font-family: 'Orbitron', sans-serif;
-    color: white;
     background: black; /* native black background */
+    color: white;
   }
 
   .app {
@@ -49,7 +49,7 @@
     flex-direction: column;
   }
 
-  /* HERO */
+  /* HERO (spacing only) */
   .hero {
     padding: 30px 20px;
     flex-shrink: 0;
@@ -82,7 +82,6 @@
       transparent 100%
     );
 
-    /* scrollbar (Firefox) */
     scrollbar-color: white black;
     scrollbar-width: thin;
   }
@@ -95,9 +94,7 @@
   .menu::-webkit-scrollbar-thumb:hover { background: #ccc; }
 
   @media (max-width: 600px) {
-    .menu {
-      padding: 80px 20px 140px;
-    }
+    .menu { padding: 80px 20px 140px; }
   }
 
   /* PANELS */
@@ -111,7 +108,7 @@
     opacity: 0;
     margin-bottom: 25px;
     cursor: pointer;
-    transition: opacity 0.6s ease; /* fadeout transition */
+    transition: background 0.3s;
   }
 
   .panel span {
@@ -132,11 +129,7 @@
     transform: translateY(-50%) skew(20deg) rotate(0deg);
     transition: transform 0.3s ease;
   }
-
-  /* ROTATE WHEN OPEN */
-  .panel.active::after {
-    transform: translateY(-50%) skew(20deg) rotate(90deg);
-  }
+  .panel.active::after { transform: translateY(-50%) skew(20deg) rotate(90deg); }
 
   /* DROPDOWN */
   .dropdown {
@@ -147,26 +140,23 @@
     overflow: hidden;
     transition: max-height 0.25s ease;
   }
-
   .dropdown.open { margin-bottom: 25px; }
-
   .dropdown .panel {
-    width: 75%;
+    width: 70%;
     margin: 8px 0;
     background: rgba(17,17,17,0.55);
     transform: skew(-20deg) translateX(-50px);
     opacity: 0;
   }
-
-  @media (max-width: 600px) {
-    .dropdown .panel { width: 65%; }
-  }
+  @media (max-width: 600px) { .dropdown .panel { width: 60%; } }
 
   /* ANIMATION */
   @keyframes flyIn {
     to { transform: skew(-20deg) translateX(0); opacity: 1; }
   }
-
+  @keyframes fadeOut {
+    to { opacity: 0; transform: skew(-20deg) translateX(-100px); }
+  }
   </style>
 </head>
 <body>
@@ -175,7 +165,7 @@
 
   <div class="bg-image" id="bgImage"></div>
 
-  <div class="content" id="homeContent">
+  <div class="content">
 
     <div class="hero"></div>
 
@@ -184,92 +174,93 @@
       <!-- SCALE -->
       <div class="panel" id="scalePanel"><span>SCALE</span></div>
       <div class="dropdown" id="scaleDropdown">
-        <div class="panel"><span>1/144</span></div>
-        <div class="panel"><span>1/100</span></div>
-        <div class="panel"><span>MISC</span></div>
+        <div class="panel" data-link="#"><span>1/144</span></div>
+        <div class="panel" data-link="#"><span>1/100</span></div>
+        <div class="panel" data-link="#"><span>MISC</span></div>
       </div>
 
       <!-- GRADES -->
       <div class="panel" id="gradesPanel"><span>GRADES</span></div>
       <div class="dropdown" id="gradesDropdown">
-        <div class="panel"><span>SD</span></div>
-        <div class="panel"><span>HG</span></div>
-        <div class="panel"><span>RG</span></div>
-        <div class="panel"><span>MG</span></div>
-        <div class="panel"><span>PG</span></div>
-        <div class="panel"><span>MEGASIZE</span></div>
+        <div class="panel" data-link="#"><span>SD</span></div>
+        <div class="panel" data-link="#"><span>HG</span></div>
+        <div class="panel" data-link="#"><span>RG</span></div>
+        <div class="panel" data-link="#"><span>MG</span></div>
+        <div class="panel" data-link="#"><span>PG</span></div>
+        <div class="panel" data-link="#"><span>MEGASIZE</span></div>
       </div>
 
-      <div class="panel" data-target="hg/index.html"><span>HG</span></div>
-      <div class="panel" data-target="mg/index.html"><span>MG</span></div>
-      <div class="panel" data-target="sd/index.html"><span>SD</span></div>
-
-      <div class="panel" data-target="explore.html"><span>EXPLORE</span></div>
-      <div class="panel" data-target="about.html"><span>ABOUT</span></div>
+      <div class="panel" data-link="#"><span>EXPLORE</span></div>
+      <div class="panel" data-link="#"><span>ABOUT</span></div>
 
     </div>
 
   </div>
-
 </div>
 
 <script>
   const mainButtons = document.querySelectorAll('.menu > .panel');
-  const bg = document.getElementById('bgImage');
-  const homeContent = document.getElementById('homeContent');
+  const bgImage = document.getElementById('bgImage');
 
-  // fly-in main buttons
+  // Initial fly-in animation
   mainButtons.forEach((btn, i) => {
-    btn.style.animation = `flyIn 0.7s forwards ${i*0.15 + 0.5}s`;
+    btn.style.animation = `flyIn 0.7s forwards ${i * 0.15 + 0.5}s`;
   });
 
-  // dropdown setup
-  function setupDropdown(triggerId, dropdownId){
+  function setupDropdown(triggerId, dropdownId) {
     const trigger = document.getElementById(triggerId);
     const dropdown = document.getElementById(dropdownId);
     const items = dropdown.querySelectorAll('.panel');
     let open = false;
 
-    trigger.addEventListener('click', ()=>{
+    trigger.addEventListener('click', () => {
       open = !open;
       trigger.classList.toggle('active');
 
-      if(open){
+      if (open) {
         dropdown.classList.add('open');
-        dropdown.style.maxHeight = dropdown.scrollHeight + 'px';
-        items.forEach((item,i)=>{
-          setTimeout(()=>{
-            item.style.transform = 'skew(-20deg) translateX(0)';
-            item.style.opacity = '1';
-          }, i*100);
+        dropdown.style.maxHeight = dropdown.scrollHeight + "px";
+        items.forEach((item, i) => {
+          item.style.animation = '';
+          setTimeout(() => { item.style.animation = `flyIn 0.4s forwards ${i*0.1}s`; }, 0);
         });
       } else {
-        dropdown.style.maxHeight = '0';
-        items.forEach(item=>{
-          item.style.transform = 'skew(-20deg) translateX(-50px)';
+        dropdown.style.maxHeight = "0";
+        dropdown.classList.remove('open');
+        items.forEach(item => {
+          item.style.animation = 'none';
           item.style.opacity = '0';
+          item.style.transform = 'skew(-20deg) translateX(-50px)';
         });
       }
     });
   }
 
-  setupDropdown('scalePanel','scaleDropdown');
-  setupDropdown('gradesPanel','gradesDropdown');
+  setupDropdown('scalePanel', 'scaleDropdown');
+  setupDropdown('gradesPanel', 'gradesDropdown');
 
-  // navigation with fadeout + bg slide for kit lists
-  document.querySelectorAll('.panel[data-target]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      // slide background if navigating to list pages
-      if(btn.dataset.target.includes('/index.html')){
-        bg.style.transform = 'translateX(50%)';
+  // Navigation / fadeout + bg slide
+  const navItems = document.querySelectorAll('.panel[data-link]');
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      // Fade out main buttons
+      mainButtons.forEach((btn, i) => {
+        btn.style.animation = `fadeOut 0.5s forwards ${i*0.05}s`;
+      });
+
+      // Slide background to half Gundam for Grades items
+      if(item.parentElement.id === 'gradesDropdown') {
+        bgImage.style.transform = 'translateX(50%)';
       }
 
-      // fade out buttons
-      homeContent.style.opacity = '0';
-
-      setTimeout(()=>{ window.location.href = btn.dataset.target; }, 1000);
+      // Delay actual navigation for animation
+      const link = item.getAttribute('data-link');
+      if(link && link !== '#') {
+        setTimeout(() => { window.location.href = link; }, 600);
+      }
     });
   });
 </script>
+
 </body>
 </html>
