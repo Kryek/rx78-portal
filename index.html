@@ -65,10 +65,10 @@
     flex: 1;
     overflow-y: auto;
 
-    /* spacing */
-    padding: 20px 20px 100px;
+    /* ✅ PUSH DOWN FROM FADE */
+    padding: 80px 20px 100px;
 
-    /* 🔥 TOP + BOTTOM FADE */
+    /* FADE TOP + BOTTOM */
     -webkit-mask-image: linear-gradient(
       to bottom,
       transparent 0%,
@@ -85,10 +85,10 @@
     );
   }
 
-  /* extra mobile breathing room */
+  /* MOBILE BUFFER */
   @media (max-width: 600px) {
     .menu {
-      padding: 20px 20px 140px;
+      padding: 80px 20px 140px;
     }
   }
 
