@@ -31,7 +31,8 @@
     background-position: top center;
     background-repeat: no-repeat;
     z-index: 0;
-    transform: translateX(50%); /* same as the main index end */
+    transform: translateX(50%); /* half gundam position */
+    transition: transform 0.7s ease;
   }
 
   .bg-image::after {
@@ -72,6 +73,7 @@
 
   @media (max-width:600px){ .menu { padding: 80px 20px 140px; } }
 
+  /* KIT PANELS */
   .panel {
     position: relative;
     display: block;
@@ -83,6 +85,8 @@
     margin-bottom: 25px;
     cursor: pointer;
     transition: background 0.2s;
+    width: 50%; /* half screen width */
+    text-align: left;
   }
 
   .panel:hover { background: rgba(17,17,17,0.8); }
@@ -96,19 +100,36 @@
     text-shadow: 0 0 4px rgba(0,0,0,0.8);
   }
 
+  /* HOME BUTTON */
+  #homeBtn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 16px;
+    font-size: 16px;
+    background: rgba(17,17,17,0.65);
+    border: 2px solid white;
+    cursor: pointer;
+    z-index: 2;
+    transition: background 0.2s;
+  }
+
+  #homeBtn:hover { background: rgba(17,17,17,0.8); }
+
   /* ANIMATION */
   @keyframes flyIn {
     to { transform: skew(-20deg) translateX(0); opacity:1; }
   }
-
   </style>
 </head>
 <body>
 <div class="app">
 
-  <div class="bg-image"></div>
+  <div class="bg-image" id="bgImage"></div>
 
   <div class="content">
+
+    <button id="homeBtn">HOME</button>
 
     <div class="hero"></div>
 
@@ -127,10 +148,33 @@
 </div>
 
 <script>
-  // Fly-in stagger animation for HG list
+  const bg = document.getElementById('bgImage');
   const kits = document.querySelectorAll('#kitList .panel');
+
+  // Fly-in stagger animation for kit panels
   kits.forEach((kit,i)=>{
     kit.style.animation = `flyIn 0.6s forwards ${i*0.1 + 0.3}s`;
+  });
+
+  // Home button click
+  const homeBtn = document.getElementById('homeBtn');
+  homeBtn.addEventListener('click', ()=>{
+    // fade out all kit panels
+    kits.forEach((kit,i)=>{
+      kit.style.transition = 'opacity 0.5s, transform 0.5s';
+      kit.style.opacity = 0;
+      kit.style.transform = 'skew(-20deg) translateX(-100px)';
+    });
+
+    // fade out home button
+    homeBtn.style.transition = 'opacity 0.5s';
+    homeBtn.style.opacity = 0;
+
+    // move background back to center
+    bg.style.transform = 'translateX(0%)';
+
+    // after animation complete, go to main index
+    setTimeout(()=>{ window.location.href = '../index.html'; }, 600);
   });
 </script>
 
