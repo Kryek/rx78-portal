@@ -61,7 +61,8 @@
     mask-image: linear-gradient(to bottom, transparent 0%, black 60px, black calc(100% - 60px), transparent 100%);
     scrollbar-color: white black;
     scrollbar-width: thin;
-    transition: opacity 0.6s ease; /* fade-out transition */
+    transition: opacity 0.7s ease;
+    opacity: 1;
   }
 
   .menu::-webkit-scrollbar { width: 8px; }
@@ -112,7 +113,7 @@
     top: 20px;
     left: 20px;
     z-index: 2;
-    transition: background 0.2s, opacity 0.6s ease;
+    transition: background 0.2s, opacity 0.7s ease;
     opacity: 0;
   }
 
@@ -164,7 +165,7 @@
       hgKits.forEach((kit, i) => {
         const panel = document.createElement('div');
         panel.classList.add('panel');
-        panel.innerHTML = `<span>${kit.name}</span>`;
+        panel.innerHTML = `<span>${kit.mold} <br> &gt; ${kit.variant}</span>`;
         panel.addEventListener('click', () => {
           window.location.href = kit.page;
         });
@@ -176,7 +177,10 @@
         }, 50);
       });
     })
-    .catch(err => console.error("Failed to load kits.json", err));
+    .catch(err => {
+      console.error("Failed to load kits.json", err);
+      kitList.innerHTML = "<div style='color:red; padding:20px;'>Failed to load HG kits. Check your JSON file.</div>";
+    });
 
   // Fly-in animation for HOME button
   setTimeout(()=>{
@@ -185,19 +189,19 @@
 
   // Home button click
   homeBtn.addEventListener('click', ()=>{
-    // fade out the entire kit list
+    // fade out the entire kit list smoothly
     kitList.style.opacity = 0;
 
-    // fade out home button
+    // fade out home button smoothly
     homeBtn.style.opacity = 0;
 
     // move background back to center
     bg.style.transform = 'translateX(0%)';
 
-    // after fade-out animation, navigate back
+    // after fade-out, navigate back
     setTimeout(()=>{
       window.location.href = '../index.html';
-    }, 650);
+    }, 700); // slightly longer to match CSS transition
   });
 </script>
 
