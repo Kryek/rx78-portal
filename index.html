@@ -53,7 +53,6 @@
     flex-shrink: 0;
   }
 
-  /* MENU */
   .menu {
     flex: 1;
     display: flex;
@@ -76,7 +75,6 @@
   .scroll-container::-webkit-scrollbar { width: 8px; }
   .scroll-container::-webkit-scrollbar-track { background: black; }
   .scroll-container::-webkit-scrollbar-thumb { background: white; border-radius:4px; }
-  .scroll-container::-webkit-scrollbar-thumb:hover { background:#ccc; }
 
   .button-container {
     display: flex;
@@ -85,7 +83,6 @@
     align-items: center;
   }
 
-  /* MAIN BUTTONS */
   .button-container > .panel {
     width: 75vw;
     max-width: 90%;
@@ -101,19 +98,14 @@
     transform: skew(-20deg) translateX(-100px);
     opacity: 0;
     cursor: pointer;
-    transition: background 0.2s;
     box-sizing: border-box;
   }
-
-  .panel:hover { background: rgba(17,17,17,0.8); }
 
   .panel span {
     display: block;
     transform: skew(20deg);
     text-align: center;
     font-size: 24px;
-    letter-spacing: 2px;
-    text-shadow: 0 0 4px rgba(0,0,0,0.8);
   }
 
   .panel::after {
@@ -121,15 +113,9 @@
     position: absolute;
     right: 12px;
     top: 50%;
-    transform: translateY(-50%) skew(20deg) rotate(0deg);
-    transition: transform 0.3s ease;
+    transform: translateY(-50%) skew(20deg);
   }
 
-  .panel.active::after {
-    transform: translateY(-50%) skew(20deg) rotate(90deg);
-  }
-
-  /* DROPDOWN (desktop unchanged) */
   .dropdown {
     display: flex;
     flex-direction: column;
@@ -143,6 +129,7 @@
     margin-bottom: 40px;
   }
 
+  /* DESKTOP (unchanged) */
   .dropdown .panel {
     width: 37.5vw;
     max-width: 50%;
@@ -152,19 +139,20 @@
     opacity: 0;
   }
 
-  /* MOBILE ONLY FIX */
+  /* ✅ MOBILE IMPROVEMENT */
   @media (max-width: 600px) {
     .panel {
       width: 80%;
     }
 
     .dropdown .panel {
-      width: 60%; /* EXACTLY 3/4 of main (80%) */
+      width: 70%;
+      max-width: 70%;
     }
 
     .dropdown .panel span {
-      font-size: 18px;
-      letter-spacing: 1.2px;
+      font-size: 16px;
+      letter-spacing: 1px;
     }
   }
 
@@ -181,11 +169,9 @@
 <body>
 
 <div class="app">
-
   <div class="bg-image" id="bgImage"></div>
 
   <div class="content">
-
     <div class="hero"></div>
 
     <div class="menu">
@@ -194,30 +180,29 @@
 
           <div class="panel" id="scalePanel"><span>SCALE</span></div>
           <div class="dropdown" id="scaleDropdown">
-            <div class="panel" data-link="#"><span>1/144</span></div>
-            <div class="panel" data-link="#"><span>1/100</span></div>
-            <div class="panel" data-link="#"><span>MISC</span></div>
+            <div class="panel"><span>1/144</span></div>
+            <div class="panel"><span>1/100</span></div>
+            <div class="panel"><span>MISC</span></div>
           </div>
 
           <div class="panel" id="gradesPanel"><span>GRADES</span></div>
           <div class="dropdown" id="gradesDropdown">
-            <div class="panel" data-link="#"><span>SD</span></div>
+            <div class="panel"><span>SD</span></div>
             <div class="panel" data-link="hg/index.html"><span>HG</span></div>
-            <div class="panel" data-link="#"><span>RG</span></div>
-            <div class="panel" data-link="#"><span>MG</span></div>
-            <div class="panel" data-link="#"><span>PG</span></div>
-            <div class="panel" data-link="#"><span>MEGASIZE</span></div>
+            <div class="panel"><span>RG</span></div>
+            <div class="panel"><span>MG</span></div>
+            <div class="panel"><span>PG</span></div>
+            <div class="panel"><span>MEGASIZE</span></div>
           </div>
 
-          <div class="panel" data-link="#"><span>EXPLORE</span></div>
-          <div class="panel" data-link="#"><span>ABOUT</span></div>
+          <div class="panel"><span>EXPLORE</span></div>
+          <div class="panel"><span>ABOUT</span></div>
 
         </div>
       </div>
     </div>
 
   </div>
-
 </div>
 
 <script>
@@ -236,23 +221,18 @@ function setupDropdown(triggerId, dropdownId){
 
   trigger.addEventListener('click',()=>{
     open=!open;
-    trigger.classList.toggle('active');
 
     if(open){
       dropdown.classList.add('open');
       dropdown.style.maxHeight=dropdown.scrollHeight+"px";
       items.forEach((item,i)=>{
-        setTimeout(()=>{
-          item.style.animation=`flyIn 0.4s forwards ${i*0.1}s`;
-        },0);
+        item.style.animation=`flyIn 0.4s forwards ${i*0.1}s`;
       });
     } else {
       dropdown.style.maxHeight="0";
       dropdown.classList.remove('open');
       items.forEach(item=>{
-        item.style.animation='none';
         item.style.opacity='0';
-        item.style.transform='skew(-20deg) translateX(-50px)';
       });
     }
   });
@@ -260,25 +240,6 @@ function setupDropdown(triggerId, dropdownId){
 
 setupDropdown('scalePanel','scaleDropdown');
 setupDropdown('gradesPanel','gradesDropdown');
-
-document.querySelectorAll('.panel[data-link]').forEach(item=>{
-  item.addEventListener('click',()=>{
-    mainButtons.forEach((btn,i)=>{
-      btn.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`;
-    });
-
-    document.querySelectorAll('.dropdown.open .panel').forEach((d,i)=>{
-      d.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`;
-    });
-
-    bgImage.style.transform='translateX(50%)';
-
-    const link=item.getAttribute('data-link');
-    if(link && link!=='#'){
-      setTimeout(()=>{ window.location.href=link; },600);
-    }
-  });
-});
 </script>
 
 </body>
