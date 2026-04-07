@@ -47,47 +47,20 @@
     flex-direction: column;
   }
 
-  /* HERO */
+  /* HERO (now just spacing container) */
   .hero {
-    text-align: center;
     padding: 30px 20px;
     flex-shrink: 0;
-    opacity: 0;
-    animation: fadeIn 1s forwards;
   }
 
-  .hero h1 {
-    margin: 0;
-    font-size: 32px;
-  }
-
-  .hero p {
-    margin: 5px 0 0;
-    font-size: 16px;
-  }
-
-  @keyframes fadeIn {
-    to { opacity: 1; }
-  }
-
-  /* 🔥 MOBILE HERO COMPACT */
+  /* MOBILE HERO COMPACT */
   @media (max-width: 600px) {
     .hero {
       padding: 15px 10px;
     }
-
-    .hero h1 {
-      font-size: 20px;
-      letter-spacing: 1px;
-    }
-
-    .hero p {
-      font-size: 12px;
-      opacity: 0.8;
-    }
   }
 
-  /* MENU (SCROLL AREA WITH FADE) */
+  /* MENU */
   .menu {
     flex: 1;
     overflow-y: auto;
@@ -188,10 +161,8 @@
 
   <div class="content">
 
-    <div class="hero">
-      <h1>RX-78-2 GUNDAM</h1>
-      <p>Prototype Close Quarters Combat Mobile Suit</p>
-    </div>
+    <!-- EMPTY HERO (just spacing) -->
+    <div class="hero"></div>
 
     <div class="menu">
 
