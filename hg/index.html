@@ -51,7 +51,6 @@
   }
 
   .hero { padding: 30px 20px; flex-shrink:0; }
-
   @media (max-width:600px){ .hero{ padding:15px 10px; } }
 
   .menu {
@@ -64,6 +63,7 @@
 
     scrollbar-color: white black;
     scrollbar-width: thin;
+    transition: opacity 0.6s ease; /* fade-out transition */
   }
 
   .menu::-webkit-scrollbar { width: 8px; }
@@ -85,7 +85,7 @@
     margin-bottom: 25px;
     cursor: pointer;
     transition: background 0.2s;
-    width: 50%; /* half screen width */
+    width: 50%;
     text-align: left;
   }
 
@@ -100,13 +100,13 @@
     text-shadow: 0 0 4px rgba(0,0,0,0.8);
   }
 
-  /* HOME BUTTON (same style as panels) */
+  /* HOME BUTTON */
   #homeBtn {
     display: block;
     background: rgba(17,17,17,0.65);
     border: 3px solid white;
     padding: 14px 26px;
-    transform: skew(-20deg) translateX(-100px); /* start off-screen for animation */
+    transform: skew(-20deg) translateX(-100px);
     cursor: pointer;
     width: 150px;
     text-align: center;
@@ -114,7 +114,7 @@
     top: 20px;
     left: 20px;
     z-index: 2;
-    transition: background 0.2s, opacity 0.5s;
+    transition: background 0.2s, opacity 0.6s ease;
     opacity: 0;
   }
 
@@ -132,7 +132,6 @@
   @keyframes flyIn {
     to { transform: skew(-20deg) translateX(0); opacity:1; }
   }
-
   </style>
 </head>
 <body>
@@ -152,7 +151,6 @@
       <div class="panel"><span>HG / Revive / Standard</span></div>
       <div class="panel"><span>HG / Revive / RX-78-3</span></div>
       <div class="panel"><span>HG / 1990 / Standard</span></div>
-      <!-- Add more kits as needed -->
 
     </div>
 
@@ -163,6 +161,7 @@
 <script>
   const bg = document.getElementById('bgImage');
   const kits = document.querySelectorAll('#kitList .panel');
+  const kitList = document.getElementById('kitList');
   const homeBtn = document.getElementById('homeBtn');
 
   // Fly-in stagger animation for kit panels
@@ -177,22 +176,19 @@
 
   // Home button click
   homeBtn.addEventListener('click', ()=>{
-    // fade out all kit panels
-    kits.forEach((kit,i)=>{
-      kit.style.transition = 'opacity 0.5s, transform 0.5s';
-      kit.style.opacity = 0;
-      kit.style.transform = 'skew(-20deg) translateX(-100px)';
-    });
+    // fade out the entire kit list
+    kitList.style.opacity = 0;
 
     // fade out home button
-    homeBtn.style.transition = 'opacity 0.5s';
     homeBtn.style.opacity = 0;
 
     // move background back to center
     bg.style.transform = 'translateX(0%)';
 
-    // after animation complete, go to main index
-    setTimeout(()=>{ window.location.href = '../index.html'; }, 600);
+    // after fade-out animation, navigate back
+    setTimeout(()=>{
+      window.location.href = '../index.html';
+    }, 650); // matches CSS transition
   });
 </script>
 
