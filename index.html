@@ -54,12 +54,11 @@
     position: relative;
     height: 100%;
     display: flex;
-    flex-direction: column-reverse; /* so dropdowns expand upward */
+    flex-direction: column-reverse; /* dropdowns expand upward */
     align-items: center;
     overflow-y: auto;
-    padding: 20px 0;
+    padding: 40px 0; /* move buttons down slightly */
 
-    /* fade mask top/bottom */
     -webkit-mask-image: linear-gradient(to bottom, transparent 0px, black 20px, black calc(100% - 20px), transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0px, black 20px, black calc(100% - 20px), transparent 100%);
 
