@@ -63,11 +63,9 @@
 
   /* MENU */
   .menu {
-    display: flex;              /* make menu a flex container */
-    flex-direction: column;     /* stack buttons vertically */
-    justify-content: flex-end;  /* push buttons to the bottom */
+    flex: 1;
     overflow-y: auto;
-    padding: 80px 20px 100px;
+    padding: 0 20px;
 
     -webkit-mask-image: linear-gradient(
       to bottom,
@@ -88,7 +86,6 @@
     scrollbar-width: thin;
   }
 
-  /* scrollbar (Chrome/Edge/Safari) */
   .menu::-webkit-scrollbar {
     width: 8px;
   }
@@ -96,8 +93,12 @@
   .menu::-webkit-scrollbar-thumb { background: white; border-radius:4px; }
   .menu::-webkit-scrollbar-thumb:hover { background:#ccc; }
 
-  @media (max-width: 600px) {
-    .menu { padding: 80px 20px 140px; }
+  /* BUTTON CONTAINER PUSHED TO BOTTOM */
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto; /* push to bottom */
+    padding-bottom: 80px; /* space for bottom gradient fade */
   }
 
   /* PANELS */
@@ -185,29 +186,29 @@
     <div class="hero"></div>
 
     <div class="menu">
+      <div class="button-container">
+        <!-- SCALE -->
+        <div class="panel" id="scalePanel"><span>SCALE</span></div>
+        <div class="dropdown" id="scaleDropdown">
+          <div class="panel" data-link="#"><span>1/144</span></div>
+          <div class="panel" data-link="#"><span>1/100</span></div>
+          <div class="panel" data-link="#"><span>MISC</span></div>
+        </div>
 
-      <!-- SCALE -->
-      <div class="panel" id="scalePanel"><span>SCALE</span></div>
-      <div class="dropdown" id="scaleDropdown">
-        <div class="panel" data-link="#"><span>1/144</span></div>
-        <div class="panel" data-link="#"><span>1/100</span></div>
-        <div class="panel" data-link="#"><span>MISC</span></div>
+        <!-- GRADES -->
+        <div class="panel" id="gradesPanel"><span>GRADES</span></div>
+        <div class="dropdown" id="gradesDropdown">
+          <div class="panel" data-link="#"><span>SD</span></div>
+          <div class="panel" data-link="hg/index.html"><span>HG</span></div>
+          <div class="panel" data-link="#"><span>RG</span></div>
+          <div class="panel" data-link="#"><span>MG</span></div>
+          <div class="panel" data-link="#"><span>PG</span></div>
+          <div class="panel" data-link="#"><span>MEGASIZE</span></div>
+        </div>
+
+        <div class="panel" data-link="#"><span>EXPLORE</span></div>
+        <div class="panel" data-link="#"><span>ABOUT</span></div>
       </div>
-
-      <!-- GRADES -->
-      <div class="panel" id="gradesPanel"><span>GRADES</span></div>
-      <div class="dropdown" id="gradesDropdown">
-        <div class="panel" data-link="#"><span>SD</span></div>
-        <div class="panel" data-link="hg/index.html"><span>HG</span></div>
-        <div class="panel" data-link="#"><span>RG</span></div>
-        <div class="panel" data-link="#"><span>MG</span></div>
-        <div class="panel" data-link="#"><span>PG</span></div>
-        <div class="panel" data-link="#"><span>MEGASIZE</span></div>
-      </div>
-
-      <div class="panel" data-link="#"><span>EXPLORE</span></div>
-      <div class="panel" data-link="#"><span>ABOUT</span></div>
-
     </div>
 
   </div>
@@ -216,7 +217,7 @@
 
 <script>
 const bgImage=document.getElementById('bgImage');
-const mainButtons=document.querySelectorAll('.menu > .panel');
+const mainButtons=document.querySelectorAll('.menu > .button-container > .panel');
 mainButtons.forEach((btn,i)=>{
   btn.style.animation=`flyIn 0.7s forwards ${i*0.15+0.5}s`;
 });
@@ -257,17 +258,11 @@ setupDropdown('gradesPanel','gradesDropdown');
 // Navigation: fadeout and slide background
 document.querySelectorAll('.panel[data-link]').forEach(item=>{
   item.addEventListener('click',()=>{
-    // fadeout main buttons
     mainButtons.forEach((btn,i)=>{ btn.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`; });
-
-    // fadeout all open dropdowns
     document.querySelectorAll('.dropdown.open .panel').forEach((d,i)=>{
       d.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`;
     });
-
-    // slide background same for Grades & Scale
     bgImage.style.transform='translateX(50%)';
-
     const link=item.getAttribute('data-link');
     if(link && link!=='#'){ setTimeout(()=>{ window.location.href=link; },600); }
   });
