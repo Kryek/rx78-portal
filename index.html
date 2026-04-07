@@ -141,27 +141,31 @@
 
   /* ✅ MOBILE IMPROVEMENT */
  @media (max-width: 600px) {
+
+  /* main buttons */
   .panel {
-    width: 80%;
+    width: 80vw;
+    max-width: 80vw;
   }
 
-  /* align dropdown with main buttons */
+  /* dropdown container */
   .dropdown {
-    align-items: flex-start;
-    width: 80%;
+    align-items: center;
+    width: 100%;
   }
 
+  /* dropdown buttons — FORCE size */
   .dropdown .panel {
-    width: 70%;
-    max-width: 70%;
-    margin-left: 0;
+    width: 70vw !important;
+    max-width: 70vw !important;
   }
 
+  /* smaller text */
   .dropdown .panel span {
     font-size: 16px;
     letter-spacing: 1px;
-    text-align: left;
   }
+
 }
 
   @keyframes flyIn {
