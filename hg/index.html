@@ -156,8 +156,8 @@
   const kitList = document.getElementById('kitList');
   const homeBtn = document.getElementById('homeBtn');
 
-  // Load JSON file dynamically
-  fetch('../kits.json')
+  // Load JSON file dynamically from data/kits.json
+  fetch('data/kits.json')
     .then(response => response.json())
     .then(data => {
       const hgKits = data.kits.filter(kit => kit.meta === "HG");
