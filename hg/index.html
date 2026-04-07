@@ -1,116 +1,102 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>HG Line - RX-78 Portal</title>
+  <title>HG Kits</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../style.css">
   <style>
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
-  body {
-    margin: 0;
-    font-family: 'Orbitron', sans-serif;
-    background: #0a0a0a;
-    color: white;
-  }
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: 'Orbitron', sans-serif;
+      color: white;
+      background: #0a0a0a;
+      overflow: hidden;
+    }
 
-  .hero {
-    text-align: center;
-    padding: 40px 20px;
-  }
+    .app { position: relative; width: 100%; height: 100%; }
 
-  .hero h1 {
-    margin: 0;
-    font-size: 32px;
-  }
+    .bg-half {
+      position: absolute;
+      top: 0; right: 0;
+      width: 60%;
+      height: 100%;
+      background: url('../images/rx78-bg.png') top center no-repeat;
+      background-size: cover;
+      z-index: 0;
+    }
 
-  .hero p {
-    margin: 5px 0 0;
-    font-size: 16px;
-  }
+    .list-container {
+      position: absolute;
+      top: 0; left: 0;
+      width: 40%;
+      height: 100%;
+      padding: 60px 20px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      background: rgba(0,0,0,0.7);
+      z-index: 1;
+    }
 
-  .menu {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    gap: 15px;
-  }
+    .panel {
+      position: relative;
+      background: rgba(17,17,17,0.65);
+      border: 3px solid white;
+      padding: 18px 30px;
+      margin-bottom: 20px;
+      transform: skew(-20deg) translateX(-50px);
+      opacity: 0;
+      cursor: pointer;
+    }
 
-  .panel {
-    position: relative;
-    display: block;
-    text-decoration: none;
-    color: white;
-    background: #111;
-    border: 3px solid white;
-    padding: 22px 36px;
-    transform: skew(-20deg);
-    overflow: visible;
-    transition: 0.2s;
-    cursor: pointer;
-    margin: 0;
-  }
+    .panel span {
+      display: block;
+      transform: skew(20deg);
+      font-size: 20px;
+      letter-spacing: 1.5px;
+      text-align: center;
+      text-shadow: 0 0 4px rgba(0,0,0,0.8);
+    }
 
-  .panel span {
-    display: block;
-    transform: skew(20deg);
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    letter-spacing: 2px;
-  }
+    .panel::after {
+      content: "///";
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%) skew(20deg);
+    }
 
-  .panel::after {
-    content: "///";
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%) skew(20deg);
-    font-weight: bold;
-    color: white;
-    font-size: 18px;
-    transition: transform 0.3s ease;
-  }
-
-  .panel:hover {
-    background: #222;
-    transform: skew(-20deg) translateX(6px);
-  }
-
-  /* Kit list container */
-  .kit-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 30px;
-    gap: 10px;
-  }
-
-  .kit-list .panel {
-    width: 60%; /* slightly narrower than main buttons */
-    padding: 20px 24px;
-    font-size: 20px;
-  }
-
+    @keyframes flyInLeft {
+      to { transform: skew(-20deg) translateX(0); opacity: 1; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Hero banner -->
-  <div class="hero">
-    <h1>HG (High Grade)</h1>
-    <p>RX-78-2 Mobile Suit Kits</p>
+<div class="app">
+
+  <div class="bg-half"></div>
+
+  <div class="list-container" id="listContainer">
+
+    <!-- Kit panels -->
+    <div class="panel"><span>Revive Standard</span></div>
+    <div class="panel"><span>Full Armor</span></div>
+    <div class="panel"><span>Other Variant</span></div>
+
   </div>
 
-  <!-- Navigation panel: Home -->
-  <div class="menu">
-    <a class="panel" href="../index.html"><span>← HOME</span></a>
-  </div>
+</div>
 
-  <!-- Kit list -->
-  <div class="kit-list">
-    <a class="panel" href="revive-standard.html"><span>RX-78-2 Revive – Standard</span></a>
-    <!-- future HG kits can be added here -->
-  </div>
+<script>
+  const panels = document.querySelectorAll('.list-container .panel');
+  panels.forEach((panel, i) => {
+    panel.style.animation = `flyInLeft 0.5s forwards ${i*0.1}s`;
+  });
+</script>
 
 </body>
 </html>
