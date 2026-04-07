@@ -1,0 +1,21 @@
+{
+  "kits": [
+    {
+      "id": "hg-revive-standard",
+      "name": "RX-78-2 Revive",
+      "grade": "HG",
+      "scale": "1/144",
+      "mold": "Revive",
+      "variant": "Standard",
+      "year": 2015,
+
+      "description": "Modern articulation-focused redesign of the RX-78-2.",
+
+      "images": {
+        "box": "images/HGUC-REVIVE-BOX.png"
+      },
+
+      "page": "hg/revive-standard.html"
+    }
+  ]
+}
