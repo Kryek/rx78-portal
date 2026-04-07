@@ -12,6 +12,7 @@
     overflow: hidden;
     font-family: 'Orbitron', sans-serif;
     color: white;
+    background: black; /* native black background */
   }
 
   .app {
@@ -30,6 +31,7 @@
     background-position: top center;
     background-repeat: no-repeat;
     z-index: 0;
+    transition: transform 1s ease;
   }
 
   .bg-image::after {
@@ -85,23 +87,12 @@
     scrollbar-width: thin;
   }
 
-  /* scrollbar (Chrome/Edge/Safari) */
   .menu::-webkit-scrollbar {
     width: 8px;
   }
-
-  .menu::-webkit-scrollbar-track {
-    background: black;
-  }
-
-  .menu::-webkit-scrollbar-thumb {
-    background: white;
-    border-radius: 4px;
-  }
-
-  .menu::-webkit-scrollbar-thumb:hover {
-    background: #ccc;
-  }
+  .menu::-webkit-scrollbar-track { background: black; }
+  .menu::-webkit-scrollbar-thumb { background: white; border-radius: 4px; }
+  .menu::-webkit-scrollbar-thumb:hover { background: #ccc; }
 
   @media (max-width: 600px) {
     .menu {
@@ -120,6 +111,7 @@
     opacity: 0;
     margin-bottom: 25px;
     cursor: pointer;
+    transition: opacity 0.6s ease; /* fadeout transition */
   }
 
   .panel span {
@@ -156,9 +148,7 @@
     transition: max-height 0.25s ease;
   }
 
-  .dropdown.open {
-    margin-bottom: 25px;
-  }
+  .dropdown.open { margin-bottom: 25px; }
 
   .dropdown .panel {
     width: 75%;
@@ -169,17 +159,12 @@
   }
 
   @media (max-width: 600px) {
-    .dropdown .panel {
-      width: 65%;
-    }
+    .dropdown .panel { width: 65%; }
   }
 
   /* ANIMATION */
   @keyframes flyIn {
-    to {
-      transform: skew(-20deg) translateX(0);
-      opacity: 1;
-    }
+    to { transform: skew(-20deg) translateX(0); opacity: 1; }
   }
 
   </style>
@@ -188,9 +173,9 @@
 
 <div class="app">
 
-  <div class="bg-image"></div>
+  <div class="bg-image" id="bgImage"></div>
 
-  <div class="content">
+  <div class="content" id="homeContent">
 
     <div class="hero"></div>
 
@@ -215,8 +200,12 @@
         <div class="panel"><span>MEGASIZE</span></div>
       </div>
 
-      <div class="panel"><span>EXPLORE</span></div>
-      <div class="panel"><span>ABOUT</span></div>
+      <div class="panel" data-target="hg/index.html"><span>HG</span></div>
+      <div class="panel" data-target="mg/index.html"><span>MG</span></div>
+      <div class="panel" data-target="sd/index.html"><span>SD</span></div>
+
+      <div class="panel" data-target="explore.html"><span>EXPLORE</span></div>
+      <div class="panel" data-target="about.html"><span>ABOUT</span></div>
 
     </div>
 
@@ -226,49 +215,61 @@
 
 <script>
   const mainButtons = document.querySelectorAll('.menu > .panel');
+  const bg = document.getElementById('bgImage');
+  const homeContent = document.getElementById('homeContent');
+
+  // fly-in main buttons
   mainButtons.forEach((btn, i) => {
-    btn.style.animation = `flyIn 0.7s forwards ${i * 0.15 + 0.5}s`;
+    btn.style.animation = `flyIn 0.7s forwards ${i*0.15 + 0.5}s`;
   });
 
-  function setupDropdown(triggerId, dropdownId) {
+  // dropdown setup
+  function setupDropdown(triggerId, dropdownId){
     const trigger = document.getElementById(triggerId);
     const dropdown = document.getElementById(dropdownId);
     const items = dropdown.querySelectorAll('.panel');
-
     let open = false;
 
-    trigger.addEventListener('click', () => {
+    trigger.addEventListener('click', ()=>{
       open = !open;
-
-      // rotate indicator
       trigger.classList.toggle('active');
 
-      if (open) {
+      if(open){
         dropdown.classList.add('open');
-        dropdown.style.maxHeight = dropdown.scrollHeight + "px";
-
-        items.forEach((item, i) => {
-          item.style.animation = '';
-          setTimeout(() => {
-            item.style.animation = `flyIn 0.4s forwards ${i * 0.1}s`;
-          }, 0);
+        dropdown.style.maxHeight = dropdown.scrollHeight + 'px';
+        items.forEach((item,i)=>{
+          setTimeout(()=>{
+            item.style.transform = 'skew(-20deg) translateX(0)';
+            item.style.opacity = '1';
+          }, i*100);
         });
-
       } else {
-        dropdown.style.maxHeight = "0";
-        dropdown.classList.remove('open');
-
-        items.forEach(item => {
-          item.style.animation = 'none';
-          item.style.opacity = '0';
+        dropdown.style.maxHeight = '0';
+        items.forEach(item=>{
           item.style.transform = 'skew(-20deg) translateX(-50px)';
+          item.style.opacity = '0';
         });
       }
     });
   }
 
-  setupDropdown('scalePanel', 'scaleDropdown');
-  setupDropdown('gradesPanel', 'gradesDropdown');
+  setupDropdown('scalePanel','scaleDropdown');
+  setupDropdown('gradesPanel','gradesDropdown');
+
+  // navigation with fadeout + bg slide for kit lists
+  document.querySelectorAll('.panel[data-target]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      // slide background if navigating to list pages
+      if(btn.dataset.target.includes('/index.html')){
+        bg.style.transform = 'translateX(50%)';
+      }
+
+      // fade out buttons
+      homeContent.style.opacity = '0';
+
+      setTimeout(()=>{ window.location.href = btn.dataset.target; }, 1000);
+    });
+  });
 </script>
 </body>
 </html>
