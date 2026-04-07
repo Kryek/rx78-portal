@@ -139,11 +139,11 @@
     transition: max-height 0.25s ease;
   }
 
-  /* refined gap */
   .dropdown.open {
     margin-bottom: 40px;
   }
 
+  /* DESKTOP DROPDOWN */
   .dropdown .panel {
     width: 37.5vw;
     max-width: 50%;
@@ -153,9 +153,20 @@
     opacity: 0;
   }
 
+  /* MOBILE FIX */
   @media (max-width: 600px) {
-    .panel { width: 80%; }
-    .dropdown .panel { width: 50%; }
+    .panel {
+      width: 80%;
+    }
+
+    .dropdown .panel {
+      width: 60%; /* 3/4 of main (~80%) */
+    }
+
+    .dropdown .panel span {
+      font-size: 18px; /* smaller text to prevent overflow */
+      letter-spacing: 1.2px;
+    }
   }
 
   @keyframes flyIn {
