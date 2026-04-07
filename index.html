@@ -22,7 +22,6 @@
     overflow: hidden;
   }
 
-  /* BACKGROUND */
   .bg-image {
     position: absolute;
     inset: 0;
@@ -49,21 +48,21 @@
     flex-direction: column;
   }
 
-  /* HERO */
   .hero {
     padding: 30px 20px;
     flex-shrink: 0;
   }
 
   @media (max-width: 600px) {
-    .hero {
-      padding: 15px 10px;
-    }
+    .hero { padding: 15px 10px; }
   }
 
   /* MENU */
   .menu {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* push buttons to bottom */
     overflow-y: auto;
     padding: 0 20px;
 
@@ -93,15 +92,12 @@
   .menu::-webkit-scrollbar-thumb { background: white; border-radius:4px; }
   .menu::-webkit-scrollbar-thumb:hover { background:#ccc; }
 
-  /* BUTTON CONTAINER PUSHED TO BOTTOM */
   .button-container {
     display: flex;
     flex-direction: column;
-    margin-top: auto; /* push to bottom */
-    padding-bottom: 80px; /* space for bottom gradient fade */
+    padding-bottom: 80px;
   }
 
-  /* PANELS */
   .panel {
     position: relative;
     display: block;
@@ -126,7 +122,6 @@
     text-shadow: 0 0 4px rgba(0,0,0,0.8);
   }
 
-  /* /// indicator */
   .panel::after {
     content: "///";
     position: absolute;
@@ -136,11 +131,8 @@
     transition: transform 0.3s ease;
   }
 
-  .panel.active::after {
-    transform: translateY(-50%) skew(20deg) rotate(90deg);
-  }
+  .panel.active::after { transform: translateY(-50%) skew(20deg) rotate(90deg); }
 
-  /* DROPDOWN */
   .dropdown {
     display: flex;
     flex-direction: column;
@@ -164,14 +156,8 @@
     .dropdown .panel { width: 65%; }
   }
 
-  /* ANIMATION */
-  @keyframes flyIn {
-    to { transform: skew(-20deg) translateX(0); opacity:1; }
-  }
-
-  @keyframes fadeOut {
-    to { transform: skew(-20deg) translateX(-100px); opacity:0; }
-  }
+  @keyframes flyIn { to { transform: skew(-20deg) translateX(0); opacity:1; } }
+  @keyframes fadeOut { to { transform: skew(-20deg) translateX(-100px); opacity:0; } }
 
   </style>
 </head>
@@ -187,7 +173,6 @@
 
     <div class="menu">
       <div class="button-container">
-        <!-- SCALE -->
         <div class="panel" id="scalePanel"><span>SCALE</span></div>
         <div class="dropdown" id="scaleDropdown">
           <div class="panel" data-link="#"><span>1/144</span></div>
@@ -195,7 +180,6 @@
           <div class="panel" data-link="#"><span>MISC</span></div>
         </div>
 
-        <!-- GRADES -->
         <div class="panel" id="gradesPanel"><span>GRADES</span></div>
         <div class="dropdown" id="gradesDropdown">
           <div class="panel" data-link="#"><span>SD</span></div>
@@ -218,11 +202,8 @@
 <script>
 const bgImage=document.getElementById('bgImage');
 const mainButtons=document.querySelectorAll('.menu > .button-container > .panel');
-mainButtons.forEach((btn,i)=>{
-  btn.style.animation=`flyIn 0.7s forwards ${i*0.15+0.5}s`;
-});
+mainButtons.forEach((btn,i)=>{ btn.style.animation=`flyIn 0.7s forwards ${i*0.15+0.5}s`; });
 
-// Dropdown toggle
 function setupDropdown(triggerId, dropdownId){
   const trigger=document.getElementById(triggerId);
   const dropdown=document.getElementById(dropdownId);
@@ -236,18 +217,11 @@ function setupDropdown(triggerId, dropdownId){
     if(open){
       dropdown.classList.add('open');
       dropdown.style.maxHeight=dropdown.scrollHeight+"px";
-      items.forEach((item,i)=>{
-        item.style.animation='';
-        setTimeout(()=>{item.style.animation=`flyIn 0.4s forwards ${i*0.1}s`;},0);
-      });
+      items.forEach((item,i)=>{ setTimeout(()=>{ item.style.animation=`flyIn 0.4s forwards ${i*0.1}s`; },0); });
     } else {
       dropdown.style.maxHeight="0";
       dropdown.classList.remove('open');
-      items.forEach(item=>{
-        item.style.animation='none';
-        item.style.opacity='0';
-        item.style.transform='skew(-20deg) translateX(-50px)';
-      });
+      items.forEach(item=>{ item.style.animation='none'; item.style.opacity='0'; item.style.transform='skew(-20deg) translateX(-50px)'; });
     }
   });
 }
@@ -255,13 +229,10 @@ function setupDropdown(triggerId, dropdownId){
 setupDropdown('scalePanel','scaleDropdown');
 setupDropdown('gradesPanel','gradesDropdown');
 
-// Navigation: fadeout and slide background
 document.querySelectorAll('.panel[data-link]').forEach(item=>{
   item.addEventListener('click',()=>{
     mainButtons.forEach((btn,i)=>{ btn.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`; });
-    document.querySelectorAll('.dropdown.open .panel').forEach((d,i)=>{
-      d.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`;
-    });
+    document.querySelectorAll('.dropdown.open .panel').forEach((d,i)=>{ d.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`; });
     bgImage.style.transform='translateX(50%)';
     const link=item.getAttribute('data-link');
     if(link && link!=='#'){ setTimeout(()=>{ window.location.href=link; },600); }
