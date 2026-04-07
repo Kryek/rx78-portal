@@ -2,7 +2,7 @@
   "kits": [
     {
       "id": "hg-revive-standard",
-      "name": "RX-78-2 Revive",
+      "name": "Revive [Standard]",
       "grade": "HG",
       "scale": "1/144",
       "mold": "Revive",
@@ -15,6 +15,22 @@
       },
 
       "page": "hg/revive-standard.html"
+    }
+    {
+      "id": "hg-revive-g3",
+      "name": "Revive [G-3]",
+      "grade": "HG",
+      "scale": "1/144",
+      "mold": "Revive",
+      "variant": "Standard",
+      "year": 2015,
+      "meta": "HG",
+
+      "images": {
+        "box": "images/hg/revive-g3-box.png"
+      },
+
+      "page": "hg/revive-g3.html"
     }
   ]
 }
