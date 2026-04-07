@@ -6,19 +6,26 @@
   <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
-  body {
+  /* LOCK PAGE */
+  html, body {
     margin: 0;
+    height: 100%;
+    overflow: hidden; /* 🚫 no page scroll */
     font-family: 'Orbitron', sans-serif;
     color: white;
-    overflow-x: hidden;
-
-    /* 🔥 prevents mobile bounce shifting */
-    overscroll-behavior: none;
   }
 
-  /* ✅ BULLETPROOF BACKGROUND */
+  /* APP CONTAINER */
+  .app {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* full screen */
+    overflow: hidden;
+  }
+
+  /* BACKGROUND */
   .bg-image {
-    position: fixed;
+    position: absolute;
     inset: 0;
 
     background-image: url('images/rx78-bg.png');
@@ -26,68 +33,63 @@
     background-position: top center;
     background-repeat: no-repeat;
 
-    z-index: -2;
-
-    /* 🔥 mobile stability fix */
-    transform: translateZ(0);
-    will-change: transform;
+    z-index: 0;
   }
 
   .bg-image::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0,0,0,0.6);
+  }
+
+  /* CONTENT LAYER */
+  .content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   /* HERO */
   .hero {
     text-align: center;
-    padding: 40px 20px;
+    padding: 30px 20px;
+    flex-shrink: 0;
     opacity: 0;
     animation: fadeIn 1s forwards;
-    animation-delay: 0.2s;
   }
 
   @keyframes fadeIn {
     to { opacity: 1; }
   }
 
-  .hero h1 { margin: 0; font-size: 32px; }
-  .hero p { margin: 5px 0 0; font-size: 16px; }
-
-  /* MENU */
+  /* MENU SCROLL AREA */
   .menu {
-    display: flex;
-    flex-direction: column;
+    flex: 1;
+    overflow-y: auto; /* ✅ internal scroll only */
     padding: 20px;
   }
 
   .panel {
     position: relative;
     display: block;
-    text-decoration: none;
     color: white;
     background: rgba(17,17,17,0.9);
     border: 3px solid white;
     padding: 22px 36px;
     transform: skew(-20deg) translateX(-100px);
     opacity: 0;
-    transition: 0.2s;
-    cursor: pointer;
     margin-bottom: 25px;
-  }
-
-  .panel:last-child {
-    margin-bottom: 0;
+    cursor: pointer;
   }
 
   .panel span {
     display: block;
     transform: skew(20deg);
-    font-size: 24px;
-    font-weight: bold;
     text-align: center;
+    font-size: 24px;
     letter-spacing: 2px;
   }
 
@@ -97,12 +99,6 @@
     right: 12px;
     top: 50%;
     transform: translateY(-50%) skew(20deg);
-    font-size: 18px;
-  }
-
-  .panel:hover {
-    background: rgba(34,34,34,0.95);
-    transform: skew(-20deg) translateX(6px);
   }
 
   /* DROPDOWN */
@@ -122,30 +118,17 @@
   .dropdown .panel {
     width: 75%;
     margin: 8px 0;
-    padding: 18px 45px 18px 25px;
-    background: rgba(34,34,34,0.9);
     transform: skew(-20deg) translateX(-50px);
     opacity: 0;
   }
 
-  /* MOBILE FIX */
   @media (max-width: 600px) {
     .dropdown .panel {
       width: 65%;
-      padding: 16px 40px 16px 20px;
     }
   }
 
-  .dropdown .panel span {
-    font-size: 20px;
-  }
-
-  .dropdown .panel:hover {
-    background: rgba(51,51,51,0.95);
-    transform: skew(-20deg) translateX(4px);
-  }
-
-  /* ANIMATIONS */
+  /* ANIMATION */
   @keyframes flyIn {
     to {
       transform: skew(-20deg) translateX(0);
@@ -153,100 +136,78 @@
     }
   }
 
-  @keyframes fadeOut {
-    to {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-  }
-
-  .fade-out {
-    animation: fadeOut 1s forwards;
-  }
-
   </style>
 </head>
 <body>
 
-  <!-- BACKGROUND -->
+<div class="app">
+
   <div class="bg-image"></div>
 
-  <!-- HERO -->
-  <div class="hero">
-    <h1>RX-78-2 GUNDAM</h1>
-    <p>Prototype Close Quarters Combat Mobile Suit</p>
-  </div>
+  <div class="content">
 
-  <!-- MENU -->
-  <div class="menu">
-
-    <!-- SCALE -->
-    <div class="panel" id="scalePanel"><span>SCALE</span></div>
-    <div class="dropdown" id="scaleDropdown">
-      <a class="panel"><span>1/144</span></a>
-      <a class="panel"><span>1/100</span></a>
+    <div class="hero">
+      <h1>RX-78-2 GUNDAM</h1>
+      <p>Prototype Close Quarters Combat Mobile Suit</p>
     </div>
 
-    <!-- GRADES -->
-    <div class="panel" id="gradesPanel"><span>GRADES</span></div>
-    <div class="dropdown" id="gradesDropdown">
-      <a class="panel" href="hg/index.html"><span>HG</span></a>
-      <a class="panel"><span>RG</span></a>
-      <a class="panel"><span>MG</span></a>
-      <a class="panel"><span>PG</span></a>
-      <a class="panel"><span>MEGASIZE</span></a>
-    </div>
+    <div class="menu">
 
-    <a class="panel"><span>EXPLORE</span></a>
-    <a class="panel"><span>ABOUT</span></a>
+      <!-- SCALE -->
+      <div class="panel" id="scalePanel"><span>SCALE</span></div>
+      <div class="dropdown" id="scaleDropdown">
+        <div class="panel"><span>1/144</span></div>
+        <div class="panel"><span>1/100</span></div>
+      </div>
+
+      <!-- GRADES -->
+      <div class="panel" id="gradesPanel"><span>GRADES</span></div>
+      <div class="dropdown" id="gradesDropdown">
+        <div class="panel"><span>HG</span></div>
+        <div class="panel"><span>RG</span></div>
+        <div class="panel"><span>MG</span></div>
+        <div class="panel"><span>PG</span></div>
+        <div class="panel"><span>MEGASIZE</span></div>
+      </div>
+
+      <div class="panel"><span>EXPLORE</span></div>
+      <div class="panel"><span>ABOUT</span></div>
+
+    </div>
 
   </div>
 
-  <script>
-    // MAIN BUTTON STAGGER IN
-    const mainButtons = document.querySelectorAll('.menu > .panel');
-    mainButtons.forEach((btn, i) => {
-      btn.style.animation = `flyIn 0.7s forwards ${i * 0.15 + 1}s`;
+</div>
+
+<script>
+  // STAGGER IN
+  const mainButtons = document.querySelectorAll('.menu > .panel');
+  mainButtons.forEach((btn, i) => {
+    btn.style.animation = `flyIn 0.7s forwards ${i * 0.15 + 0.5}s`;
+  });
+
+  function setupDropdown(triggerId, dropdownId) {
+    const trigger = document.getElementById(triggerId);
+    const dropdown = document.getElementById(dropdownId);
+
+    let open = false;
+
+    trigger.addEventListener('click', () => {
+      open = !open;
+
+      if (open) {
+        dropdown.classList.add('open');
+        dropdown.style.maxHeight = dropdown.scrollHeight + "px";
+      } else {
+        dropdown.style.maxHeight = "0";
+        dropdown.classList.remove('open');
+      }
     });
+  }
 
-    function setupDropdown(triggerId, dropdownId) {
-      const trigger = document.getElementById(triggerId);
-      const dropdown = document.getElementById(dropdownId);
-      const items = dropdown.querySelectorAll('.panel');
-
-      let open = false;
-
-      trigger.addEventListener('click', () => {
-        open = !open;
-
-        if (open) {
-          dropdown.classList.add('open');
-          dropdown.style.maxHeight = dropdown.scrollHeight + "px";
-
-          items.forEach((item, i) => {
-            item.style.animation = '';
-            setTimeout(() => {
-              item.style.animation = `flyIn 0.5s forwards ${i * 0.1}s`;
-            }, 0);
-          });
-
-        } else {
-          // INSTANT COLLAPSE (clean system feel)
-          dropdown.style.maxHeight = "0";
-          dropdown.classList.remove('open');
-
-          items.forEach((item) => {
-            item.style.animation = 'none';
-            item.style.opacity = '0';
-            item.style.transform = 'skew(-20deg) translateX(-40px)';
-          });
-        }
-      });
-    }
-
-    setupDropdown('scalePanel', 'scaleDropdown');
-    setupDropdown('gradesPanel', 'gradesDropdown');
-  </script>
+  setupDropdown('scalePanel', 'scaleDropdown');
+  setupDropdown('gradesPanel', 'gradesDropdown');
+</script>
 
 </body>
 </html>
