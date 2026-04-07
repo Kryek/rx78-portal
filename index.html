@@ -83,7 +83,13 @@
     flex-direction: column;
     margin-top: auto; /* push buttons to bottom */
     align-items: center;
-    gap: 25px; /* uniform gap for all buttons */
+  }
+
+  /* MAIN BUTTONS */
+  .button-container > .panel {
+    width: 400px;
+    max-width: 90%;
+    margin-bottom: 25px; /* uniform gap between main buttons */
   }
 
   .panel {
@@ -92,8 +98,6 @@
     background: rgba(17,17,17,0.65);
     border: 3px solid white;
     padding: 22px 36px;
-    width: 400px;
-    max-width: 90%;
     transform: skew(-20deg) translateX(-100px);
     opacity: 0;
     cursor: pointer;
@@ -123,6 +127,7 @@
 
   .panel.active::after { transform: translateY(-50%) skew(20deg) rotate(90deg); }
 
+  /* DROPDOWN */
   .dropdown {
     display: flex;
     flex-direction: column;
@@ -132,11 +137,9 @@
     transition: max-height 0.25s ease;
   }
 
-  .dropdown.open { }
-
   .dropdown .panel {
-    width: 350px;
-    max-width: 85%;
+    width: 75%;
+    margin: 8px 0;
     background: rgba(17,17,17,0.55);
     transform: skew(-20deg) translateX(-50px);
     opacity: 0;
@@ -195,7 +198,7 @@
 
 <script>
 const bgImage=document.getElementById('bgImage');
-const mainButtons=document.querySelectorAll('.scroll-container > .button-container > .panel');
+const mainButtons=document.querySelectorAll('.button-container > .panel');
 mainButtons.forEach((btn,i)=>{ btn.style.animation=`flyIn 0.7s forwards ${i*0.15+0.5}s`; });
 
 function setupDropdown(triggerId, dropdownId){
