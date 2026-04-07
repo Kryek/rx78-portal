@@ -150,21 +150,25 @@
   /* MOBILE */
   @media (max-width: 600px) {
 
-    .panel {
-      width: 80vw;
-      max-width: 80vw;
-    }
-
-    .dropdown .panel {
-      width: 70vw;
-      max-width: 70vw;
-    }
-
-    .dropdown .panel span {
-      font-size: 16px;
-      letter-spacing: 1px;
-    }
+  .panel {
+    width: 80vw;
+    max-width: 80vw;
   }
+
+  .dropdown .panel {
+    width: 70vw;
+    max-width: 70vw;
+
+    /* 🔥 fix clipping */
+    margin-left: 5vw;
+    margin-right: 5vw;
+  }
+
+  .dropdown .panel span {
+    font-size: 16px;
+    letter-spacing: 1px;
+  }
+}
 
   @keyframes flyIn {
     to { transform: skew(-20deg) translateX(0); opacity:1; }
