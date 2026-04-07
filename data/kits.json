@@ -8,6 +8,7 @@
       "mold": "Revive",
       "variant": "Standard",
       "year": 2015,
+      "meta": "HG",
 
       "images": {
         "box": "images/hg/revive-standard-box.png"
