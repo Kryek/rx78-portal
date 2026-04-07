@@ -140,19 +140,27 @@
   }
 
   /* ✅ MOBILE IMPROVEMENT */
-  @media (max-width: 600px) {
+ @media (max-width: 600px) {
   .panel {
     width: 80%;
   }
 
+  /* align dropdown with main buttons */
+  .dropdown {
+    align-items: flex-start;
+    width: 80%;
+  }
+
   .dropdown .panel {
-    width: 52vw;        /* ← THIS is the real fix */
-    max-width: 52vw;    /* override desktop cap */
+    width: 70%;
+    max-width: 70%;
+    margin-left: 0;
   }
 
   .dropdown .panel span {
     font-size: 16px;
     letter-spacing: 1px;
+    text-align: left;
   }
 }
 
