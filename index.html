@@ -129,7 +129,7 @@
     transform: translateY(-50%) skew(20deg) rotate(90deg);
   }
 
-  /* DROPDOWN */
+  /* DROPDOWN (desktop unchanged) */
   .dropdown {
     display: flex;
     flex-direction: column;
@@ -143,7 +143,6 @@
     margin-bottom: 40px;
   }
 
-  /* DESKTOP DROPDOWN */
   .dropdown .panel {
     width: 37.5vw;
     max-width: 50%;
@@ -153,18 +152,18 @@
     opacity: 0;
   }
 
-  /* MOBILE FIX */
+  /* MOBILE ONLY FIX */
   @media (max-width: 600px) {
     .panel {
       width: 80%;
     }
 
     .dropdown .panel {
-      width: 60%; /* 3/4 of main (~80%) */
+      width: 60%; /* EXACTLY 3/4 of main (80%) */
     }
 
     .dropdown .panel span {
-      font-size: 18px; /* smaller text to prevent overflow */
+      font-size: 18px;
       letter-spacing: 1.2px;
     }
   }
