@@ -62,9 +62,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
     overflow: hidden;
-    padding: 0 20px;
 
     -webkit-mask-image: linear-gradient(
       to bottom,
@@ -84,9 +82,9 @@
 
   .scroll-container {
     display: flex;
-    flex-direction: column-reverse; /* keeps bottom buttons visually at bottom */
+    flex-direction: column;
     overflow-y: auto;
-    padding-bottom: 120px; /* move further down */
+    padding-bottom: 120px; /* push buttons further down */
     max-height: 100%;
     scrollbar-color: white black;
     scrollbar-width: thin;
@@ -99,7 +97,10 @@
 
   .button-container {
     display: flex;
-    flex-direction: column-reverse; /* keep bottom-first in scroll */
+    flex-direction: column;
+    margin-top: auto; /* push buttons to bottom */
+    align-items: center;
+    gap: 25px; /* spacing between buttons */
   }
 
   .panel {
@@ -108,9 +109,10 @@
     background: rgba(17,17,17,0.65);
     border: 3px solid white;
     padding: 22px 36px;
+    width: 70%; /* fix clipping */
+    max-width: 400px;
     transform: skew(-20deg) translateX(-100px);
     opacity: 0;
-    margin-bottom: 25px;
     cursor: pointer;
     transition: background 0.2s;
   }
@@ -157,7 +159,8 @@
   }
 
   @media (max-width: 600px) {
-    .dropdown .panel { width: 65%; }
+    .panel { width: 90%; }
+    .dropdown .panel { width: 85%; }
   }
 
   @keyframes flyIn { to { transform: skew(-20deg) translateX(0); opacity:1; } }
@@ -178,6 +181,7 @@
     <div class="menu">
       <div class="scroll-container">
         <div class="button-container">
+          <!-- Correct order -->
           <div class="panel" id="scalePanel"><span>SCALE</span></div>
           <div class="dropdown" id="scaleDropdown">
             <div class="panel" data-link="#"><span>1/144</span></div>
