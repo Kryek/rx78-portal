@@ -9,10 +9,8 @@
       "variant": "Standard",
       "year": 2015,
 
-      "description": "Modern articulation-focused redesign of the RX-78-2.",
-
       "images": {
-        "box": "images/HGUC-REVIVE-BOX.png"
+        "box": "images/hg/revive-standard-box.png"
       },
 
       "page": "hg/revive-standard.html"
