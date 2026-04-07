@@ -47,18 +47,31 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* anchor buttons near bottom */
   }
 
-  /* MENU */
-  .menu {
-    width: 100%;
+  /* BUTTON CONTAINER (full height, scrollable) */
+  .button-container {
+    position: relative;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 40px; /* space from bottom */
-    overflow: visible; /* allow dropdowns to expand upward */
+    justify-content: flex-end;
+    overflow-y: auto;
+    padding-bottom: 40px;
+
+    /* SHORTER FADE MASK TOP & BOTTOM */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0px, black 20px, black calc(100% - 20px), transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0px, black 20px, black calc(100% - 20px), transparent 100%);
+
+    scrollbar-color: white black;
+    scrollbar-width: thin;
   }
+
+  .button-container::-webkit-scrollbar { width: 8px; }
+  .button-container::-webkit-scrollbar-track { background: black; }
+  .button-container::-webkit-scrollbar-thumb { background: white; border-radius:4px; }
+  .button-container::-webkit-scrollbar-thumb:hover { background:#ccc; }
 
   /* PANELS */
   .panel {
@@ -87,7 +100,6 @@
     text-shadow: 0 0 4px rgba(0,0,0,0.8);
   }
 
-  /* /// indicator */
   .panel::after {
     content: "///";
     position: absolute;
@@ -104,7 +116,7 @@
   /* DROPDOWN */
   .dropdown {
     display: flex;
-    flex-direction: column-reverse; /* expand upward */
+    flex-direction: column-reverse;
     align-items: center;
     max-height: 0;
     overflow: hidden;
@@ -112,9 +124,7 @@
     margin-bottom: 0;
   }
 
-  .dropdown.open {
-    margin-bottom: 15px;
-  }
+  .dropdown.open { margin-bottom: 15px; }
 
   .dropdown .panel {
     width: 180px;
@@ -125,16 +135,11 @@
   }
 
   /* ANIMATION */
-  @keyframes flyIn {
-    to { transform: skew(-20deg) translateX(0); opacity:1; }
-  }
-
-  @keyframes fadeOut {
-    to { transform: skew(-20deg) translateX(-100px); opacity:0; }
-  }
+  @keyframes flyIn { to { transform: skew(-20deg) translateX(0); opacity:1; } }
+  @keyframes fadeOut { to { transform: skew(-20deg) translateX(-100px); opacity:0; } }
 
   @media (max-width: 600px) {
-    .content { justify-content: flex-start; } /* top alignment on mobile */
+    .button-container { justify-content: flex-start; padding: 80px 0 140px; }
     .panel { width: 90%; margin-bottom: 12px; }
     .dropdown .panel { width: 80%; }
   }
@@ -146,7 +151,8 @@
 <div class="app">
   <div class="bg-image" id="bgImage"></div>
   <div class="content">
-    <div class="menu">
+
+    <div class="button-container">
       <!-- SCALE -->
       <div class="panel" id="scalePanel"><span>SCALE</span></div>
       <div class="dropdown" id="scaleDropdown">
@@ -169,12 +175,13 @@
       <div class="panel" data-link="#"><span>EXPLORE</span></div>
       <div class="panel" data-link="#"><span>ABOUT</span></div>
     </div>
+
   </div>
 </div>
 
 <script>
 const bgImage = document.getElementById('bgImage');
-const mainButtons = document.querySelectorAll('.menu > .panel');
+const mainButtons = document.querySelectorAll('.button-container > .panel');
 mainButtons.forEach((btn,i)=>{
   btn.style.animation = `flyIn 0.7s forwards ${i*0.15+0.5}s`;
 });
@@ -215,17 +222,11 @@ setupDropdown('gradesPanel','gradesDropdown');
 // Navigation: fadeout and slide background
 document.querySelectorAll('.panel[data-link]').forEach(item=>{
   item.addEventListener('click',()=>{
-    // fadeout main buttons
     mainButtons.forEach((btn,i)=>{ btn.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`; });
-
-    // fadeout all open dropdowns
     document.querySelectorAll('.dropdown.open .panel').forEach((d,i)=>{
       d.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`;
     });
-
-    // slide background same for Grades & Scale
     bgImage.style.transform='translateX(50%)';
-
     const link=item.getAttribute('data-link');
     if(link && link!=='#'){ setTimeout(()=>{ window.location.href=link; },600); }
   });
