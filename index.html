@@ -62,8 +62,8 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* push buttons to bottom */
-    overflow-y: auto;
+    justify-content: flex-end;
+    overflow: hidden;
     padding: 0 20px;
 
     -webkit-mask-image: linear-gradient(
@@ -80,22 +80,26 @@
       black calc(100% - 60px),
       transparent 100%
     );
+  }
 
+  .scroll-container {
+    display: flex;
+    flex-direction: column-reverse; /* keeps bottom buttons visually at bottom */
+    overflow-y: auto;
+    padding-bottom: 120px; /* move further down */
+    max-height: 100%;
     scrollbar-color: white black;
     scrollbar-width: thin;
   }
 
-  .menu::-webkit-scrollbar {
-    width: 8px;
-  }
-  .menu::-webkit-scrollbar-track { background: black; }
-  .menu::-webkit-scrollbar-thumb { background: white; border-radius:4px; }
-  .menu::-webkit-scrollbar-thumb:hover { background:#ccc; }
+  .scroll-container::-webkit-scrollbar { width: 8px; }
+  .scroll-container::-webkit-scrollbar-track { background: black; }
+  .scroll-container::-webkit-scrollbar-thumb { background: white; border-radius:4px; }
+  .scroll-container::-webkit-scrollbar-thumb:hover { background:#ccc; }
 
   .button-container {
     display: flex;
-    flex-direction: column;
-    padding-bottom: 80px;
+    flex-direction: column-reverse; /* keep bottom-first in scroll */
   }
 
   .panel {
@@ -172,26 +176,28 @@
     <div class="hero"></div>
 
     <div class="menu">
-      <div class="button-container">
-        <div class="panel" id="scalePanel"><span>SCALE</span></div>
-        <div class="dropdown" id="scaleDropdown">
-          <div class="panel" data-link="#"><span>1/144</span></div>
-          <div class="panel" data-link="#"><span>1/100</span></div>
-          <div class="panel" data-link="#"><span>MISC</span></div>
-        </div>
+      <div class="scroll-container">
+        <div class="button-container">
+          <div class="panel" id="scalePanel"><span>SCALE</span></div>
+          <div class="dropdown" id="scaleDropdown">
+            <div class="panel" data-link="#"><span>1/144</span></div>
+            <div class="panel" data-link="#"><span>1/100</span></div>
+            <div class="panel" data-link="#"><span>MISC</span></div>
+          </div>
 
-        <div class="panel" id="gradesPanel"><span>GRADES</span></div>
-        <div class="dropdown" id="gradesDropdown">
-          <div class="panel" data-link="#"><span>SD</span></div>
-          <div class="panel" data-link="hg/index.html"><span>HG</span></div>
-          <div class="panel" data-link="#"><span>RG</span></div>
-          <div class="panel" data-link="#"><span>MG</span></div>
-          <div class="panel" data-link="#"><span>PG</span></div>
-          <div class="panel" data-link="#"><span>MEGASIZE</span></div>
-        </div>
+          <div class="panel" id="gradesPanel"><span>GRADES</span></div>
+          <div class="dropdown" id="gradesDropdown">
+            <div class="panel" data-link="#"><span>SD</span></div>
+            <div class="panel" data-link="hg/index.html"><span>HG</span></div>
+            <div class="panel" data-link="#"><span>RG</span></div>
+            <div class="panel" data-link="#"><span>MG</span></div>
+            <div class="panel" data-link="#"><span>PG</span></div>
+            <div class="panel" data-link="#"><span>MEGASIZE</span></div>
+          </div>
 
-        <div class="panel" data-link="#"><span>EXPLORE</span></div>
-        <div class="panel" data-link="#"><span>ABOUT</span></div>
+          <div class="panel" data-link="#"><span>EXPLORE</span></div>
+          <div class="panel" data-link="#"><span>ABOUT</span></div>
+        </div>
       </div>
     </div>
 
@@ -201,7 +207,7 @@
 
 <script>
 const bgImage=document.getElementById('bgImage');
-const mainButtons=document.querySelectorAll('.menu > .button-container > .panel');
+const mainButtons=document.querySelectorAll('.scroll-container > .button-container > .panel');
 mainButtons.forEach((btn,i)=>{ btn.style.animation=`flyIn 0.7s forwards ${i*0.15+0.5}s`; });
 
 function setupDropdown(triggerId, dropdownId){
