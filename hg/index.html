@@ -106,7 +106,7 @@
     background: rgba(17,17,17,0.65);
     border: 3px solid white;
     padding: 14px 26px;
-    transform: skew(-20deg);
+    transform: skew(-20deg) translateX(-100px); /* start off-screen for animation */
     cursor: pointer;
     width: 150px;
     text-align: center;
@@ -115,6 +115,7 @@
     left: 20px;
     z-index: 2;
     transition: background 0.2s, opacity 0.5s;
+    opacity: 0;
   }
 
   #homeBtn span {
@@ -131,6 +132,7 @@
   @keyframes flyIn {
     to { transform: skew(-20deg) translateX(0); opacity:1; }
   }
+
   </style>
 </head>
 <body>
@@ -161,14 +163,19 @@
 <script>
   const bg = document.getElementById('bgImage');
   const kits = document.querySelectorAll('#kitList .panel');
+  const homeBtn = document.getElementById('homeBtn');
 
   // Fly-in stagger animation for kit panels
   kits.forEach((kit,i)=>{
     kit.style.animation = `flyIn 0.6s forwards ${i*0.1 + 0.3}s`;
   });
 
+  // Fly-in animation for HOME button
+  setTimeout(()=>{
+    homeBtn.style.animation = 'flyIn 0.6s forwards 0.2s';
+  }, 100);
+
   // Home button click
-  const homeBtn = document.getElementById('homeBtn');
   homeBtn.addEventListener('click', ()=>{
     // fade out all kit panels
     kits.forEach((kit,i)=>{
@@ -178,6 +185,7 @@
     });
 
     // fade out home button
+    homeBtn.style.transition = 'opacity 0.5s';
     homeBtn.style.opacity = 0;
 
     // move background back to center
