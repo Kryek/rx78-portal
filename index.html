@@ -56,19 +56,43 @@
     animation: fadeIn 1s forwards;
   }
 
+  .hero h1 {
+    margin: 0;
+    font-size: 32px;
+  }
+
+  .hero p {
+    margin: 5px 0 0;
+    font-size: 16px;
+  }
+
   @keyframes fadeIn {
     to { opacity: 1; }
+  }
+
+  /* 🔥 MOBILE HERO COMPACT */
+  @media (max-width: 600px) {
+    .hero {
+      padding: 15px 10px;
+    }
+
+    .hero h1 {
+      font-size: 20px;
+      letter-spacing: 1px;
+    }
+
+    .hero p {
+      font-size: 12px;
+      opacity: 0.8;
+    }
   }
 
   /* MENU (SCROLL AREA WITH FADE) */
   .menu {
     flex: 1;
     overflow-y: auto;
-
-    /* ✅ PUSH DOWN FROM FADE */
     padding: 80px 20px 100px;
 
-    /* FADE TOP + BOTTOM */
     -webkit-mask-image: linear-gradient(
       to bottom,
       transparent 0%,
@@ -85,7 +109,6 @@
     );
   }
 
-  /* MOBILE BUFFER */
   @media (max-width: 600px) {
     .menu {
       padding: 80px 20px 140px;
@@ -199,7 +222,6 @@
 </div>
 
 <script>
-  // MAIN BUTTON STAGGER IN
   const mainButtons = document.querySelectorAll('.menu > .panel');
   mainButtons.forEach((btn, i) => {
     btn.style.animation = `flyIn 0.7s forwards ${i * 0.15 + 0.5}s`;
