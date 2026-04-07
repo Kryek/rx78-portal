@@ -3,16 +3,16 @@
 <head>
   <title>RX-78 Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
     html, body {
       margin: 0;
       height: 100%;
-      overflow: hidden;
+      background: black; /* native background under image */
       font-family: 'Orbitron', sans-serif;
       color: white;
+      overflow: hidden;
     }
 
     .app {
@@ -22,6 +22,7 @@
       overflow: hidden;
     }
 
+    /* BACKGROUND IMAGE */
     .bg-image {
       position: absolute;
       inset: 0;
@@ -74,52 +75,130 @@
       right: 12px;
       top: 50%;
       transform: translateY(-50%) skew(20deg);
+      transition: transform 0.3s ease;
     }
 
+    /* Dropdown */
+    .dropdown {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .dropdown.open {
+      margin-bottom: 25px;
+    }
+
+    .dropdown .panel {
+      width: 70%;
+      margin: 8px 0;
+      background: rgba(17,17,17,0.55);
+      transform: skew(-20deg) translateX(-50px);
+      opacity: 0;
+    }
+
+    @media (max-width: 600px) {
+      .dropdown .panel {
+        width: 60%;
+      }
+    }
+
+    /* Animations */
     @keyframes flyIn {
       to { transform: skew(-20deg) translateX(0); opacity: 1; }
     }
   </style>
 </head>
 <body>
-
 <div class="app">
-
   <div class="bg-image" id="bgImage"></div>
 
-  <div class="content home" id="homeContent">
+  <div class="content" id="homeContent">
     <div class="menu">
-      <div class="panel" data-target="hg/index.html"><span>HG</span></div>
-      <div class="panel" data-target="mg/index.html"><span>MG</span></div>
-      <div class="panel" data-target="sd/index.html"><span>SD</span></div>
+      <!-- SCALE dropdown -->
+      <div class="panel" id="scalePanel"><span>SCALE</span></div>
+      <div class="dropdown" id="scaleDropdown">
+        <div class="panel"><span>1/144</span></div>
+        <div class="panel"><span>1/100</span></div>
+        <div class="panel"><span>PG</span></div>
+        <div class="panel"><span>MEGASIZE</span></div>
+      </div>
+
+      <!-- GRADES dropdown -->
+      <div class="panel" id="gradesPanel"><span>GRADES</span></div>
+      <div class="dropdown" id="gradesDropdown">
+        <div class="panel"><span>SD</span></div>
+        <div class="panel"><span>HG</span></div>
+        <div class="panel"><span>RG</span></div>
+        <div class="panel"><span>MG</span></div>
+        <div class="panel"><span>PG</span></div>
+        <div class="panel"><span>MEGASIZE</span></div>
+      </div>
+
+      <div class="panel" data-target="explore.html"><span>EXPLORE</span></div>
       <div class="panel" data-target="about.html"><span>ABOUT</span></div>
     </div>
   </div>
-
 </div>
 
 <script>
-  const homeButtons = document.querySelectorAll('.home .panel');
-  const bg = document.getElementById('bgImage');
   const homeContent = document.getElementById('homeContent');
+  const bg = document.getElementById('bgImage');
 
-  // Fly-in on load
-  homeButtons.forEach((btn,i)=>{
-    btn.style.animation = `flyIn 0.7s forwards ${i*0.15 + 0.5}s`;
+  // Fly-in main panels
+  const mainPanels = document.querySelectorAll('.menu > .panel');
+  mainPanels.forEach((panel, i)=>{
+    panel.style.animation = `flyIn 0.7s forwards ${i*0.15 + 0.5}s`;
   });
 
-  homeButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.target;
-      // Slide background right
+  // Dropdown setup
+  function setupDropdown(triggerId, dropdownId){
+    const trigger = document.getElementById(triggerId);
+    const dropdown = document.getElementById(dropdownId);
+    const items = dropdown.querySelectorAll('.panel');
+    let open = false;
+
+    trigger.addEventListener('click', ()=>{
+      open = !open;
+      const arrow = trigger.querySelector('::after');
+
+      if(open){
+        dropdown.classList.add('open');
+        dropdown.style.maxHeight = dropdown.scrollHeight + 'px';
+        items.forEach((item,i)=>{
+          setTimeout(()=>{
+            item.style.transform = 'skew(-20deg) translateX(0)';
+            item.style.opacity = '1';
+          }, i*100);
+        });
+        trigger.querySelector('span').parentNode.querySelector('::after');
+        trigger.querySelector('span').parentNode.style.transform; // arrow spin can be added here
+        trigger.querySelector('::after').style.transform = 'translateY(-50%) skew(20deg) rotate(90deg)';
+      } else {
+        dropdown.style.maxHeight = '0';
+        items.forEach(item=>{
+          item.style.transform = 'skew(-20deg) translateX(-50px)';
+          item.style.opacity = '0';
+        });
+        trigger.querySelector('::after').style.transform = 'translateY(-50%) skew(20deg) rotate(0deg)';
+      }
+    });
+  }
+
+  setupDropdown('scalePanel','scaleDropdown');
+  setupDropdown('gradesPanel','gradesDropdown');
+
+  // Navigation buttons
+  document.querySelectorAll('.panel[data-target]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
       bg.style.transform = 'translateX(50%)';
-      // Fade out home buttons
       homeContent.style.opacity = '0';
-      // Wait for animation before navigating
-      setTimeout(()=> { window.location.href = target; }, 1000);
+      setTimeout(()=> { window.location.href = btn.dataset.target; }, 1000);
     });
   });
 </script>
-
 </body>
 </html>
