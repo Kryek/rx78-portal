@@ -49,18 +49,17 @@
     flex-direction: column;
   }
 
-  /* BUTTON CONTAINER (full height, scrollable) */
-  .button-container {
+  /* SCROLLABLE BUTTON CONTAINER */
+  .scrollable-container {
     position: relative;
     height: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse; /* so dropdowns expand upward */
     align-items: center;
-    justify-content: flex-end;
     overflow-y: auto;
-    padding-bottom: 40px;
+    padding: 20px 0;
 
-    /* SHORTER FADE MASK TOP & BOTTOM */
+    /* fade mask top/bottom */
     -webkit-mask-image: linear-gradient(to bottom, transparent 0px, black 20px, black calc(100% - 20px), transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0px, black 20px, black calc(100% - 20px), transparent 100%);
 
@@ -68,12 +67,12 @@
     scrollbar-width: thin;
   }
 
-  .button-container::-webkit-scrollbar { width: 8px; }
-  .button-container::-webkit-scrollbar-track { background: black; }
-  .button-container::-webkit-scrollbar-thumb { background: white; border-radius:4px; }
-  .button-container::-webkit-scrollbar-thumb:hover { background:#ccc; }
+  .scrollable-container::-webkit-scrollbar { width: 8px; }
+  .scrollable-container::-webkit-scrollbar-track { background: black; }
+  .scrollable-container::-webkit-scrollbar-thumb { background: white; border-radius:4px; }
+  .scrollable-container::-webkit-scrollbar-thumb:hover { background:#ccc; }
 
-  /* PANELS */
+  /* PANEL BUTTONS */
   .panel {
     position: relative;
     display: block;
@@ -84,9 +83,9 @@
     opacity: 0;
     margin-bottom: 15px;
     cursor: pointer;
-    transition: background 0.2s;
-    width: 200px;
+    width: 220px;
     text-align: center;
+    transition: background 0.2s;
   }
 
   .panel:hover { background: rgba(17,17,17,0.8); }
@@ -113,21 +112,20 @@
     transform: translateY(-50%) skew(20deg) rotate(90deg);
   }
 
-  /* DROPDOWN */
+  /* DROPDOWN PANELS */
   .dropdown {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column-reverse; /* expand upward */
     align-items: center;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.25s ease;
-    margin-bottom: 0;
+    transition: max-height 0.3s ease;
   }
 
   .dropdown.open { margin-bottom: 15px; }
 
   .dropdown .panel {
-    width: 180px;
+    width: 200px;
     margin: 8px 0;
     background: rgba(17,17,17,0.55);
     transform: skew(-20deg) translateX(-50px);
@@ -138,8 +136,8 @@
   @keyframes flyIn { to { transform: skew(-20deg) translateX(0); opacity:1; } }
   @keyframes fadeOut { to { transform: skew(-20deg) translateX(-100px); opacity:0; } }
 
-  @media (max-width: 600px) {
-    .button-container { justify-content: flex-start; padding: 80px 0 140px; }
+  @media (max-width:600px) {
+    .scrollable-container { padding: 80px 0 140px; }
     .panel { width: 90%; margin-bottom: 12px; }
     .dropdown .panel { width: 80%; }
   }
@@ -152,7 +150,7 @@
   <div class="bg-image" id="bgImage"></div>
   <div class="content">
 
-    <div class="button-container">
+    <div class="scrollable-container">
       <!-- SCALE -->
       <div class="panel" id="scalePanel"><span>SCALE</span></div>
       <div class="dropdown" id="scaleDropdown">
@@ -181,7 +179,7 @@
 
 <script>
 const bgImage = document.getElementById('bgImage');
-const mainButtons = document.querySelectorAll('.button-container > .panel');
+const mainButtons = document.querySelectorAll('.scrollable-container > .panel');
 mainButtons.forEach((btn,i)=>{
   btn.style.animation = `flyIn 0.7s forwards ${i*0.15+0.5}s`;
 });
