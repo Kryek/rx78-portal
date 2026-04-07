@@ -270,6 +270,10 @@
   setupDropdown('scalePanel', 'scaleDropdown');
   setupDropdown('gradesPanel', 'gradesDropdown');
 </script>
-
+fetch('data/kits.json')
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+  });
 </body>
 </html>
