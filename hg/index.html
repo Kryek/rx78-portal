@@ -36,47 +36,42 @@
 
   .content { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; }
 
-  /* HERO CONTAINER */
-  .hero { padding: 80px 20px 10px 20px; flex-shrink:0; } /* increased top padding */
+  .hero { padding: 60px 20px 10px 20px; flex-shrink:0; }
   @media (max-width:600px){ 
-    .hero{ padding: 70px 10px 10px 10px; } /* bigger gap on mobile */
+    .hero{ padding: 50px 10px 10px 10px; } 
   }
 
-  /* PAGE TITLE */
   #pageTitle {
     font-size: 28px;
     margin: 0 0 16px 0;
     line-height: 1.2;
     text-shadow: 0 0 6px rgba(0,0,0,0.8);
+    transform: skew(20deg);
     display: inline-block;
     opacity: 0;
     transition: opacity 0.6s ease;
   }
-
-  #pageTitle span { display: block; }
+  #pageTitle span { transform: skew(-20deg); display: block; }
 
   @media (max-width:600px){
     #pageTitle { font-size: 22px; margin-bottom: 12px; }
   }
 
-  /* SEARCH BAR */
   #searchBarWrapper { margin: 0 0 8px 0; opacity:0; transition: opacity 0.6s ease; }
+
   #searchBar {
     background: rgba(17,17,17,0.65);
     border: 3px solid white;
     padding: 8px 10px;
+    transform: skew(-20deg);
     font-size: 14px;
     color: white;
     outline: none;
     width: calc(45% - 20px);
   }
+
   #searchBar::placeholder { color: #ccc; }
 
-  @media (max-width:600px){
-    #searchBar { width: 66vw; } /* expanded to 2/3 screen width on mobile */
-  }
-
-  /* KIT LIST */
   .menu {
     flex: 1;
     overflow-y: auto;
@@ -92,7 +87,6 @@
   .menu::-webkit-scrollbar { width: 8px; }
   .menu::-webkit-scrollbar-track { background: black; }
   .menu::-webkit-scrollbar-thumb { background: white; border-radius:4px; }
-  .menu::-webkit-scrollbar-thumb:hover { background:#ccc; }
 
   .panel {
     position: relative;
@@ -100,7 +94,7 @@
     background: rgba(17,17,17,0.65);
     border: 3px solid white;
     padding: 20px 30px;
-    transform: translateX(-100px);
+    transform: skew(-20deg) translateX(-100px);
     opacity: 0;
     margin-bottom: 20px;
     cursor: pointer;
@@ -113,24 +107,52 @@
 
   .panel span {
     display: block;
+    transform: skew(20deg);
     text-align: left;
-    font-size: 18px;
     letter-spacing: 1.2px;
-    line-height: 1.2;
     text-shadow: 0 0 4px rgba(0,0,0,0.8);
   }
 
-  @media (max-width:600px){
-    .panel { width: 50%; padding: 16px 20px; } /* half screen width on mobile */
-    .panel span { font-size: 14px; } /* dynamically smaller font to prevent line wrap */
+  /* ✅ LINE CONTROL */
+  .line {
+    display: block;
+    white-space: nowrap; /* prevent wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis; /* optional fallback */
   }
 
-  /* HOME BUTTON */
+  /* ✅ FONT SCALING */
+  .line.mold {
+    font-size: clamp(12px, 2.2vw, 18px);
+  }
+
+  .line.variant {
+    font-size: clamp(10px, 2vw, 16px);
+    opacity: 0.8;
+  }
+
+  /* MOBILE */
+  @media (max-width:600px){
+    .panel {
+      width: 50vw;
+      padding: 16px 20px;
+    }
+
+    .line.mold {
+      font-size: clamp(10px, 3vw, 16px);
+    }
+
+    .line.variant {
+      font-size: clamp(9px, 2.6vw, 14px);
+    }
+  }
+
   #homeBtn {
     display: block;
     background: rgba(17,17,17,0.65);
     border: 3px solid white;
     padding: 8px 12px;
+    transform: skew(-20deg) translateX(-100px);
     cursor: pointer;
     width: 66px;
     text-align: center;
@@ -144,6 +166,7 @@
 
   #homeBtn span {
     display: block;
+    transform: skew(20deg);
     text-align: center;
     font-size: 10px;
     letter-spacing: 1.2px;
@@ -151,7 +174,7 @@
 
   #homeBtn:hover { background: rgba(17,17,17,0.8); }
 
-  @keyframes flyIn { to { transform: translateX(0); opacity:1; } }
+  @keyframes flyIn { to { transform: skew(-20deg) translateX(0); opacity:1; } }
 
   </style>
 </head>
@@ -165,10 +188,8 @@
     <div id="homeBtn"><span>HOME</span></div>
 
     <div class="hero">
-      <!-- Page Title -->
       <div id="pageTitle"><span>HIGH GRADE</span></div>
 
-      <!-- Search Bar -->
       <div id="searchBarWrapper">
         <input type="text" id="searchBar" placeholder="Search by mold or variant...">
       </div>
@@ -189,16 +210,11 @@
   const searchBar = document.getElementById('searchBar');
   let hgKits = [];
 
-  // Load JSON
   fetch('../data/kits.json')
     .then(res => res.json())
     .then(data => {
       hgKits = data.kits.filter(k => k.meta === "HG");
       displayKits(hgKits);
-    })
-    .catch(err => {
-      console.error("Failed to load kits.json", err);
-      kitList.innerHTML = "<div style='color:red; padding:20px;'>Failed to load HG kits.</div>";
     });
 
   function displayKits(kits) {
@@ -206,12 +222,19 @@
     kits.forEach((kit, i) => {
       const panel = document.createElement('div');
       panel.classList.add('panel');
-      panel.innerHTML = `<span>${kit.mold} <br> &gt; ${kit.variant}</span>`;
+
+      panel.innerHTML = `
+        <span>
+          <span class="line mold">${kit.mold}</span>
+          <span class="line variant">&gt; ${kit.variant}</span>
+        </span>
+      `;
+
       panel.addEventListener('click', () => window.location.href = kit.page);
       kitList.appendChild(panel);
       setTimeout(() => { panel.style.animation = `flyIn 0.6s forwards ${i*0.1 + 0.3}s`; }, 50);
     });
-    // fade in everything
+
     setTimeout(()=>{ 
       pageTitle.style.opacity = 1; 
       searchWrapper.style.opacity = 1;
@@ -219,7 +242,6 @@
     }, 100);
   }
 
-  // Search filter
   searchBar.addEventListener('input', () => {
     const term = searchBar.value.toLowerCase();
     displayKits(hgKits.filter(k => 
@@ -227,10 +249,8 @@
     ));
   });
 
-  // HOME button fly-in
   setTimeout(()=>{ homeBtn.style.animation = 'flyIn 0.6s forwards 0.2s'; }, 100);
 
-  // Home button click — fade out everything
   homeBtn.addEventListener('click', () => {
     kitList.style.opacity = 0;
     pageTitle.style.opacity = 0;
