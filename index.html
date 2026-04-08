@@ -12,17 +12,16 @@
     background: black;
     font-family: 'Orbitron', sans-serif;
     color: white;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    overflow: hidden;
   }
 
   .app {
     position: relative;
     width: 100%;
     height: 100vh;
+    overflow: hidden;
   }
 
-  /* BACKGROUND */
   .bg-image {
     position: absolute;
     inset: 0;
@@ -48,63 +47,62 @@
     flex-direction: column;
   }
 
-  .menu {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+  .hero {
+    padding: 30px 20px;
+    flex-shrink: 0;
   }
 
-  .scroll-container {
+  .menu {
     flex: 1;
-    display: flex;
-    flex-direction: column;
     overflow-y: auto;
-    align-items: center;
-    justify-content: flex-end;
-    padding-bottom: 50px;
+    padding: 80px 20px 100px;
+
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 60px,
+      black calc(100% - 60px),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 60px,
+      black calc(100% - 60px),
+      transparent 100%
+    );
 
     scrollbar-color: white black;
     scrollbar-width: thin;
   }
 
-  .scroll-container::-webkit-scrollbar { width: 8px; }
-  .scroll-container::-webkit-scrollbar-track { background: black; }
-  .scroll-container::-webkit-scrollbar-thumb { background: white; border-radius:4px; }
+  .menu::-webkit-scrollbar { width: 8px; }
+  .menu::-webkit-scrollbar-track { background: black; }
+  .menu::-webkit-scrollbar-thumb { background: white; border-radius:4px; }
 
   /* MAIN BUTTONS */
   .panel {
     position: relative;
-    width: 75vw;
-    max-width: 500px;
-    margin-bottom: 25px;
-
+    display: block;
     background: rgba(17,17,17,0.65);
     border: 3px solid white;
     padding: 22px 36px;
-
     transform: skew(-20deg) translateX(-100px);
     opacity: 0;
-
+    margin-bottom: 25px;
     cursor: pointer;
     transition: background 0.2s;
-  }
-
-  .panel:hover {
-    background: rgba(17,17,17,0.8);
   }
 
   .panel span {
     display: block;
     transform: skew(20deg);
     text-align: center;
-    font-size: 22px;
+    font-size: 24px;
   }
 
-  /* /// indicator (MAIN ONLY) */
-  .menu > .scroll-container > .panel::after,
-  #scalePanel::after,
-  #gradesPanel::after {
+  /* /// MAIN ONLY */
+  .panel::after {
     content: "///";
     position: absolute;
     right: 12px;
@@ -127,54 +125,41 @@
     transition: max-height 0.25s ease;
   }
 
-  .dropdown.open {
-    margin-bottom: 30px;
-  }
+  .dropdown.open { margin-bottom: 25px; }
 
-  /* 🔥 DESKTOP DROPDOWN (RECTANGLE) */
+  /* 🔥 FIX: REMOVE SKEW CLEANLY */
   .dropdown .panel {
-    width: 50vw;
-    max-width: 300px;
+    width: 75%;
     margin: 8px 0;
+    background: rgba(17,17,17,0.55);
 
     transform: translateX(-50px); /* no skew */
     opacity: 0;
   }
 
   .dropdown .panel span {
-    transform: none;
-    font-size: 18px;
+    transform: none; /* remove counter skew */
   }
 
+  /* remove /// */
   .dropdown .panel::after {
     content: none;
   }
 
-  /* MOBILE FIX */
   @media (max-width: 600px) {
-
-    .panel {
-      width: 80vw;
-      max-width: 80vw;
-    }
-
     .dropdown .panel {
-      width: 80vw;
-      max-width: 80vw;
+      width: 70%;
 
-      /* 🔥 FORCE RECTANGLE */
-      transform: translateX(0) !important;
-      animation: none !important;
-      opacity: 1;
+      /* 🔥 CRITICAL FIX FOR MOBILE */
+      transform: translateX(-30px) !important;
     }
 
     .dropdown .panel span {
-      transform: none !important;
-      font-size: 15px;
+      font-size: 16px;
     }
   }
 
-  @keyframes flyInMain {
+  @keyframes flyIn {
     to { transform: skew(-20deg) translateX(0); opacity:1; }
   }
 
@@ -183,7 +168,7 @@
   }
 
   @keyframes fadeOut {
-    to { transform: translateX(-100px); opacity:0; }
+    to { transform: skew(-20deg) translateX(-100px); opacity:0; }
   }
 
   </style>
@@ -191,71 +176,67 @@
 <body>
 
 <div class="app">
-
   <div class="bg-image" id="bgImage"></div>
 
   <div class="content">
+    <div class="hero"></div>
+
     <div class="menu">
-      <div class="scroll-container">
 
-        <!-- SCALE -->
-        <div class="panel" id="scalePanel"><span>SCALE</span></div>
-        <div class="dropdown" id="scaleDropdown">
-          <div class="panel"><span>1/144</span></div>
-          <div class="panel"><span>1/100</span></div>
-          <div class="panel"><span>MISC</span></div>
-        </div>
-
-        <!-- GRADES -->
-        <div class="panel" id="gradesPanel"><span>GRADES</span></div>
-        <div class="dropdown" id="gradesDropdown">
-          <div class="panel"><span>SD</span></div>
-          <div class="panel" data-link="hg/index.html"><span>HG</span></div>
-          <div class="panel"><span>RG</span></div>
-          <div class="panel"><span>MG</span></div>
-          <div class="panel"><span>PG</span></div>
-          <div class="panel"><span>MEGASIZE</span></div>
-        </div>
-
-        <div class="panel"><span>EXPLORE</span></div>
-        <div class="panel"><span>ABOUT</span></div>
-
+      <!-- SCALE -->
+      <div class="panel" id="scalePanel"><span>SCALE</span></div>
+      <div class="dropdown" id="scaleDropdown">
+        <div class="panel"><span>1/144</span></div>
+        <div class="panel"><span>1/100</span></div>
+        <div class="panel"><span>MISC</span></div>
       </div>
+
+      <!-- GRADES -->
+      <div class="panel" id="gradesPanel"><span>GRADES</span></div>
+      <div class="dropdown" id="gradesDropdown">
+        <div class="panel"><span>SD</span></div>
+        <div class="panel" data-link="hg/index.html"><span>HG</span></div>
+        <div class="panel"><span>RG</span></div>
+        <div class="panel"><span>MG</span></div>
+        <div class="panel"><span>PG</span></div>
+        <div class="panel"><span>MEGASIZE</span></div>
+      </div>
+
+      <div class="panel"><span>EXPLORE</span></div>
+      <div class="panel"><span>ABOUT</span></div>
+
     </div>
   </div>
-
 </div>
 
 <script>
-const bgImage = document.getElementById('bgImage');
-const mainButtons = document.querySelectorAll('#scalePanel, #gradesPanel, .scroll-container > .panel:not([id])');
+const bgImage=document.getElementById('bgImage');
+const mainButtons=document.querySelectorAll('.menu > .panel');
 
-/* MAIN ANIMATION */
 mainButtons.forEach((btn,i)=>{
-  btn.style.animation=`flyInMain 0.7s forwards ${i*0.15+0.5}s`;
+  btn.style.animation=`flyIn 0.7s forwards ${i*0.15+0.5}s`;
 });
 
-/* DROPDOWN */
 function setupDropdown(triggerId, dropdownId){
-  const trigger = document.getElementById(triggerId);
-  const dropdown = document.getElementById(dropdownId);
-  const items = dropdown.querySelectorAll('.panel');
-  let open = false;
+  const trigger=document.getElementById(triggerId);
+  const dropdown=document.getElementById(dropdownId);
+  const items=dropdown.querySelectorAll('.panel');
+  let open=false;
 
-  trigger.addEventListener('click', ()=>{
-    open = !open;
+  trigger.addEventListener('click',()=>{
+    open=!open;
     trigger.classList.toggle('active');
 
     if(open){
       dropdown.classList.add('open');
-      dropdown.style.maxHeight = dropdown.scrollHeight + "px";
+      dropdown.style.maxHeight=dropdown.scrollHeight+"px";
 
       items.forEach((item,i)=>{
-        item.style.animation=`flyInDropdown 0.3s forwards ${i*0.08}s`;
+        item.style.animation=`flyInDropdown 0.4s forwards ${i*0.1}s`;
       });
 
     } else {
-      dropdown.style.maxHeight = "0";
+      dropdown.style.maxHeight="0";
       dropdown.classList.remove('open');
     }
   });
@@ -264,7 +245,7 @@ function setupDropdown(triggerId, dropdownId){
 setupDropdown('scalePanel','scaleDropdown');
 setupDropdown('gradesPanel','gradesDropdown');
 
-/* NAVIGATION FIX */
+/* 🔥 FIX: fade EVERYTHING */
 document.querySelectorAll('[data-link]').forEach(item=>{
   item.addEventListener('click',()=>{
 
