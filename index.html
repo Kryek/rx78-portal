@@ -95,10 +95,7 @@
     cursor: pointer;
     box-sizing: border-box;
     transition: background 0.2s;
-    z-index: 1;
   }
-
-  .panel:hover { background: rgba(17,17,17,0.8); }
 
   .panel span {
     display: block;
@@ -107,7 +104,7 @@
     font-size: 24px;
   }
 
-  /* /// ONLY FOR MAIN BUTTONS */
+  /* /// only main buttons */
   .button-container > .panel::after {
     content: "///";
     position: absolute;
@@ -133,26 +130,25 @@
 
   .dropdown.open {
     margin-bottom: 35px;
-    z-index: 20;
   }
 
-  /* 🔥 DROPDOWN BUTTONS → RECTANGLES */
+  /* 🔥 FIXED DROPDOWN BUTTONS */
   .dropdown .panel {
     width: 37.5vw;
     max-width: 50%;
     margin: 8px 0;
     background: rgba(17,17,17,0.55);
 
-    transform: translateX(-50px); /* 👈 NO skew */
+    /* ❗ FULL RESET */
+    transform: translateX(-50px); /* NO skew */
     opacity: 0;
   }
 
   .dropdown .panel span {
-    transform: none; /* 👈 remove counter-skew */
+    transform: none; /* remove counter-skew */
     font-size: 20px;
   }
 
-  /* REMOVE /// FROM DROPDOWN */
   .dropdown .panel::after {
     content: none;
   }
@@ -166,22 +162,26 @@
     }
 
     .dropdown .panel {
-      width: 70vw;
-      max-width: 70vw;
+      width: 80vw; /* 👈 FULL WIDTH → no clipping */
+      max-width: 80vw;
+      transform: translateX(-40px);
     }
 
     .dropdown .panel span {
       font-size: 15px;
-      letter-spacing: 1px;
     }
   }
 
-  @keyframes flyIn {
+  @keyframes flyInMain {
     to { transform: skew(-20deg) translateX(0); opacity:1; }
   }
 
+  @keyframes flyInDropdown {
+    to { transform: translateX(0); opacity:1; }
+  }
+
   @keyframes fadeOut {
-    to { transform: skew(-20deg) translateX(-100px); opacity:0; }
+    to { transform: translateX(-100px); opacity:0; }
   }
 
   </style>
@@ -196,7 +196,6 @@
       <div class="scroll-container">
         <div class="button-container">
 
-          <!-- SCALE -->
           <div class="panel" id="scalePanel"><span>SCALE</span></div>
           <div class="dropdown" id="scaleDropdown">
             <div class="panel"><span>1/144</span></div>
@@ -204,7 +203,6 @@
             <div class="panel"><span>MISC</span></div>
           </div>
 
-          <!-- GRADES -->
           <div class="panel" id="gradesPanel"><span>GRADES</span></div>
           <div class="dropdown" id="gradesDropdown">
             <div class="panel"><span>SD</span></div>
@@ -228,12 +226,11 @@
 const bgImage = document.getElementById('bgImage');
 const mainButtons = document.querySelectorAll('.button-container > .panel');
 
-/* fly in */
+/* main buttons */
 mainButtons.forEach((btn,i)=>{
-  btn.style.animation=`flyIn 0.7s forwards ${i*0.15+0.5}s`;
+  btn.style.animation=`flyInMain 0.7s forwards ${i*0.15+0.5}s`;
 });
 
-/* dropdown logic */
 function setupDropdown(triggerId, dropdownId){
   const trigger=document.getElementById(triggerId);
   const dropdown=document.getElementById(dropdownId);
@@ -242,7 +239,6 @@ function setupDropdown(triggerId, dropdownId){
 
   trigger.addEventListener('click',()=>{
     open=!open;
-
     trigger.classList.toggle('active');
 
     if(open){
@@ -250,16 +246,12 @@ function setupDropdown(triggerId, dropdownId){
       dropdown.style.maxHeight=dropdown.scrollHeight+"px";
 
       items.forEach((item,i)=>{
-        item.style.animation=`flyIn 0.4s forwards ${i*0.1}s`;
+        item.style.animation=`flyInDropdown 0.4s forwards ${i*0.1}s`;
       });
 
     } else {
       dropdown.style.maxHeight="0";
       dropdown.classList.remove('open');
-
-      items.forEach(item=>{
-        item.style.opacity='0';
-      });
     }
   });
 }
@@ -272,10 +264,6 @@ document.querySelectorAll('[data-link]').forEach(item=>{
   item.addEventListener('click',()=>{
     mainButtons.forEach((btn,i)=>{
       btn.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`;
-    });
-
-    document.querySelectorAll('.dropdown.open .panel').forEach((d,i)=>{
-      d.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`;
     });
 
     bgImage.style.transform='translateX(50%)';
