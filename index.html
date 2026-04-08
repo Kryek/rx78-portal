@@ -84,7 +84,6 @@
     align-items: center;
   }
 
-  /* MAIN BUTTONS */
   .button-container > .panel {
     width: 75vw;
     max-width: 90%;
@@ -115,15 +114,21 @@
     font-size: 24px;
   }
 
+  /* DEFAULT /// */
   .panel::after {
     content: "///";
     position: absolute;
     right: 12px;
     top: 50%;
-    transform: translateY(-50%) skew(20deg);
+    transform: translateY(-50%) skew(20deg) rotate(0deg);
+    transition: transform 0.3s ease;
   }
 
-  /* DROPDOWN */
+  /* ROTATE WHEN ACTIVE */
+  .panel.active::after {
+    transform: translateY(-50%) skew(20deg) rotate(90deg);
+  }
+
   .dropdown {
     display: flex;
     flex-direction: column;
@@ -144,27 +149,20 @@
     max-width: 50%;
     margin: 8px 0;
     background: rgba(17,17,17,0.55);
-
-    /* ✅ UNSKEWED */
     transform: translateX(-50px);
-
     opacity: 0;
     z-index: 25;
   }
 
-  /* ✅ REMOVE INNER SKEW */
   .dropdown .panel span {
     transform: none;
   }
 
-  /* ✅ REMOVE /// */
   .dropdown .panel::after {
     content: none;
   }
 
-  /* MOBILE */
   @media (max-width: 600px) {
-
     .panel {
       width: 80vw;
       max-width: 80vw;
@@ -173,8 +171,6 @@
     .dropdown .panel {
       width: 60vw;
       max-width: 60vw;
-
-      /* still no skew */
       transform: translateX(-40px);
     }
 
@@ -184,7 +180,6 @@
     }
   }
 
-  /* MAIN BUTTON ANIMATION */
   @keyframes flyIn {
     to { transform: skew(-20deg) translateX(0); opacity:1; }
   }
@@ -193,7 +188,6 @@
     to { transform: skew(-20deg) translateX(-100px); opacity:0; }
   }
 
-  /* ✅ DROPDOWN ANIMATIONS (NO SKEW) */
   @keyframes flyInDropdown {
     to { transform: translateX(0); opacity:1; }
   }
@@ -216,27 +210,25 @@
       <div class="scroll-container">
         <div class="button-container">
 
-          <!-- SCALE -->
           <div class="panel" id="scalePanel"><span>SCALE</span></div>
           <div class="dropdown" id="scaleDropdown">
-            <div class="panel" data-link="#"><span>1/144</span></div>
-            <div class="panel" data-link="#"><span>1/100</span></div>
-            <div class="panel" data-link="#"><span>MISC</span></div>
+            <div class="panel"><span>1/144</span></div>
+            <div class="panel"><span>1/100</span></div>
+            <div class="panel"><span>MISC</span></div>
           </div>
 
-          <!-- GRADES -->
           <div class="panel" id="gradesPanel"><span>GRADES</span></div>
           <div class="dropdown" id="gradesDropdown">
-            <div class="panel" data-link="#"><span>SD</span></div>
+            <div class="panel"><span>SD</span></div>
             <div class="panel" data-link="hg/index.html"><span>HG</span></div>
-            <div class="panel" data-link="#"><span>RG</span></div>
-            <div class="panel" data-link="#"><span>MG</span></div>
-            <div class="panel" data-link="#"><span>PG</span></div>
-            <div class="panel" data-link="#"><span>MEGASIZE</span></div>
+            <div class="panel"><span>RG</span></div>
+            <div class="panel"><span>MG</span></div>
+            <div class="panel"><span>PG</span></div>
+            <div class="panel"><span>MEGASIZE</span></div>
           </div>
 
-          <div class="panel" data-link="#"><span>EXPLORE</span></div>
-          <div class="panel" data-link="#"><span>ABOUT</span></div>
+          <div class="panel"><span>EXPLORE</span></div>
+          <div class="panel"><span>ABOUT</span></div>
 
         </div>
       </div>
@@ -264,12 +256,18 @@ function setupDropdown(triggerId, dropdownId){
   trigger.addEventListener('click',()=>{
     open=!open;
 
+    trigger.classList.toggle('active');
+
     if(open){
       dropdown.classList.add('open');
       dropdown.style.maxHeight=dropdown.scrollHeight+"px";
+
       items.forEach((item,i)=>{
-        item.style.animation=`flyInDropdown 0.4s forwards ${i*0.1}s`;
+        item.style.animation = "none";
+        item.offsetHeight; // force reflow
+        item.style.animation = `flyInDropdown 0.4s forwards ${i*0.1}s`;
       });
+
     } else {
       dropdown.style.maxHeight="0";
       dropdown.classList.remove('open');
