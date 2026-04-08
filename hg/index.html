@@ -109,26 +109,41 @@
     display: block;
     transform: skew(20deg);
     text-align: left;
-
-    /* ✅ NO WRAP */
-    white-space: nowrap;
-
-    /* ✅ DYNAMIC FONT */
-    font-size: clamp(12px, 2.5vw, 18px);
-
     letter-spacing: 1.2px;
     text-shadow: 0 0 4px rgba(0,0,0,0.8);
   }
 
-  /* ✅ MOBILE FIX */
+  /* ✅ LINE CONTROL */
+  .line {
+    display: block;
+    white-space: nowrap; /* prevent wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis; /* optional fallback */
+  }
+
+  /* ✅ FONT SCALING */
+  .line.mold {
+    font-size: clamp(12px, 2.2vw, 18px);
+  }
+
+  .line.variant {
+    font-size: clamp(10px, 2vw, 16px);
+    opacity: 0.8;
+  }
+
+  /* MOBILE */
   @media (max-width:600px){
     .panel {
-      width: 50vw; /* exact half screen */
+      width: 50vw;
       padding: 16px 20px;
     }
 
-    .panel span {
-      font-size: clamp(10px, 3.5vw, 16px);
+    .line.mold {
+      font-size: clamp(10px, 3vw, 16px);
+    }
+
+    .line.variant {
+      font-size: clamp(9px, 2.6vw, 14px);
     }
   }
 
@@ -200,10 +215,6 @@
     .then(data => {
       hgKits = data.kits.filter(k => k.meta === "HG");
       displayKits(hgKits);
-    })
-    .catch(err => {
-      console.error("Failed to load kits.json", err);
-      kitList.innerHTML = "<div style='color:red; padding:20px;'>Failed to load HG kits.</div>";
     });
 
   function displayKits(kits) {
@@ -212,8 +223,12 @@
       const panel = document.createElement('div');
       panel.classList.add('panel');
 
-      /* ✅ single line now */
-      panel.innerHTML = `<span>${kit.mold} > ${kit.variant}</span>`;
+      panel.innerHTML = `
+        <span>
+          <span class="line mold">${kit.mold}</span>
+          <span class="line variant">&gt; ${kit.variant}</span>
+        </span>
+      `;
 
       panel.addEventListener('click', () => window.location.href = kit.page);
       kitList.appendChild(panel);
