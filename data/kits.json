@@ -1,6 +1,11 @@
 {
   "kits": [
     {
+      "comment": "below is HG",
+      "comment": "below is HG",
+      "comment": "below is HG"
+    }
+    {
       "id": "hg-revive-standard",
       "name": "Revive [Standard]",
       "grade": "HG",
@@ -16,6 +21,86 @@
 
       "page": "hg/revive-standard.html"
     },
+    {
+      "id": "hg-revive-g3",
+      "name": "Revive [G-3]",
+      "grade": "HG",
+      "scale": "1/144",
+      "mold": "Revive",
+      "variant": "G-3",
+      "year": 2015,
+      "meta": "HG",
+
+      "images": {
+        "box": "images/hg/revive-g3-box.png"
+      },
+
+      "page": "hg/revive-g3.html"
+    }
+    {
+      "id": "hg-revive-g3",
+      "name": "Revive [G-3]",
+      "grade": "HG",
+      "scale": "1/144",
+      "mold": "Revive",
+      "variant": "G-3",
+      "year": 2015,
+      "meta": "HG",
+
+      "images": {
+        "box": "images/hg/revive-g3-box.png"
+      },
+
+      "page": "hg/revive-g3.html"
+    }
+    {
+      "id": "hg-revive-g3",
+      "name": "Revive [G-3]",
+      "grade": "HG",
+      "scale": "1/144",
+      "mold": "Revive",
+      "variant": "G-3",
+      "year": 2015,
+      "meta": "HG",
+
+      "images": {
+        "box": "images/hg/revive-g3-box.png"
+      },
+
+      "page": "hg/revive-g3.html"
+    }
+    {
+      "id": "hg-revive-g3",
+      "name": "Revive [G-3]",
+      "grade": "HG",
+      "scale": "1/144",
+      "mold": "Revive",
+      "variant": "G-3",
+      "year": 2015,
+      "meta": "HG",
+
+      "images": {
+        "box": "images/hg/revive-g3-box.png"
+      },
+
+      "page": "hg/revive-g3.html"
+    }
+    {
+      "id": "hg-revive-g3",
+      "name": "Revive [G-3]",
+      "grade": "HG",
+      "scale": "1/144",
+      "mold": "Revive",
+      "variant": "G-3",
+      "year": 2015,
+      "meta": "HG",
+
+      "images": {
+        "box": "images/hg/revive-g3-box.png"
+      },
+
+      "page": "hg/revive-g3.html"
+    }
     {
       "id": "hg-revive-g3",
       "name": "Revive [G-3]",
