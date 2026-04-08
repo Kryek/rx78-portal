@@ -22,7 +22,6 @@
     height: 100vh;
   }
 
-  /* BACKGROUND */
   .bg-image {
     position: absolute;
     inset: 0;
@@ -52,66 +51,60 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
-    align-items: center;
     justify-content: flex-end;
+    align-items: center;
+    overflow-y: auto;
     padding-bottom: 40px;
   }
 
-  /* PANEL */
-  .panel {
-    position: relative;
-    width: 75vw;
-    max-width: 500px;
-    margin-bottom: 25px;
-    cursor: pointer;
-    opacity: 0;
-    transform: translateX(-100px);
-    animation: flyIn 0.6s forwards;
+  .menu::-webkit-scrollbar {
+    width: 8px;
+  }
+  .menu::-webkit-scrollbar-thumb {
+    background: white;
+    border-radius: 4px;
   }
 
-  /* ✅ FIX: oversized skew layer */
-  .panel::before {
-    content: "";
-    position: absolute;
-
-    /* 👇 extend beyond bounds */
-    left: -40px;
-    right: -40px;
-    top: 0;
-    bottom: 0;
+  /* MAIN BUTTONS */
+  .panel {
+    width: 70vw;
+    max-width: 500px;
+    margin: 0 auto 25px auto;
 
     background: rgba(17,17,17,0.65);
     border: 3px solid white;
+    padding: 22px 36px;
 
-    transform: skew(-20deg);
-    z-index: -1;
+    transform: skew(-20deg) translateX(-100px);
+    opacity: 0;
+
+    cursor: pointer;
     transition: background 0.2s;
   }
 
-  .panel:hover::before {
+  .panel:hover {
     background: rgba(17,17,17,0.8);
   }
 
   .panel span {
     display: block;
+    transform: skew(20deg);
     text-align: center;
     font-size: 22px;
-    padding: 20px;
   }
 
   /* /// indicator */
   .panel::after {
     content: "///";
     position: absolute;
-    right: 15px;
+    right: 12px;
     top: 50%;
-    transform: translateY(-50%) rotate(0deg);
+    transform: translateY(-50%) skew(20deg) rotate(0deg);
     transition: transform 0.3s ease;
   }
 
   .panel.active::after {
-    transform: translateY(-50%) rotate(90deg);
+    transform: translateY(-50%) skew(20deg) rotate(90deg);
   }
 
   /* DROPDOWN */
@@ -129,24 +122,36 @@
   }
 
   .dropdown .panel {
-    width: 50vw;
+    width: 45vw;
     max-width: 300px;
-    margin: 8px 0;
+    margin: 8px auto;
+
+    transform: skew(-20deg) translateX(-60px);
   }
 
-  /* MOBILE */
+  /* MOBILE FIX */
   @media (max-width: 600px) {
-    .panel { width: 85vw; }
-    .dropdown .panel { width: 65vw; }
-    .panel span { font-size: 16px; }
+
+    .panel {
+      width: 80vw;
+    }
+
+    .dropdown .panel {
+      width: 60vw;
+      transform: skew(-20deg) translateX(-40px);
+    }
+
+    .panel span {
+      font-size: 16px;
+    }
   }
 
   @keyframes flyIn {
-    to { transform: translateX(0); opacity:1; }
+    to { transform: skew(-20deg) translateX(0); opacity:1; }
   }
 
   @keyframes fadeOut {
-    to { transform: translateX(-100px); opacity:0; }
+    to { transform: skew(-20deg) translateX(-100px); opacity:0; }
   }
 
   </style>
@@ -159,27 +164,25 @@
   <div class="content">
     <div class="menu">
 
-      <!-- SCALE -->
       <div class="panel" id="scalePanel"><span>SCALE</span></div>
       <div class="dropdown" id="scaleDropdown">
-        <div class="panel" data-link="#"><span>1/144</span></div>
-        <div class="panel" data-link="#"><span>1/100</span></div>
-        <div class="panel" data-link="#"><span>MISC</span></div>
+        <div class="panel"><span>1/144</span></div>
+        <div class="panel"><span>1/100</span></div>
+        <div class="panel"><span>MISC</span></div>
       </div>
 
-      <!-- GRADES -->
       <div class="panel" id="gradesPanel"><span>GRADES</span></div>
       <div class="dropdown" id="gradesDropdown">
-        <div class="panel" data-link="#"><span>SD</span></div>
+        <div class="panel"><span>SD</span></div>
         <div class="panel" data-link="hg/index.html"><span>HG</span></div>
-        <div class="panel" data-link="#"><span>RG</span></div>
-        <div class="panel" data-link="#"><span>MG</span></div>
-        <div class="panel" data-link="#"><span>PG</span></div>
-        <div class="panel" data-link="#"><span>MEGASIZE</span></div>
+        <div class="panel"><span>RG</span></div>
+        <div class="panel"><span>MG</span></div>
+        <div class="panel"><span>PG</span></div>
+        <div class="panel"><span>MEGASIZE</span></div>
       </div>
 
-      <div class="panel" data-link="#"><span>EXPLORE</span></div>
-      <div class="panel" data-link="#"><span>ABOUT</span></div>
+      <div class="panel"><span>EXPLORE</span></div>
+      <div class="panel"><span>ABOUT</span></div>
 
     </div>
   </div>
@@ -187,7 +190,11 @@
 
 <script>
 const bgImage = document.getElementById('bgImage');
-const buttons = document.querySelectorAll('.panel');
+const panels = document.querySelectorAll('.panel');
+
+panels.forEach((btn,i)=>{
+  btn.style.animation=`flyIn 0.6s forwards ${i*0.1+0.3}s`;
+});
 
 function setupDropdown(triggerId, dropdownId){
   const trigger = document.getElementById(triggerId);
@@ -211,16 +218,16 @@ function setupDropdown(triggerId, dropdownId){
 setupDropdown('scalePanel','scaleDropdown');
 setupDropdown('gradesPanel','gradesDropdown');
 
-document.querySelectorAll('.panel[data-link]').forEach(item=>{
+document.querySelectorAll('[data-link]').forEach(item=>{
   item.addEventListener('click',()=>{
-    buttons.forEach((btn,i)=>{
+    panels.forEach((btn,i)=>{
       btn.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`;
     });
 
     bgImage.style.transform='translateX(50%)';
 
     const link=item.getAttribute('data-link');
-    if(link && link!=='#'){
+    if(link){
       setTimeout(()=>{ window.location.href=link; },600);
     }
   });
