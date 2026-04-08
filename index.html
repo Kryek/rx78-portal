@@ -20,9 +20,9 @@
     position: relative;
     width: 100%;
     height: 100vh;
-    overflow-x: visible;
   }
 
+  /* BACKGROUND */
   .bg-image {
     position: absolute;
     inset: 0;
@@ -60,52 +60,51 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    overflow-x: visible;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 50px;
+
     scrollbar-color: white black;
     scrollbar-width: thin;
-    padding-bottom: 50px;
   }
 
   .scroll-container::-webkit-scrollbar { width: 8px; }
   .scroll-container::-webkit-scrollbar-track { background: black; }
   .scroll-container::-webkit-scrollbar-thumb { background: white; border-radius:4px; }
 
-  .button-container {
-    display: flex;
-    flex-direction: column;
-    margin-top: auto;
-    align-items: center;
-  }
-
-  /* MAIN BUTTONS (UNCHANGED) */
-  .button-container > .panel {
-    width: 75vw;
-    max-width: 90%;
-    margin-bottom: 25px;
-  }
-
+  /* MAIN BUTTONS */
   .panel {
     position: relative;
-    display: block;
+    width: 75vw;
+    max-width: 500px;
+    margin-bottom: 25px;
+
     background: rgba(17,17,17,0.65);
     border: 3px solid white;
     padding: 22px 36px;
+
     transform: skew(-20deg) translateX(-100px);
     opacity: 0;
+
     cursor: pointer;
-    box-sizing: border-box;
     transition: background 0.2s;
+  }
+
+  .panel:hover {
+    background: rgba(17,17,17,0.8);
   }
 
   .panel span {
     display: block;
     transform: skew(20deg);
     text-align: center;
-    font-size: 24px;
+    font-size: 22px;
   }
 
-  /* /// only main buttons */
-  .button-container > .panel::after {
+  /* /// indicator (MAIN ONLY) */
+  .menu > .scroll-container > .panel::after,
+  #scalePanel::after,
+  #gradesPanel::after {
     content: "///";
     position: absolute;
     right: 12px;
@@ -114,7 +113,7 @@
     transition: transform 0.3s ease;
   }
 
-  .button-container > .panel.active::after {
+  .panel.active::after {
     transform: translateY(-50%) skew(20deg) rotate(90deg);
   }
 
@@ -129,31 +128,29 @@
   }
 
   .dropdown.open {
-    margin-bottom: 35px;
+    margin-bottom: 30px;
   }
 
-  /* 🔥 FIXED DROPDOWN BUTTONS */
+  /* 🔥 DESKTOP DROPDOWN (RECTANGLE) */
   .dropdown .panel {
-    width: 37.5vw;
-    max-width: 50%;
+    width: 50vw;
+    max-width: 300px;
     margin: 8px 0;
-    background: rgba(17,17,17,0.55);
 
-    /* ❗ FULL RESET */
-    transform: translateX(-50px); /* NO skew */
+    transform: translateX(-50px); /* no skew */
     opacity: 0;
   }
 
   .dropdown .panel span {
-    transform: none; /* remove counter-skew */
-    font-size: 20px;
+    transform: none;
+    font-size: 18px;
   }
 
   .dropdown .panel::after {
     content: none;
   }
 
-  /* MOBILE */
+  /* MOBILE FIX */
   @media (max-width: 600px) {
 
     .panel {
@@ -162,12 +159,17 @@
     }
 
     .dropdown .panel {
-      width: 80vw; /* 👈 FULL WIDTH → no clipping */
+      width: 80vw;
       max-width: 80vw;
-      transform: translateX(-40px);
+
+      /* 🔥 FORCE RECTANGLE */
+      transform: translateX(0) !important;
+      animation: none !important;
+      opacity: 1;
     }
 
     .dropdown .panel span {
+      transform: none !important;
       font-size: 15px;
     }
   }
@@ -189,68 +191,71 @@
 <body>
 
 <div class="app">
+
   <div class="bg-image" id="bgImage"></div>
 
   <div class="content">
     <div class="menu">
       <div class="scroll-container">
-        <div class="button-container">
 
-          <div class="panel" id="scalePanel"><span>SCALE</span></div>
-          <div class="dropdown" id="scaleDropdown">
-            <div class="panel"><span>1/144</span></div>
-            <div class="panel"><span>1/100</span></div>
-            <div class="panel"><span>MISC</span></div>
-          </div>
-
-          <div class="panel" id="gradesPanel"><span>GRADES</span></div>
-          <div class="dropdown" id="gradesDropdown">
-            <div class="panel"><span>SD</span></div>
-            <div class="panel" data-link="hg/index.html"><span>HG</span></div>
-            <div class="panel"><span>RG</span></div>
-            <div class="panel"><span>MG</span></div>
-            <div class="panel"><span>PG</span></div>
-            <div class="panel"><span>MEGASIZE</span></div>
-          </div>
-
-          <div class="panel"><span>EXPLORE</span></div>
-          <div class="panel"><span>ABOUT</span></div>
-
+        <!-- SCALE -->
+        <div class="panel" id="scalePanel"><span>SCALE</span></div>
+        <div class="dropdown" id="scaleDropdown">
+          <div class="panel"><span>1/144</span></div>
+          <div class="panel"><span>1/100</span></div>
+          <div class="panel"><span>MISC</span></div>
         </div>
+
+        <!-- GRADES -->
+        <div class="panel" id="gradesPanel"><span>GRADES</span></div>
+        <div class="dropdown" id="gradesDropdown">
+          <div class="panel"><span>SD</span></div>
+          <div class="panel" data-link="hg/index.html"><span>HG</span></div>
+          <div class="panel"><span>RG</span></div>
+          <div class="panel"><span>MG</span></div>
+          <div class="panel"><span>PG</span></div>
+          <div class="panel"><span>MEGASIZE</span></div>
+        </div>
+
+        <div class="panel"><span>EXPLORE</span></div>
+        <div class="panel"><span>ABOUT</span></div>
+
       </div>
     </div>
   </div>
+
 </div>
 
 <script>
 const bgImage = document.getElementById('bgImage');
-const mainButtons = document.querySelectorAll('.button-container > .panel');
+const mainButtons = document.querySelectorAll('#scalePanel, #gradesPanel, .scroll-container > .panel:not([id])');
 
-/* main buttons */
+/* MAIN ANIMATION */
 mainButtons.forEach((btn,i)=>{
   btn.style.animation=`flyInMain 0.7s forwards ${i*0.15+0.5}s`;
 });
 
+/* DROPDOWN */
 function setupDropdown(triggerId, dropdownId){
-  const trigger=document.getElementById(triggerId);
-  const dropdown=document.getElementById(dropdownId);
-  const items=dropdown.querySelectorAll('.panel');
-  let open=false;
+  const trigger = document.getElementById(triggerId);
+  const dropdown = document.getElementById(dropdownId);
+  const items = dropdown.querySelectorAll('.panel');
+  let open = false;
 
-  trigger.addEventListener('click',()=>{
-    open=!open;
+  trigger.addEventListener('click', ()=>{
+    open = !open;
     trigger.classList.toggle('active');
 
     if(open){
       dropdown.classList.add('open');
-      dropdown.style.maxHeight=dropdown.scrollHeight+"px";
+      dropdown.style.maxHeight = dropdown.scrollHeight + "px";
 
       items.forEach((item,i)=>{
-        item.style.animation=`flyInDropdown 0.4s forwards ${i*0.1}s`;
+        item.style.animation=`flyInDropdown 0.3s forwards ${i*0.08}s`;
       });
 
     } else {
-      dropdown.style.maxHeight="0";
+      dropdown.style.maxHeight = "0";
       dropdown.classList.remove('open');
     }
   });
@@ -259,18 +264,21 @@ function setupDropdown(triggerId, dropdownId){
 setupDropdown('scalePanel','scaleDropdown');
 setupDropdown('gradesPanel','gradesDropdown');
 
-/* navigation */
+/* NAVIGATION FIX */
 document.querySelectorAll('[data-link]').forEach(item=>{
   item.addEventListener('click',()=>{
-    mainButtons.forEach((btn,i)=>{
-      btn.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`;
+
+    const allPanels = document.querySelectorAll('.panel');
+
+    allPanels.forEach((btn,i)=>{
+      btn.style.animation=`fadeOut 0.4s forwards ${i*0.03}s`;
     });
 
     bgImage.style.transform='translateX(50%)';
 
     const link=item.getAttribute('data-link');
     if(link){
-      setTimeout(()=>{ window.location.href=link; },600);
+      setTimeout(()=>{ window.location.href=link; },500);
     }
   });
 });
