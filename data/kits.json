@@ -1,11 +1,6 @@
 {
   "kits": [
     {
-      "comment": "below is HG",
-      "comment": "below is HG",
-      "comment": "below is HG"
-    },
-    {
       "id": "hg-revive-standard",
       "name": "Revive [Standard]",
       "grade": "HG",
