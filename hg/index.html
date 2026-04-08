@@ -39,7 +39,7 @@
   /* HERO CONTAINER */
   .hero { padding: 60px 20px 10px 20px; flex-shrink:0; }
   @media (max-width:600px){ 
-    .hero{ padding: 70px 10px 10px 10px; } /* increased top padding for bigger gap on mobile */
+    .hero{ padding: 80px 10px 10px 10px; } /* bigger gap for mobile */
   }
 
   /* PAGE TITLE */
@@ -69,7 +69,7 @@
     font-size: 14px;
     color: white;
     outline: none;
-    width: calc(45% - 20px);
+    width: calc(66% - 20px); /* widened on mobile */
   }
   #searchBar::placeholder { color: #ccc; }
 
@@ -200,15 +200,15 @@
   const searchBar = document.getElementById('searchBar');
   let hgKits = [];
 
-  // Load JSON
-  fetch('../data/kits.json')
+  // Load HG kits JSON
+  fetch('../data/hg-kits.json')
     .then(res => res.json())
     .then(data => {
-      hgKits = data.kits.filter(k => k.meta === "HG");
+      hgKits = data.kits; // use all kits in hg-kits.json
       displayKits(hgKits);
     })
     .catch(err => {
-      console.error("Failed to load kits.json", err);
+      console.error("Failed to load hg-kits.json", err);
       kitList.innerHTML = "<div style='color:red; padding:20px;'>Failed to load HG kits.</div>";
     });
 
