@@ -12,7 +12,7 @@
     background: black;
     font-family: 'Orbitron', sans-serif;
     color: white;
-    overflow-x: hidden; /* prevent horizontal scroll */
+    overflow-x: hidden;
     overflow-y: hidden;
   }
 
@@ -20,8 +20,6 @@
     position: relative;
     width: 100%;
     height: 100vh;
-
-    /* ✅ FIX: allow skew overflow */
     overflow-x: visible;
     overflow-y: hidden;
   }
@@ -69,7 +67,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    overflow-x: visible; /* allow skew edges */
+    overflow-x: visible;
     scrollbar-color: white black;
     scrollbar-width: thin;
     padding-bottom: 50px;
@@ -146,39 +144,62 @@
     max-width: 50%;
     margin: 8px 0;
     background: rgba(17,17,17,0.55);
-    transform: skew(-20deg) translateX(-50px);
+
+    /* ✅ UNSKEWED */
+    transform: translateX(-50px);
+
     opacity: 0;
     z-index: 25;
+  }
+
+  /* ✅ REMOVE INNER SKEW */
+  .dropdown .panel span {
+    transform: none;
+  }
+
+  /* ✅ REMOVE /// */
+  .dropdown .panel::after {
+    content: none;
   }
 
   /* MOBILE */
   @media (max-width: 600px) {
 
-  .panel {
-    width: 80vw;
-    max-width: 80vw;
+    .panel {
+      width: 80vw;
+      max-width: 80vw;
+    }
+
+    .dropdown .panel {
+      width: 60vw;
+      max-width: 60vw;
+
+      /* still no skew */
+      transform: translateX(-40px);
+    }
+
+    .dropdown .panel span {
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
   }
 
-  .dropdown .panel {
-    width: 60vw;
-    max-width: 60vw;
-
-    /* 👇 THIS is the key */
-    transform: skew(-20deg) translateX(-40px);
-  }
-
-  .dropdown .panel span {
-    font-size: 16px;
-    letter-spacing: 1px;
-  }
-}
-
+  /* MAIN BUTTON ANIMATION */
   @keyframes flyIn {
     to { transform: skew(-20deg) translateX(0); opacity:1; }
   }
 
   @keyframes fadeOut {
     to { transform: skew(-20deg) translateX(-100px); opacity:0; }
+  }
+
+  /* ✅ DROPDOWN ANIMATIONS (NO SKEW) */
+  @keyframes flyInDropdown {
+    to { transform: translateX(0); opacity:1; }
+  }
+
+  @keyframes fadeOutDropdown {
+    to { transform: translateX(-100px); opacity:0; }
   }
 
   </style>
@@ -247,7 +268,7 @@ function setupDropdown(triggerId, dropdownId){
       dropdown.classList.add('open');
       dropdown.style.maxHeight=dropdown.scrollHeight+"px";
       items.forEach((item,i)=>{
-        item.style.animation=`flyIn 0.4s forwards ${i*0.1}s`;
+        item.style.animation=`flyInDropdown 0.4s forwards ${i*0.1}s`;
       });
     } else {
       dropdown.style.maxHeight="0";
@@ -271,7 +292,7 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
     });
 
     document.querySelectorAll('.dropdown.open .panel').forEach((d,i)=>{
-      d.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`;
+      d.style.animation=`fadeOutDropdown 0.5s forwards ${i*0.05}s`;
     });
 
     bgImage.style.transform='translateX(50%)';
