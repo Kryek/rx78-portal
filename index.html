@@ -114,9 +114,8 @@
     font-size: 24px;
   }
 
-  /* ===== ICON SYSTEM ===== */
+  /* ===== ICON FIXED ===== */
 
-  /* circle */
   .panel::after {
     content: "";
     position: absolute;
@@ -129,25 +128,24 @@
     transform: translateY(-50%) skew(20deg);
   }
 
-  /* centered line */
   .panel::before {
     content: "";
     position: absolute;
-    right: 14px;
+
+    /* ✅ true center of circle */
+    right: 23px; /* 14 + 9 */
     top: 50%;
 
     width: 2px;
     height: 12px;
     background: white;
 
-    /* ✅ PERFECT CENTERING */
-    transform: translate(50%, -50%) skew(20deg) rotate(0deg);
+    transform: translate(-50%, -50%) skew(20deg) rotate(0deg);
     transition: transform 0.3s ease;
   }
 
-  /* rotate line */
   .panel.active::before {
-    transform: translate(50%, -50%) skew(20deg) rotate(90deg);
+    transform: translate(-50%, -50%) skew(20deg) rotate(90deg);
   }
 
   /* ======================= */
@@ -175,13 +173,20 @@
     transform: translateX(-50px);
     opacity: 0;
     z-index: 25;
+
+    /* ✅ CENTER CONTENT */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 18px 20px;
   }
 
   .dropdown .panel span {
     transform: none;
+    text-align: center;
+    width: 100%;
   }
 
-  /* remove icon from dropdown */
   .dropdown .panel::after,
   .dropdown .panel::before {
     content: none;
