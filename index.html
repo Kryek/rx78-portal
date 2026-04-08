@@ -95,7 +95,7 @@
     display: block;
     background: rgba(17,17,17,0.65);
     border: 3px solid white;
-    padding: 22px 36px;
+    padding: 22px 50px 22px 36px; /* extra right space for icon */
     transform: skew(-20deg) translateX(-100px);
     opacity: 0;
     cursor: pointer;
@@ -114,20 +114,43 @@
     font-size: 24px;
   }
 
-  /* DEFAULT /// */
+  /* =========================
+     ICON SYSTEM (NEW)
+  ========================== */
+
+  /* circle */
   .panel::after {
-    content: "///";
+    content: "";
     position: absolute;
-    right: 12px;
+    right: 14px;
     top: 50%;
+    width: 18px;
+    height: 18px;
+    border: 2px solid white;
+    border-radius: 50%;
+    transform: translateY(-50%) skew(20deg);
+  }
+
+  /* inner line */
+  .panel::before {
+    content: "";
+    position: absolute;
+    right: 23px;
+    top: 50%;
+    width: 2px;
+    height: 12px;
+    background: white;
+
     transform: translateY(-50%) skew(20deg) rotate(0deg);
     transition: transform 0.3s ease;
   }
 
-  /* ROTATE WHEN ACTIVE */
-  .panel.active::after {
+  /* rotate line when active */
+  .panel.active::before {
     transform: translateY(-50%) skew(20deg) rotate(90deg);
   }
+
+  /* ========================= */
 
   .dropdown {
     display: flex;
@@ -158,7 +181,9 @@
     transform: none;
   }
 
-  .dropdown .panel::after {
+  /* remove icon from dropdown */
+  .dropdown .panel::after,
+  .dropdown .panel::before {
     content: none;
   }
 
@@ -241,12 +266,10 @@
 const bgImage = document.getElementById('bgImage');
 const mainButtons = document.querySelectorAll('.button-container > .panel');
 
-/* fly in */
 mainButtons.forEach((btn,i)=>{
   btn.style.animation=`flyIn 0.7s forwards ${i*0.15+0.5}s`;
 });
 
-/* dropdown logic */
 function setupDropdown(triggerId, dropdownId){
   const trigger=document.getElementById(triggerId);
   const dropdown=document.getElementById(dropdownId);
@@ -263,9 +286,9 @@ function setupDropdown(triggerId, dropdownId){
       dropdown.style.maxHeight=dropdown.scrollHeight+"px";
 
       items.forEach((item,i)=>{
-        item.style.animation = "none";
-        item.offsetHeight; // force reflow
-        item.style.animation = `flyInDropdown 0.4s forwards ${i*0.1}s`;
+        item.style.animation="none";
+        item.offsetHeight;
+        item.style.animation=`flyInDropdown 0.4s forwards ${i*0.1}s`;
       });
 
     } else {
@@ -281,7 +304,6 @@ function setupDropdown(triggerId, dropdownId){
 setupDropdown('scalePanel','scaleDropdown');
 setupDropdown('gradesPanel','gradesDropdown');
 
-/* navigation animation */
 document.querySelectorAll('.panel[data-link]').forEach(item=>{
   item.addEventListener('click',()=>{
 
