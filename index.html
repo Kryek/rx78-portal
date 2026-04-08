@@ -12,7 +12,7 @@
     background: black;
     font-family: 'Orbitron', sans-serif;
     color: white;
-    overflow-x: hidden; /* prevent horizontal scroll */
+    overflow-x: hidden;
     overflow-y: hidden;
   }
 
@@ -20,8 +20,6 @@
     position: relative;
     width: 100%;
     height: 100vh;
-
-    /* ✅ FIX: allow skew overflow */
     overflow-x: visible;
     overflow-y: hidden;
   }
@@ -52,11 +50,6 @@
     flex-direction: column;
   }
 
-  .hero {
-    padding: 30px 20px;
-    flex-shrink: 0;
-  }
-
   .menu {
     flex: 1;
     display: flex;
@@ -69,7 +62,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    overflow-x: visible; /* allow skew edges */
+    overflow-x: visible;
     scrollbar-color: white black;
     scrollbar-width: thin;
     padding-bottom: 50px;
@@ -117,12 +110,18 @@
     font-size: 24px;
   }
 
+  /* /// indicator */
   .panel::after {
     content: "///";
     position: absolute;
     right: 12px;
     top: 50%;
-    transform: translateY(-50%) skew(20deg);
+    transform: translateY(-50%) skew(20deg) rotate(0deg);
+    transition: transform 0.3s ease;
+  }
+
+  .panel.active::after {
+    transform: translateY(-50%) skew(20deg) rotate(90deg);
   }
 
   /* DROPDOWN */
@@ -136,7 +135,7 @@
   }
 
   .dropdown.open {
-    margin-bottom: 40px;
+    margin-bottom: 35px;
     position: relative;
     z-index: 20;
   }
@@ -151,27 +150,26 @@
     z-index: 25;
   }
 
-  /* MOBILE */
+  /* MOBILE FIX */
   @media (max-width: 600px) {
 
-  .panel {
-    width: 80vw;
-    max-width: 80vw;
-  }
+    .panel {
+      width: 80vw;
+      max-width: 80vw;
+    }
 
-  .dropdown .panel {
-    width: 60vw;
-    max-width: 60vw;
+    .dropdown .panel {
+      width: 55vw;
+      max-width: 55vw;
+      margin: 8px auto;
+      transform: skew(-20deg) translateX(-30px);
+    }
 
-    /* 👇 THIS is the key */
-    transform: skew(-20deg) translateX(-40px);
+    .dropdown .panel span {
+      font-size: 15px;
+      letter-spacing: 1px;
+    }
   }
-
-  .dropdown .panel span {
-    font-size: 16px;
-    letter-spacing: 1px;
-  }
-}
 
   @keyframes flyIn {
     to { transform: skew(-20deg) translateX(0); opacity:1; }
@@ -189,8 +187,6 @@
   <div class="bg-image" id="bgImage"></div>
 
   <div class="content">
-    <div class="hero"></div>
-
     <div class="menu">
       <div class="scroll-container">
         <div class="button-container">
@@ -220,7 +216,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -243,15 +238,21 @@ function setupDropdown(triggerId, dropdownId){
   trigger.addEventListener('click',()=>{
     open=!open;
 
+    /* restore /// rotation */
+    trigger.classList.toggle('active');
+
     if(open){
       dropdown.classList.add('open');
       dropdown.style.maxHeight=dropdown.scrollHeight+"px";
+
       items.forEach((item,i)=>{
         item.style.animation=`flyIn 0.4s forwards ${i*0.1}s`;
       });
+
     } else {
       dropdown.style.maxHeight="0";
       dropdown.classList.remove('open');
+
       items.forEach(item=>{
         item.style.opacity='0';
       });
