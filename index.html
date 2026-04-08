@@ -16,19 +16,80 @@
     overflow-y: hidden;
   }
 
-  .app { position: relative; width: 100%; height: 100vh; overflow-x: visible; overflow-y: hidden; }
-  .bg-image { position: absolute; inset: 0; background-image: url('images/rx78-bg.png'); background-size: cover; background-position: top center; background-repeat: no-repeat; z-index: 0; transition: transform 0.8s ease; }
-  .bg-image::after { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.6); }
-  .content { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; }
-  .hero { padding: 30px 20px; flex-shrink: 0; }
-  .menu { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-  .scroll-container { flex: 1; display: flex; flex-direction: column; overflow-y: auto; overflow-x: visible; scrollbar-color: white black; scrollbar-width: thin; padding-bottom: 50px; }
+  .app {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow-x: visible;
+    overflow-y: hidden;
+  }
+
+  .bg-image {
+    position: absolute;
+    inset: 0;
+    background-image: url('images/rx78-bg.png');
+    background-size: cover;
+    background-position: top center;
+    background-repeat: no-repeat;
+    z-index: 0;
+    transition: transform 0.8s ease;
+  }
+
+  .bg-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero {
+    padding: 30px 20px;
+    flex-shrink: 0;
+  }
+
+  .menu {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .scroll-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: visible;
+    scrollbar-color: white black;
+    scrollbar-width: thin;
+    padding-bottom: 50px;
+  }
+
   .scroll-container::-webkit-scrollbar { width: 8px; }
   .scroll-container::-webkit-scrollbar-track { background: black; }
   .scroll-container::-webkit-scrollbar-thumb { background: white; border-radius:4px; }
 
-  .button-container { display: flex; flex-direction: column; margin-top: auto; align-items: center; }
-  .button-container > .panel { width: 75vw; max-width: 90%; margin-bottom: 25px; }
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    align-items: center;
+  }
+
+  .button-container > .panel {
+    width: 75vw;
+    max-width: 90%;
+    margin-bottom: 25px;
+  }
+
   .panel {
     position: relative;
     display: block;
@@ -43,16 +104,67 @@
     z-index: 1;
     touch-action: manipulation;
   }
+
   .panel:hover { background: rgba(17,17,17,0.8); }
-  .panel span { display: block; transform: skew(20deg); text-align: center; font-size: 24px; }
 
-  /* ICON FIXED */
-  .panel::after { content: ""; position: absolute; right: 14px; top: 50%; width: 18px; height: 18px; border: 2px solid white; border-radius: 50%; transform: translateY(-50%) skew(20deg); }
-  .panel::before { content: ""; position: absolute; right: 23px; top: 50%; width: 2px; height: 12px; background: white; transform: translate(-50%, -50%) skew(20deg) rotate(0deg); transition: transform 0.3s ease; }
-  .panel.active::before { transform: translate(-50%, -50%) skew(20deg) rotate(90deg); }
+  .panel span {
+    display: block;
+    transform: skew(20deg);
+    text-align: center;
+    font-size: 24px;
+  }
 
-  .dropdown { display: flex; flex-direction: column; align-items: center; max-height: 0; overflow: hidden; transition: max-height 0.25s ease; }
-  .dropdown.open { margin-bottom: 40px; position: relative; z-index: 20; }
+  /* ===== ICON FIXED ===== */
+
+  .panel::after {
+    content: "";
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    border: 2px solid white;
+    border-radius: 50%;
+    transform: translateY(-50%) skew(20deg);
+  }
+
+  .panel::before {
+    content: "";
+    position: absolute;
+
+    /* ✅ true center of circle */
+    right: 23px; /* 14 + 9 */
+    top: 50%;
+
+    width: 2px;
+    height: 12px;
+    background: white;
+
+    transform: translate(-50%, -50%) skew(20deg) rotate(0deg);
+    transition: transform 0.3s ease;
+  }
+
+  .panel.active::before {
+    transform: translate(-50%, -50%) skew(20deg) rotate(90deg);
+  }
+
+  /* ======================= */
+
+  .dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+  }
+
+  .dropdown.open {
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 20;
+  }
+
   .dropdown .panel {
     width: 37.5vw;
     max-width: 50%;
@@ -61,24 +173,58 @@
     transform: translateX(-50px);
     opacity: 0;
     z-index: 25;
+
+    /* ✅ CENTER CONTENT */
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 18px 20px;
   }
-  .dropdown .panel span { transform: none; text-align: center; width: 100%; }
-  .dropdown .panel::after, .dropdown .panel::before { content: none; }
 
-  @media (max-width: 600px) {
-    .panel { width: 80vw; max-width: 80vw; }
-    .dropdown .panel { width: 60vw; max-width: 60vw; transform: translateX(-40px); }
-    .dropdown .panel span { font-size: 16px; letter-spacing: 1px; }
+  .dropdown .panel span {
+    transform: none;
+    text-align: center;
+    width: 100%;
   }
 
-  @keyframes flyIn { to { transform: skew(-20deg) translateX(0); opacity:1; } }
-  @keyframes fadeOut { to { transform: skew(-20deg) translateX(-100px); opacity:0; } }
-  @keyframes flyInDropdown { to { transform: translateX(0); opacity:1; } }
-  @keyframes fadeOutDropdown { to { transform: translateX(-100px); opacity:0; } }
+  .dropdown .panel::after,
+  .dropdown .panel::before {
+    content: none;
+  }
+
+  @media (max-width: 600px) {
+    .panel {
+      width: 80vw;
+      max-width: 80vw;
+    }
+
+    .dropdown .panel {
+      width: 60vw;
+      max-width: 60vw;
+      transform: translateX(-40px);
+    }
+
+    .dropdown .panel span {
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+  }
+
+  @keyframes flyIn {
+    to { transform: skew(-20deg) translateX(0); opacity:1; }
+  }
+
+  @keyframes fadeOut {
+    to { transform: skew(-20deg) translateX(-100px); opacity:0; }
+  }
+
+  @keyframes flyInDropdown {
+    to { transform: translateX(0); opacity:1; }
+  }
+
+  @keyframes fadeOutDropdown {
+    to { transform: translateX(-100px); opacity:0; }
+  }
 
   </style>
 </head>
@@ -103,13 +249,12 @@
 
           <div class="panel" id="gradesPanel"><span>GRADES</span></div>
           <div class="dropdown" id="gradesDropdown">
-            <!-- Updated links to kits.html with query param -->
-            <div class="panel" data-link="kits.html?grade=SD"><span>SD</span></div>
-            <div class="panel" data-link="kits.html?grade=HG"><span>HG</span></div>
-            <div class="panel" data-link="kits.html?grade=RG"><span>RG</span></div>
-            <div class="panel" data-link="kits.html?grade=MG"><span>MG</span></div>
-            <div class="panel" data-link="kits.html?grade=PG"><span>PG</span></div>
-            <div class="panel" data-link="kits.html?grade=MEGASIZE"><span>MEGA SIZE</span></div>
+            <div class="panel" data-link="sd/index.html"><span>SD</span></div>
+            <div class="panel" data-link="hg/index.html"><span>HG</span></div>
+            <div class="panel" data-link="rg/index.html"><span>RG</span></div>
+            <div class="panel" data-link="mg/index.html"><span>MG</span></div>
+            <div class="panel" data-link="pg/index.html"><span>PG</span></div>
+            <div class="panel" data-link="megasize/index.html"><span>MEGASIZE</span></div>
           </div>
 
           <div class="panel"><span>EXPLORE</span></div>
@@ -126,7 +271,9 @@
 const bgImage = document.getElementById('bgImage');
 const mainButtons = document.querySelectorAll('.button-container > .panel');
 
-mainButtons.forEach((btn,i)=>{ btn.style.animation=`flyIn 0.7s forwards ${i*0.15+0.5}s`; });
+mainButtons.forEach((btn,i)=>{
+  btn.style.animation=`flyIn 0.7s forwards ${i*0.15+0.5}s`;
+});
 
 function setupDropdown(triggerId, dropdownId){
   const trigger=document.getElementById(triggerId);
@@ -136,20 +283,25 @@ function setupDropdown(triggerId, dropdownId){
 
   trigger.addEventListener('click',()=>{
     open=!open;
+
     trigger.classList.toggle('active');
 
     if(open){
       dropdown.classList.add('open');
       dropdown.style.maxHeight=dropdown.scrollHeight+"px";
+
       items.forEach((item,i)=>{
         item.style.animation="none";
         item.offsetHeight;
         item.style.animation=`flyInDropdown 0.4s forwards ${i*0.1}s`;
       });
+
     } else {
       dropdown.style.maxHeight="0";
       dropdown.classList.remove('open');
-      items.forEach(item=>{ item.style.opacity='0'; });
+      items.forEach(item=>{
+        item.style.opacity='0';
+      });
     }
   });
 }
@@ -159,10 +311,15 @@ setupDropdown('gradesPanel','gradesDropdown');
 
 document.querySelectorAll('.panel[data-link]').forEach(item=>{
   item.addEventListener('click',()=>{
-    mainButtons.forEach((btn,i)=>{ btn.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`; });
+
+    mainButtons.forEach((btn,i)=>{
+      btn.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`;
+    });
+
     document.querySelectorAll('.dropdown.open .panel').forEach((d,i)=>{
       d.style.animation=`fadeOutDropdown 0.5s forwards ${i*0.05}s`;
     });
+
     bgImage.style.transform='translateX(50%)';
 
     const link=item.getAttribute('data-link');
