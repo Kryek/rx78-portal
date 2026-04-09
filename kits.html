@@ -44,18 +44,11 @@
   #pageTitle {
     font-size: 28px;
     margin: 0 0 16px 0;
-    line-height: 1.2;
-    text-shadow: 0 0 6px rgba(0,0,0,0.8);
     transform: skew(20deg);
-    display: inline-block;
     opacity: 0;
     transition: opacity 0.6s ease;
   }
   #pageTitle span { transform: skew(-20deg); display: block; }
-
-  @media (max-width:600px){
-    #pageTitle { font-size: 22px; margin-bottom: 12px; }
-  }
 
   #searchBarWrapper { margin: 0 0 8px 0; opacity:0; transition: opacity 0.6s ease; }
   #searchBar {
@@ -63,34 +56,40 @@
     border: 3px solid white;
     padding: 8px 10px;
     transform: skew(-20deg);
-    font-size: 14px;
-    color: white;
-    outline: none;
     width: calc(66% - 20px);
+    color: white;
   }
 
-  /* ✅ SCROLL AREA */
+  /* ===== NEW STRUCTURE ===== */
+
   .menu {
     flex: 1;
+    display: flex;
+    justify-content: center; /* center the scroll area */
+  }
+
+  .scroll-area {
+    width: 50%;
+    height: 100%;
     overflow-y: auto;
-    padding: 20px 20px 40px 20px;
+    padding: 20px 0 40px 0;
 
     /* fade mask */
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25px, black calc(100% - 60px), transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0%, black 25px, black calc(100% - 60px), transparent 100%);
 
-    /* ✅ hide scrollbar */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-color: white black;
+    scrollbar-width: thin;
 
     transition: opacity 0.7s ease;
     opacity: 0;
   }
 
-  /* Chrome/Safari */
-  .menu::-webkit-scrollbar {
-    display: none;
-  }
+  .scroll-area::-webkit-scrollbar { width: 6px; }
+  .scroll-area::-webkit-scrollbar-track { background: transparent; }
+  .scroll-area::-webkit-scrollbar-thumb { background: white; border-radius: 4px; }
+
+  /* ========================= */
 
   .panel {
     display: flex;
@@ -103,7 +102,7 @@
     opacity: 0;
     margin-bottom: 20px;
     cursor: pointer;
-    width: 50%;
+    width: 100%;
     box-sizing: border-box;
   }
 
@@ -122,10 +121,8 @@
     font-size: clamp(14px, 2vw, 18px);
   }
 
-  .line.variant { margin-top: 4px; }
-
   @media (max-width:600px){
-    .panel { width: 50%; padding: 16px 20px; }
+    .scroll-area { width: 50%; }
     .line { font-size: clamp(12px, 3vw, 16px); }
   }
 
@@ -143,8 +140,8 @@
   }
 
   #homeBtn span {
-    display: block;
     transform: skew(20deg);
+    display: block;
     font-size: 10px;
     text-align: center;
   }
@@ -169,7 +166,9 @@
       </div>
     </div>
 
-    <div class="menu" id="kitList"></div>
+    <div class="menu">
+      <div class="scroll-area" id="kitList"></div>
+    </div>
 
   </div>
 </div>
@@ -205,10 +204,6 @@ fetch(`data/${current.file}`)
   .then(data => {
     kits = data.kits;
     displayKits(kits);
-  })
-  .catch(err => {
-    console.error(err);
-    kitList.innerHTML = "<div style='color:red;padding:20px;'>Failed to load kits</div>";
   });
 
 function displayKits(list) {
@@ -221,13 +216,11 @@ function displayKits(list) {
     panel.innerHTML = `
       <div class="text">
         <div class="line">${kit.mold}</div>
-        <div class="line variant">&gt; ${kit.variant}</div>
+        <div class="line">&gt; ${kit.variant}</div>
       </div>
     `;
 
-    panel.addEventListener('click', () => {
-      window.location.href = kit.page;
-    });
+    panel.onclick = () => window.location.href = kit.page;
 
     kitList.appendChild(panel);
 
@@ -253,17 +246,15 @@ searchBar.addEventListener('input', () => {
 
 setTimeout(()=>{ homeBtn.style.animation = 'flyIn 0.6s forwards 0.2s'; }, 100);
 
-homeBtn.addEventListener('click', () => {
+homeBtn.onclick = () => {
   kitList.style.opacity = 0;
   document.getElementById('pageTitle').style.opacity = 0;
   searchWrapper.style.opacity = 0;
   homeBtn.style.opacity = 0;
   bg.style.transform = 'translateX(0%)';
 
-  setTimeout(()=>{
-    window.location.href='index.html';
-  },700);
-});
+  setTimeout(()=> window.location.href='index.html',700);
+};
 </script>
 
 </body>
