@@ -78,7 +78,7 @@
     width: calc(66% - 20px);
   }
 
-  /* ===== SCROLL WRAPPER ===== */
+  /* ===== SCROLL AREA ===== */
   .menu-wrapper {
     display: flex;
     justify-content: center;
@@ -87,14 +87,14 @@
     overflow: hidden;
   }
 
-  /* ✅ SCROLLBAR ALIGNED WITH SEARCH BAR */
+  /* ✅ SCROLLBAR ALIGNED TO PANEL EDGE */
   .menu {
-    width: calc(66% - 20px);
-    max-width: calc(66% - 20px);
+    width: 50%;
+    max-width: 50%;
     height: 100%;
     overflow-y: auto;
 
-    padding: 20px 20px 40px 20px;
+    padding: 20px 10px 40px 10px;
 
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25px, black calc(100% - 60px), transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0%, black 25px, black calc(100% - 60px), transparent 100%);
@@ -135,7 +135,7 @@
     opacity: 0;
     margin-bottom: 20px;
     cursor: pointer;
-    width: 50%;
+    width: 100%;   /* ✅ fill menu width */
     box-sizing: border-box;
   }
 
@@ -158,7 +158,7 @@
 
   @media (max-width:600px){
     .panel { 
-      width: 60%;
+      width: 100%;
       padding: 16px 20px; 
     }
     .line { font-size: clamp(12px, 3vw, 16px); }
