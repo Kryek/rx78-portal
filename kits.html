@@ -84,10 +84,27 @@
     overflow-y: auto;
     overflow-x: hidden;
 
-    /* 👇 THIS moves scrollbar inward */
+    /* scrollbar pulled inward */
     width: calc(50% + 40px);
 
     padding: 20px 20px 40px 20px;
+
+    /* ✅ FADE TOP & BOTTOM */
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 25px,
+      black calc(100% - 60px),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 25px,
+      black calc(100% - 60px),
+      transparent 100%
+    );
+
     scrollbar-color: white black;
     scrollbar-width: thin;
 
