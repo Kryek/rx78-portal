@@ -70,12 +70,12 @@
     width: calc(66% - 20px);
   }
 
-  /* ===== KEY FIX: SHRINK SCROLL AREA ===== */
+  /* ===== MENU ===== */
   .menu {
     flex: 1;
     overflow-y: auto;
 
-    width: 75%;          /* 👈 THIS moves scrollbar inward */
+    width: 75%; /* scrollbar moved inward */
     padding: 20px 0 40px 20px;
 
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25px, black calc(100% - 60px), transparent 100%);
@@ -125,14 +125,20 @@
 
   .line.variant { margin-top: 4px; }
 
-  /* ===== MOBILE FIX ===== */
+  /* ===== MOBILE ===== */
   @media (max-width:600px){
+
     .menu {
-      width: 85%; /* keep scrollbar nice on mobile */
+      width: 85%;
+      scrollbar-width: none; /* Firefox */
+    }
+
+    .menu::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
     }
 
     .panel {
-      width: 60%; /* 👈 3/5 width */
+      width: 60%; /* 3/5 width */
       padding: 16px 20px;
     }
 
