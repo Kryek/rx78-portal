@@ -209,7 +209,7 @@ const currentGrade = gradeMap[grade] || gradeMap['HG'];
 document.getElementById('pageTitle').querySelector('span').textContent = currentGrade.title;
 
 // Load JSON dynamically
-fetch(`../data/${currentGrade.file}`)
+fetch(`/data/${currentGrade.file}`)
   .then(res => res.json())
   .then(data => {
     kits = data.kits;
