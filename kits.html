@@ -34,7 +34,13 @@
     background: rgba(0,0,0,0.6);
   }
 
-  .content { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; }
+  .content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
 
   .hero { padding: 60px 20px 10px 20px; flex-shrink:0; }
   @media (max-width:600px){ 
@@ -58,7 +64,6 @@
   }
 
   #searchBarWrapper { margin: 0 0 8px 0; opacity:0; transition: opacity 0.6s ease; }
-
   #searchBar {
     background: rgba(17,17,17,0.65);
     border: 3px solid white;
@@ -70,29 +75,43 @@
     width: calc(66% - 20px);
   }
 
-  /* ===== MENU ===== */
+  /* ===== SCROLL AREA WRAPPER ===== */
+  .menu-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
   .menu {
     flex: 1;
+    max-width: 60%;
     overflow-y: auto;
-
-    width: 75%; /* scrollbar moved inward */
-    padding: 20px 0 40px 20px;
-
+    padding: 20px 20px 40px 20px;
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25px, black calc(100% - 60px), transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0%, black 25px, black calc(100% - 60px), transparent 100%);
-
     scrollbar-color: white black;
     scrollbar-width: thin;
-
     transition: opacity 0.7s ease;
     opacity: 0;
   }
 
+  /* Desktop scrollbar (visible & centered) */
   .menu::-webkit-scrollbar { width: 8px; }
-  .menu::-webkit-scrollbar-track { background: transparent; }
-  .menu::-webkit-scrollbar-thumb { background: white; border-radius: 4px; }
+  .menu::-webkit-scrollbar-track { background: black; }
+  .menu::-webkit-scrollbar-thumb { background: white; border-radius:4px; }
 
-  /* ===== PANELS ===== */
+  /* ===== MOBILE: HIDE SCROLLBAR ===== */
+  @media (max-width:600px){
+    .menu {
+      max-width: 100%;
+      scrollbar-width: none; /* Firefox */
+    }
+    .menu::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
+  }
+
+  /* PANELS */
   .panel {
     display: flex;
     justify-content: center;
@@ -125,29 +144,16 @@
 
   .line.variant { margin-top: 4px; }
 
-  /* ===== MOBILE ===== */
+  /* MOBILE BUTTON WIDTH */
   @media (max-width:600px){
-
-    .menu {
-      width: 85%;
-      scrollbar-width: none; /* Firefox */
-    }
-
-    .menu::-webkit-scrollbar {
-      display: none; /* Chrome/Safari */
-    }
-
-    .panel {
+    .panel { 
       width: 60%; /* 3/5 width */
-      padding: 16px 20px;
+      padding: 16px 20px; 
     }
-
-    .line {
-      font-size: clamp(12px, 3vw, 16px);
-    }
+    .line { font-size: clamp(12px, 3vw, 16px); }
   }
 
-  /* ===== HOME BUTTON ===== */
+  /* HOME BUTTON */
   #homeBtn {
     position: absolute;
     top: 12px;
@@ -168,8 +174,8 @@
     text-align: center;
   }
 
-  @keyframes flyIn {
-    to { transform: skew(-20deg) translateX(0); opacity:1; }
+  @keyframes flyIn { 
+    to { transform: skew(-20deg) translateX(0); opacity:1; } 
   }
 
   </style>
@@ -190,7 +196,10 @@
       </div>
     </div>
 
-    <div class="menu" id="kitList"></div>
+    <!-- WRAPPER ADDED -->
+    <div class="menu-wrapper">
+      <div class="menu" id="kitList"></div>
+    </div>
 
   </div>
 </div>
@@ -226,6 +235,10 @@ fetch(`data/${current.file}`)
   .then(data => {
     kits = data.kits;
     displayKits(kits);
+  })
+  .catch(err => {
+    console.error(err);
+    kitList.innerHTML = "<div style='color:red;padding:20px;'>Failed to load kits</div>";
   });
 
 function displayKits(list) {
@@ -242,7 +255,9 @@ function displayKits(list) {
       </div>
     `;
 
-    panel.onclick = () => window.location.href = kit.page;
+    panel.addEventListener('click', () => {
+      window.location.href = kit.page;
+    });
 
     kitList.appendChild(panel);
 
@@ -268,15 +283,17 @@ searchBar.addEventListener('input', () => {
 
 setTimeout(()=>{ homeBtn.style.animation = 'flyIn 0.6s forwards 0.2s'; }, 100);
 
-homeBtn.onclick = () => {
+homeBtn.addEventListener('click', () => {
   kitList.style.opacity = 0;
   document.getElementById('pageTitle').style.opacity = 0;
   searchWrapper.style.opacity = 0;
   homeBtn.style.opacity = 0;
   bg.style.transform = 'translateX(0%)';
 
-  setTimeout(()=> window.location.href='index.html',700);
-};
+  setTimeout(()=>{
+    window.location.href='index.html';
+  },700);
+});
 </script>
 
 </body>
