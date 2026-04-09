@@ -87,15 +87,14 @@
     overflow: hidden;
   }
 
+  /* ✅ SCROLLBAR ALIGNED WITH SEARCH BAR */
   .menu {
-    width: 60%;
-    max-width: 60%;
+    width: calc(66% - 20px);
+    max-width: calc(66% - 20px);
     height: 100%;
     overflow-y: auto;
 
-    /* 👇 SCROLLBAR POSITIONING MAGIC */
-    padding: 20px 40px 40px 20px;  /* extra right padding */
-    margin-right: -20px;           /* pull scrollbar inward */
+    padding: 20px 20px 40px 20px;
 
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25px, black calc(100% - 60px), transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0%, black 25px, black calc(100% - 60px), transparent 100%);
@@ -116,9 +115,6 @@
     .menu {
       width: 100%;
       max-width: 100%;
-      padding-right: 20px;
-      margin-right: 0;
-
       scrollbar-width: none;
     }
 
