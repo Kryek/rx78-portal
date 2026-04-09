@@ -19,7 +19,7 @@
 
   .bg-image {
     position: absolute; inset: 0;
-    background-image: url('images/rx78-bg.png'); /* ✅ fixed path (root now) */
+    background-image: url('images/rx78-bg.png');
     background-size: cover;
     background-position: top center;
     background-repeat: no-repeat;
@@ -69,16 +69,27 @@
     width: calc(66% - 20px);
   }
 
+  /* ✅ SCROLL AREA */
   .menu {
     flex: 1;
     overflow-y: auto;
     padding: 20px 20px 40px 20px;
+
+    /* fade mask */
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25px, black calc(100% - 60px), transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0%, black 25px, black calc(100% - 60px), transparent 100%);
-    scrollbar-color: white black;
-    scrollbar-width: thin;
+
+    /* ✅ hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+
     transition: opacity 0.7s ease;
     opacity: 0;
+  }
+
+  /* Chrome/Safari */
+  .menu::-webkit-scrollbar {
+    display: none;
   }
 
   .panel {
@@ -167,7 +178,6 @@
 const params = new URLSearchParams(window.location.search);
 const grade = params.get("grade") || "HG";
 
-/* grade mapping */
 const gradeMap = {
   HG: { title: "HIGH GRADE", file: "hg-kits.json" },
   MG: { title: "MASTER GRADE", file: "mg-kits.json" },
@@ -188,10 +198,8 @@ const searchBar = document.getElementById('searchBar');
 
 let kits = [];
 
-/* set title */
 pageTitle.textContent = current.title;
 
-/* fetch JSON (✅ FIXED PATH) */
 fetch(`data/${current.file}`)
   .then(res => res.json())
   .then(data => {
@@ -235,7 +243,6 @@ function displayKits(list) {
   }, 100);
 }
 
-/* search */
 searchBar.addEventListener('input', () => {
   const term = searchBar.value.toLowerCase();
   displayKits(kits.filter(k => 
@@ -244,7 +251,6 @@ searchBar.addEventListener('input', () => {
   ));
 });
 
-/* home button */
 setTimeout(()=>{ homeBtn.style.animation = 'flyIn 0.6s forwards 0.2s'; }, 100);
 
 homeBtn.addEventListener('click', () => {
@@ -255,7 +261,7 @@ homeBtn.addEventListener('click', () => {
   bg.style.transform = 'translateX(0%)';
 
   setTimeout(()=>{
-    window.location.href='index.html'; /* ✅ root path */
+    window.location.href='index.html';
   },700);
 });
 </script>
