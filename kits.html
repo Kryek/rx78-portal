@@ -78,18 +78,13 @@
     width: calc(66% - 20px);
   }
 
-  /* ===== SCROLL AREA ===== */
   .menu {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-
-    /* scrollbar pulled inward */
     width: calc(50% + 40px);
-
     padding: 20px 20px 40px 20px;
 
-    /* ✅ FADE TOP & BOTTOM */
     -webkit-mask-image: linear-gradient(
       to bottom,
       transparent 0%,
@@ -116,22 +111,17 @@
   .menu::-webkit-scrollbar-track { background: transparent; }
   .menu::-webkit-scrollbar-thumb { background: white; border-radius:4px; }
 
-  /* ===== PANELS ===== */
   .panel {
     display: flex;
     justify-content: center;
     align-items: center;
-
     background: rgba(17,17,17,0.65);
     border: 3px solid white;
-
     padding: 20px 30px;
     transform: skew(-20deg) translateX(-100px);
     opacity: 0;
-
     margin-bottom: 20px;
     cursor: pointer;
-
     width: 50%;
     box-sizing: border-box;
   }
@@ -153,7 +143,6 @@
 
   .line.variant { margin-top: 4px; }
 
-  /* ===== MOBILE ===== */
   @media (max-width:600px){
     .menu {
       width: 100%;
@@ -174,18 +163,14 @@
     }
   }
 
-  /* ===== HOME BUTTON ===== */
   #homeBtn {
     position: absolute;
     top: 12px;
     left: 12px;
-
     background: rgba(17,17,17,0.65);
     border: 3px solid white;
-
     padding: 8px 12px;
     transform: skew(-20deg) translateX(-100px);
-
     width: 66px;
     opacity: 0;
     cursor: pointer;
@@ -201,7 +186,6 @@
   @keyframes flyIn { 
     to { transform: skew(-20deg) translateX(0); opacity:1; } 
   }
-
   </style>
 </head>
 <body>
@@ -227,8 +211,9 @@
 
 <script>
 const params = new URLSearchParams(window.location.search);
-const grade = params.get("grade") || "HG";
+const grade = params.get("grade");
 
+// ✅ REDIRECT IF INVALID OR MISSING
 const gradeMap = {
   HG: { title: "HIGH GRADE", file: "hg-kits.json" },
   MG: { title: "MASTER GRADE", file: "mg-kits.json" },
@@ -238,7 +223,11 @@ const gradeMap = {
   MEGASIZE: { title: "MEGA SIZE MODEL", file: "megasize-kits.json" }
 };
 
-const current = gradeMap[grade] || gradeMap["HG"];
+if (!grade || !gradeMap[grade]) {
+  window.location.href = "index.html";
+}
+
+const current = gradeMap[grade];
 
 const bg = document.getElementById('bgImage');
 const kitList = document.getElementById('kitList');
@@ -309,7 +298,9 @@ homeBtn.addEventListener('click', () => {
 
   setTimeout(()=> window.location.href='index.html',700);
 });
-  window.addEventListener("pageshow", (event) => {
+
+// ✅ BACK BUTTON FIX
+window.addEventListener("pageshow", (event) => {
   if (event.persisted) {
     location.reload();
   }
