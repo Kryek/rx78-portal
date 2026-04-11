@@ -309,6 +309,11 @@ homeBtn.addEventListener('click', () => {
 
   setTimeout(()=> window.location.href='index.html',700);
 });
+  window.addEventListener("pageshow", (event) => {
+  if (event.persisted) {
+    location.reload();
+  }
+});
 </script>
 
 </body>
