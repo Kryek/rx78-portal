@@ -338,6 +338,11 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
     }
   });
 });
+  window.addEventListener("pageshow", (event) => {
+  if (event.persisted) {
+    location.reload();
+  }
+});
 </script>
 
 </body>
