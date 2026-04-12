@@ -317,6 +317,10 @@ setupDropdown('gradesPanel','gradesDropdown');
 
 document.querySelectorAll('.panel[data-link]').forEach(item=>{
   item.addEventListener('click',()=>{
+
+    // ✅ hide scrollbar instantly
+    document.querySelector('.scroll-container').style.overflow = 'hidden';
+
     mainButtons.forEach((btn,i)=>{
       btn.style.animation=`fadeOut 0.5s forwards ${i*0.05}s`;
     });
