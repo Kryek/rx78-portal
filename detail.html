@@ -227,48 +227,18 @@ if (!file) window.location.href = "index.html";
 
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
-/* TYPEWRITER (SAFE TEXT ONLY) */
-function typeText(el, text, speed = 10, cb) {
-  if (!el || !text) return cb?.();
+/* SIMPLE TEXT ANIMATION */
+function flyIn(el, delay = 0) {
+  if (!el) return;
 
-  let i = 0;
-  el.textContent = "";
+  el.style.opacity = "0";
+  el.style.transform = "translateY(30px)";
+  el.style.transition = "all 0.6s ease";
 
-  (function step() {
-    if (i < text.length) {
-      el.textContent += text[i++];
-      setTimeout(step, speed);
-    } else cb?.();
-  })();
-}
-
-/* SECTION TYPE EFFECT (NO DOM DESTRUCTION) */
-function revealSection(section, speed = 6, done) {
-  if (!section) return done?.();
-
-  // Create overlay layer
-  const overlay = document.createElement("div");
-  overlay.style.position = "relative";
-
-  const clone = section.cloneNode(true);
-  clone.style.opacity = "0.15"; // keep layout visible underneath
-
-  const textLayer = document.createElement("div");
-  textLayer.style.position = "absolute";
-  textLayer.style.top = "0";
-  textLayer.style.left = "0";
-  textLayer.style.right = "0";
-  textLayer.style.whiteSpace = "pre-wrap";
-
-  overlay.appendChild(clone);
-  overlay.appendChild(textLayer);
-
-  section.innerHTML = "";
-  section.appendChild(overlay);
-
-  const text = clone.textContent.trim();
-
-  typeText(textLayer, text, speed, done);
+  setTimeout(() => {
+    el.style.opacity = "1";
+    el.style.transform = "translateY(0)";
+  }, delay);
 }
 
 /* DATA */
@@ -278,15 +248,14 @@ fetch(`data/${file}`)
     const kit = data.kits.find(k => k.id === id);
     if (!kit) return window.location.href = "index.html";
 
-    typeText(document.getElementById("kitTitle"), kit.name, 18);
+    const title = document.getElementById("kitTitle");
+    const subtitle = document.getElementById("kitSubtitle");
 
-    setTimeout(() => {
-      typeText(
-        document.getElementById("kitSubtitle"),
-        `${kit.mold} • ${kit.variant} • ${kit.year}`,
-        12
-      );
-    }, 300);
+    title.textContent = kit.name;
+    subtitle.textContent = `${kit.mold} • ${kit.variant} • ${kit.year}`;
+
+    flyIn(title, 100);
+    flyIn(subtitle, 250);
   });
 
 /* CONTENT */
@@ -301,34 +270,25 @@ fetch(kitPath + "content.html")
     const overviewEl = document.getElementById("overview");
     const triviaEl = document.getElementById("trivia");
 
-    const queue = [];
-
-    sections.forEach(section => {
+    sections.forEach((section, i) => {
       const title = section.querySelector("h2")?.textContent || "";
 
       if (title.toLowerCase().includes("overview")) {
         overviewEl.appendChild(section);
+        flyIn(section, 200 + i * 120);
       } else {
         triviaEl.appendChild(section);
+        flyIn(section, 200 + i * 120);
       }
-
-      queue.push(section);
     });
-
-    let i = 0;
-
-    function run() {
-      if (i >= queue.length) return;
-      revealSection(queue[i++], 4, run);
-    }
-
-    setTimeout(run, 500);
   });
 
 /* IMAGES */
 const box = document.createElement("img");
 box.src = kitPath + "images/box.jpg";
 document.getElementById("boxart").appendChild(box);
+
+flyIn(box, 200);
 
 let index = 1;
 function loadNextImage() {
@@ -337,6 +297,7 @@ function loadNextImage() {
 
   img.onload = () => {
     document.getElementById("gallery").appendChild(img);
+    flyIn(img, 50);
     index++;
     loadNextImage();
   };
