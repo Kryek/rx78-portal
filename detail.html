@@ -159,18 +159,7 @@ function loadNextImage() {
 
 // start loading
 loadNextImage();
-
-// Boxart
-const box = document.createElement("img");
-box.src = kitPath + "images/" + images[0];
-boxartDiv.appendChild(box);
-
-// Gallery
-images.slice(1).forEach(src => {
-  const img = document.createElement("img");
-  img.src = kitPath + "images/" + src;
-  galleryDiv.appendChild(img);
-});
+  
 </script>
 
 </body>
