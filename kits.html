@@ -245,11 +245,17 @@ pageTitle.textContent = current.title;
 fetch(`data/${current.file}`)
   .then(res => res.json())
   .then(data => {
-    kits = data.kits.sort((a, b) => {
-      const moldCompare = a.mold.localeCompare(b.mold);
-      if (moldCompare !== 0) return moldCompare;
-      return a.variant.localeCompare(b.variant);
+    kits = data.kits;
+
+    // ✅ ADD THIS HERE
+    kits.sort((a, b) => {
+      const nameA = (a.mold || "").toLowerCase();
+      const nameB = (b.mold || "").toLowerCase();
+      return nameA.localeCompare(nameB);
     });
+
+    displayKits(kits);
+  });
 
 function displayKits(list) {
   kitList.innerHTML = '';
