@@ -20,6 +20,100 @@
       margin: auto;
     }
 
+    /* ✅ NAV (DESKTOP DEFAULT) */
+    .nav {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    .nav-btn {
+      background: rgba(17,17,17,0.65);
+      border: 3px solid white;
+      padding: 8px 12px;
+      transform: skew(-20deg);
+      cursor: pointer;
+      width: 80px;
+    }
+
+    .nav-btn span {
+      display: block;
+      transform: skew(20deg);
+      font-size: 10px;
+      text-align: center;
+    }
+
+    /* ✅ DROPDOWN (DESKTOP) */
+    .dropdown {
+      display: none;
+      flex-direction: column;
+      margin-top: 5px;
+      gap: 6px;
+    }
+
+    .dropdown.open {
+      display: flex;
+    }
+
+    .dropdown .nav-btn {
+      width: 90px;
+    }
+
+    /* ✅ MOBILE NAV BAR */
+    @media (max-width: 600px) {
+      .nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 10px;
+        background: rgba(0,0,0,0.85);
+      }
+
+      .app {
+        padding-top: 70px; /* prevent overlap */
+      }
+
+      .nav-btn {
+        width: 80px;
+      }
+    }
+
+    /* ✅ OVERLAY (MOBILE ONLY) */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .overlay.open {
+      display: flex;
+    }
+
+    .overlay .nav-btn {
+      margin: 10px 0;
+      width: 160px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
     .title {
       font-size: 24px;
       margin-bottom: 10px;
@@ -55,108 +149,41 @@
     ul {
       padding-left: 18px;
     }
-
-    /* ✅ NAV */
-    #navContainer {
-      position: fixed;
-      top: 12px;
-      left: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      z-index: 20;
-    }
-
-    .navBtn {
-      background: rgba(17,17,17,0.65);
-      border: 3px solid white;
-      padding: 8px 12px;
-      transform: skew(-20deg);
-      cursor: pointer;
-    }
-
-    .navBtn span {
-      display: block;
-      transform: skew(20deg);
-      font-size: 10px;
-      text-align: center;
-    }
-
-    @media (max-width:600px){
-      #navContainer {
-        flex-direction: row;
-        top: 10px;
-        left: 10px;
-      }
-    }
-
-    /* ✅ OVERLAY */
-    #gradesOverlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.95);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 50;
-    }
-
-    #gradesOverlay.open {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    #closeOverlay {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 24px;
-      cursor: pointer;
-    }
-
-    .overlayMenu {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .overlayItem {
-      font-size: 18px;
-      border: 2px solid white;
-      padding: 10px 20px;
-      text-align: center;
-      cursor: pointer;
-    }
-
   </style>
 </head>
 <body>
 
 <!-- ✅ NAV -->
-<div id="navContainer">
-  <div class="navBtn" id="homeBtn"><span>HOME</span></div>
-  <div class="navBtn" id="gradesBtn"><span>GRADES</span></div>
+<div class="nav">
+  <div class="nav-btn" id="homeBtn"><span>HOME</span></div>
+
+  <div class="nav-btn" id="gradesBtn"><span>GRADES</span></div>
+
+  <!-- Desktop dropdown -->
+  <div class="dropdown" id="gradesDropdown">
+    <div class="nav-btn" data-grade="HG"><span>HG</span></div>
+    <div class="nav-btn" data-grade="MG"><span>MG</span></div>
+    <div class="nav-btn" data-grade="RG"><span>RG</span></div>
+    <div class="nav-btn" data-grade="PG"><span>PG</span></div>
+    <div class="nav-btn" data-grade="SD"><span>SD</span></div>
+    <div class="nav-btn" data-grade="MEGASIZE"><span>MEGA</span></div>
+    <div class="nav-btn" data-grade="MISC"><span>MISC</span></div>
+    <div class="nav-btn" data-grade="CUSTOM"><span>CUSTOM</span></div>
+  </div>
 </div>
 
-<!-- ✅ OVERLAY -->
-<div id="gradesOverlay">
-  <div id="closeOverlay">✕</div>
+<!-- ✅ MOBILE OVERLAY -->
+<div class="overlay" id="gradesOverlay">
+  <div class="close-btn" id="closeOverlay">✕</div>
 
-  <div class="overlayMenu">
-    <div class="overlayItem" data-grade="SD">SD</div>
-    <div class="overlayItem" data-grade="HG">HG</div>
-    <div class="overlayItem" data-grade="RG">RG</div>
-    <div class="overlayItem" data-grade="MG">MG</div>
-    <div class="overlayItem" data-grade="PG">PG</div>
-    <div class="overlayItem" data-grade="MEGASIZE">MEGA SIZE</div>
-    <div class="overlayItem" data-grade="MISC">MISC</div>
-    <div class="overlayItem" data-grade="CUSTOM">CUSTOMS</div>
-  </div>
+  <div class="nav-btn" data-grade="HG"><span>HG</span></div>
+  <div class="nav-btn" data-grade="MG"><span>MG</span></div>
+  <div class="nav-btn" data-grade="RG"><span>RG</span></div>
+  <div class="nav-btn" data-grade="PG"><span>PG</span></div>
+  <div class="nav-btn" data-grade="SD"><span>SD</span></div>
+  <div class="nav-btn" data-grade="MEGASIZE"><span>MEGA</span></div>
+  <div class="nav-btn" data-grade="MISC"><span>MISC</span></div>
+  <div class="nav-btn" data-grade="CUSTOM"><span>CUSTOM</span></div>
 </div>
 
 <div class="app">
@@ -176,12 +203,10 @@ const params = new URLSearchParams(window.location.search);
 const grade = params.get("grade");
 const id = params.get("id");
 
-// ✅ VALIDATION
 if (!grade || !id) {
   window.location.href = "index.html";
 }
 
-// ✅ MAP GRADE → JSON FILE
 const gradeMap = {
   HG: "hg-kits.json",
   MG: "mg-kits.json",
@@ -194,53 +219,37 @@ const gradeMap = {
 };
 
 const file = gradeMap[grade];
+if (!file) window.location.href = "index.html";
 
-if (!file) {
-  window.location.href = "index.html";
-}
-
-// ✅ BUILD KIT PATH
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
-// ✅ FETCH JSON → FIND KIT
 fetch(`data/${file}`)
   .then(res => res.json())
   .then(data => {
-
     const kit = data.kits.find(k => k.id === id);
+    if (!kit) return window.location.href = "index.html";
 
-    if (!kit) {
-      window.location.href = "index.html";
-      return;
-    }
-
-    // ✅ TITLE
     document.getElementById("kitTitle").textContent = kit.name;
-
     document.getElementById("kitSubtitle").textContent =
       `${kit.mold} • ${kit.variant} • ${kit.year}`;
-
   });
 
-// ✅ LOAD CONTENT.HTML
 fetch(kitPath + "content.html")
   .then(res => res.text())
   .then(html => {
     document.getElementById("kitContent").innerHTML = html;
   });
 
-// ✅ LOAD IMAGES
 const boxartDiv = document.getElementById("boxart");
 const galleryDiv = document.getElementById("gallery");
 
-// BOXART
+// boxart
 const box = document.createElement("img");
 box.src = kitPath + "images/box.jpg";
 boxartDiv.appendChild(box);
 
-// AUTO GALLERY
+// gallery auto-load
 let index = 1;
-
 function loadNextImage() {
   const img = new Image();
   img.src = kitPath + "images/" + index + ".jpg";
@@ -250,38 +259,35 @@ function loadNextImage() {
     index++;
     loadNextImage();
   };
-
-  img.onerror = () => {
-    return;
-  };
 }
-
 loadNextImage();
 
 // ✅ NAV LOGIC
+document.getElementById("homeBtn").onclick = () => {
+  window.location.href = "index.html";
+};
 
-// HOME → back to current grade
-document.getElementById("homeBtn").addEventListener("click", () => {
-  window.location.href = `kits.html?grade=${grade}`;
-});
-
-// OVERLAY
+const gradesBtn = document.getElementById("gradesBtn");
+const dropdown = document.getElementById("gradesDropdown");
 const overlay = document.getElementById("gradesOverlay");
 
-document.getElementById("gradesBtn").addEventListener("click", () => {
-  overlay.classList.add("open");
-});
+gradesBtn.onclick = () => {
+  if (window.innerWidth <= 600) {
+    overlay.classList.add("open");
+  } else {
+    dropdown.classList.toggle("open");
+  }
+};
 
-document.getElementById("closeOverlay").addEventListener("click", () => {
+document.getElementById("closeOverlay").onclick = () => {
   overlay.classList.remove("open");
-});
+};
 
-// SELECT GRADE
-document.querySelectorAll(".overlayItem").forEach(item => {
-  item.addEventListener("click", () => {
-    const selected = item.getAttribute("data-grade");
-    window.location.href = `kits.html?grade=${selected}`;
-  });
+document.querySelectorAll("[data-grade]").forEach(btn => {
+  btn.onclick = () => {
+    const g = btn.getAttribute("data-grade");
+    window.location.href = `kits.html?grade=${g}`;
+  };
 });
 </script>
 
