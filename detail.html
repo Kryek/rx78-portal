@@ -47,19 +47,19 @@
       text-align: center;
     }
 
-    /* ✅ DROPDOWN (FIXED ANIMATION + NO CLIP) */
+    /* ✅ FIXED DROPDOWN (NO CLIP + SMOOTH) */
     .dropdown {
       display: flex;
       flex-direction: column;
       gap: 6px;
 
       max-height: 0;
-      opacity: 0;
-      overflow: hidden;
+      overflow: visible; /* ✅ FIX CLIPPING */
 
+      opacity: 0;
       pointer-events: none;
 
-      transition: max-height 0.35s ease, opacity 0.2s ease;
+      transition: max-height 0.3s ease, opacity 0.2s ease;
     }
 
     .dropdown.open {
@@ -68,28 +68,25 @@
       pointer-events: auto;
     }
 
-    /* smaller submenu buttons */
+    /* ✅ DROPDOWN BUTTON ANIMATION BASE */
     .dropdown .nav-btn {
-      width: 70px;
-      padding: 6px 10px;
-    }
+  width: 70px; /* ✅ shorter width */
+  padding: 6px 10px; /* ✅ slightly tighter */
 
-    /* clean animation (no skew glitch) */
+  transform: skew(-20deg) translateX(-20px); /* ✅ less offset so it tucks under */
+  opacity: 0;
+}
+
+    /* ✅ FLY IN ANIMATION */
     @keyframes flyInDropdown {
       from {
-        transform: skew(-20deg) translateX(-25px);
+        transform: skew(-20deg) translateX(-40px);
         opacity: 0;
       }
       to {
         transform: skew(-20deg) translateX(0);
         opacity: 1;
       }
-    }
-
-    /* prevent animation reset flicker */
-    .dropdown .nav-btn {
-      opacity: 0;
-      transform: skew(-20deg) translateX(-25px);
     }
 
     /* ✅ MOBILE NAV */
@@ -124,7 +121,6 @@
       align-items: center;
       justify-content: center;
       z-index: 2000;
-      overscroll-behavior: contain;
     }
 
     .overlay.open { display: flex; }
@@ -164,7 +160,6 @@
 
   </style>
 </head>
-
 <body>
 
 <!-- NAV -->
@@ -204,8 +199,10 @@
   <div class="subtitle" id="kitSubtitle"></div>
 
   <div id="overview"></div>
+
   <div id="boxart"></div>
   <div class="gallery" id="gallery"></div>
+
   <div id="trivia"></div>
 
 </div>
@@ -244,16 +241,19 @@ fetch(`data/${file}`)
       `${kit.mold} • ${kit.variant} • ${kit.year}`;
   });
 
+// content split
 fetch(kitPath + "content.html")
   .then(res => res.text())
   .then(html => {
     const temp = document.createElement("div");
     temp.innerHTML = html;
 
-    temp.querySelectorAll(".section").forEach(section => {
-      const title = section.querySelector("h2")?.textContent?.toLowerCase();
+    const sections = temp.querySelectorAll(".section");
 
-      if (title?.includes("overview")) {
+    sections.forEach(section => {
+      const title = section.querySelector("h2")?.textContent;
+
+      if (title?.toLowerCase().includes("overview")) {
         document.getElementById("overview").appendChild(section);
       } else {
         document.getElementById("trivia").appendChild(section);
@@ -299,7 +299,7 @@ gradesBtn.onclick = () => {
       items.forEach((item, i) => {
         item.style.animation = "none";
         item.offsetHeight;
-        item.style.animation = `flyInDropdown 0.3s forwards ${i * 0.06}s`;
+        item.style.animation = `flyInDropdown 0.35s forwards ${i * 0.08}s`;
       });
     }
   }
