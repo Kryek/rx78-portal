@@ -1,132 +1,20 @@
 {
   "kits": [
     {
-      "id": "test-standard",
-      "name": "Test [Standard]",
-      "grade": "HG",
-      "scale": "1/144",
-      "mold": "RX-Test-1",
-      "variant": "Standard",
-      "year": 2015,
-      "meta": "HG",
-
-      "images": {
-        "box": "images/hg/revive-standard-box.png"
-      },
-
-      "page": "hg/revive-standard.html"
+      "id": "",
+      "name": "",
+      "mold": "THERE",
+      "variant": "IS",
+      "year": "",
+      "notes": ""
     },
     {
-      "id": "test-clear",
-      "name": "Test [Clear Color]",
-      "grade": "HG",
-      "scale": "1/144",
-      "mold": "RX-Test-2",
-      "variant": "Clear Color",
-      "year": 2015,
-      "meta": "HG",
-
-      "images": {
-        "box": "images/hg/revive-standard-box.png"
-      },
-
-      "page": "hg/revive-standard.html"
-    },
-    {
-      "id": "test-gold",
-      "name": "Test [Gold Plating]",
-      "grade": "HG",
-      "scale": "1/144",
-      "mold": "RX-Test-3",
-      "variant": "Gold Plating",
-      "year": 2015,
-      "meta": "HG",
-
-      "images": {
-        "box": "images/hg/revive-standard-box.png"
-      },
-
-      "page": "hg/revive-standard.html"
-    },
-    {
-      "id": "test-pearl",
-      "name": "Test [Pearl]",
-      "grade": "HG",
-      "scale": "1/144",
-      "mold": "RX-Test-4",
-      "variant": "Pearl",
-      "year": 2015,
-      "meta": "HG",
-
-      "images": {
-        "box": "images/hg/revive-standard-box.png"
-      },
-
-      "page": "hg/revive-standard.html"
-    },
-    {
-      "id": "test-chrome",
-      "name": "Test [Chrome Plating]",
-      "grade": "HG",
-      "scale": "1/144",
-      "mold": "RX-Test-5",
-      "variant": "Chrome Plating",
-      "year": 2015,
-      "meta": "HG",
-
-      "images": {
-        "box": "images/hg/revive-standard-box.png"
-      },
-
-      "page": "hg/revive-standard.html"
-    },
-    {
-      "id": "test-casval",
-      "name": "Test [Casval]",
-      "grade": "HG",
-      "scale": "1/144",
-      "mold": "RX-Test-6",
-      "variant": "Casval",
-      "year": 2015,
-      "meta": "HG",
-
-      "images": {
-        "box": "images/hg/revive-standard-box.png"
-      },
-
-      "page": "hg/revive-standard.html"
-    },
-    {
-      "id": "test-proto",
-      "name": "Test [01]",
-      "grade": "HG",
-      "scale": "1/144",
-      "mold": "RX-Test-7",
-      "variant": "Prototype",
-      "year": 2015,
-      "meta": "HG",
-
-      "images": {
-        "box": "images/hg/revive-standard-box.png"
-      },
-
-      "page": "hg/revive-standard.html"
-    },
-    {
-      "id": "test-g3",
-      "name": "Test [G-3]",
-      "grade": "HG",
-      "scale": "1/144",
-      "mold": "RX-Test-8",
-      "variant": "G-3",
-      "year": 2015,
-      "meta": "HG",
-
-      "images": {
-        "box": "images/hg/revive-standard-box.png"
-      },
-
-      "page": "hg/revive-standard.html"
+      "id": "",
+      "name": "",
+      "mold": "NOTHING",
+      "variant": "HERE",
+      "year": "",
+      "notes": ""
     }
   ]
 }
