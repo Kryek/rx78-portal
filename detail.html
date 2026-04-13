@@ -12,15 +12,19 @@
       background: black;
       color: white;
       font-family: 'Orbitron', sans-serif;
+      height: 100%;
     }
 
+    /* ✅ FULL HEIGHT FOR DESKTOP SCROLL SPLIT */
     .app {
       padding: 20px;
       max-width: 900px;
       margin: auto;
+      height: 100vh;
+      box-sizing: border-box;
     }
 
-    /* ✅ NEW DESKTOP LAYOUT */
+    /* ✅ DESKTOP 2-PANE LAYOUT */
     .layout {
       display: block;
     }
@@ -30,12 +34,42 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 30px;
-        align-items: start;
+        height: 100%;
+      }
+
+      /* ✅ LEFT SCROLL PANEL */
+      .info {
+        overflow-y: auto;
+        padding-right: 10px;
+        scrollbar-width: thin;
+        scrollbar-color: white black;
+      }
+
+      /* optional subtle fade feel */
+      .info::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .info::-webkit-scrollbar-thumb {
+        background: white;
+      }
+
+      /* ✅ RIGHT SCROLL PANEL */
+      .media {
+        overflow-y: auto;
+        padding-right: 10px;
+        scrollbar-width: thin;
+        scrollbar-color: white black;
+      }
+
+      .media::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .media::-webkit-scrollbar-thumb {
+        background: white;
       }
     }
-
-    .info {}
-    .media {}
 
     /* NAV */
     .nav {
@@ -100,7 +134,7 @@
       }
     }
 
-    /* MOBILE NAV */
+    /* MOBILE */
     @media (max-width: 600px) {
       .nav {
         position: fixed;
@@ -206,10 +240,9 @@
 
 <div class="app">
 
-  <!-- ✅ NEW STRUCTURE -->
   <div class="layout">
 
-    <!-- LEFT SIDE -->
+    <!-- LEFT -->
     <div class="info">
       <div class="title" id="kitTitle"></div>
       <div class="subtitle" id="kitSubtitle"></div>
@@ -218,13 +251,14 @@
       <div id="trivia"></div>
     </div>
 
-    <!-- RIGHT SIDE -->
+    <!-- RIGHT -->
     <div class="media">
       <div id="boxart"></div>
       <div class="gallery" id="gallery"></div>
     </div>
 
   </div>
+
 </div>
 
 <script>
@@ -250,7 +284,6 @@ if (!file) window.location.href = "index.html";
 
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
-/* KIT DATA */
 fetch(`data/${file}`)
   .then(res => res.json())
   .then(data => {
@@ -262,7 +295,6 @@ fetch(`data/${file}`)
       `${kit.mold} • ${kit.variant} • ${kit.year}`;
   });
 
-/* CONTENT SPLIT */
 fetch(kitPath + "content.html")
   .then(res => res.text())
   .then(html => {
@@ -282,7 +314,6 @@ fetch(kitPath + "content.html")
     });
   });
 
-/* IMAGES */
 const box = document.createElement("img");
 box.src = kitPath + "images/box.jpg";
 document.getElementById("boxart").appendChild(box);
@@ -300,7 +331,7 @@ function loadNextImage() {
 }
 loadNextImage();
 
-/* NAV */
+/* NAV (UNCHANGED) */
 document.getElementById("homeBtn").onclick = () => {
   window.location.href = "index.html";
 };
