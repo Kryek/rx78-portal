@@ -12,9 +12,8 @@
       background: black;
       color: white;
       font-family: 'Orbitron', sans-serif;
-
       height: 100%;
-      overflow: hidden; /* ✅ LOCK PAGE SCROLL */
+      overflow: hidden;
     }
 
     .app {
@@ -39,10 +38,7 @@
     }
 
     @keyframes navFlyIn {
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
+      to { opacity: 1; transform: translateX(0); }
     }
 
     .nav-btn {
@@ -87,22 +83,28 @@
     }
 
     @keyframes flyInDropdown {
-      from {
-        transform: skew(-20deg) translateX(-35px);
-        opacity: 0;
-      }
-      to {
-        transform: skew(-20deg) translateX(0);
-        opacity: 1;
-      }
+      from { transform: skew(-20deg) translateX(-35px); opacity: 0; }
+      to { transform: skew(-20deg) translateX(0); opacity: 1; }
     }
+
+    /* ✅ HEADER (NEW) */
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-top: 70px;
+      margin-bottom: 10px;
+    }
+
+    .title { font-size: 24px; margin-bottom: 10px; }
+    .subtitle { font-size: 14px; opacity: 0.7; }
 
     /* LAYOUT SPLIT */
     .layout {
       display: flex;
       gap: 30px;
-      margin-top: 80px;
-      height: calc(100vh - 100px);
+      height: calc(100vh - 140px);
       overflow: hidden;
     }
 
@@ -128,15 +130,8 @@
     }
 
     @keyframes imageRise {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      to { opacity: 1; transform: translateY(0); }
     }
-
-    /* TEXT */
-    .title { font-size: 24px; margin-bottom: 10px; }
-    .subtitle { font-size: 14px; opacity: 0.7; margin-bottom: 20px; }
 
     h2 {
       font-size: 16px;
@@ -150,7 +145,6 @@
       border: 2px solid white;
     }
 
-    /* MOBILE */
     @media (max-width: 600px) {
       .layout {
         flex-direction: column;
@@ -186,13 +180,16 @@
 
 <div class="app">
 
+  <!-- ✅ HEADER MOVED OUTSIDE TEXT COLUMN -->
+  <div class="header">
+    <div class="title" id="kitTitle"></div>
+    <div class="subtitle" id="kitSubtitle"></div>
+  </div>
+
   <div class="layout">
 
     <!-- TEXT SIDE -->
     <div class="text-side">
-      <div class="title" id="kitTitle"></div>
-      <div class="subtitle" id="kitSubtitle"></div>
-
       <div id="overview"></div>
       <div id="trivia"></div>
     </div>
@@ -230,36 +227,6 @@ if (!file) window.location.href = "index.html";
 
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
-/* TYPEWRITER */
-function typeText(el, text, speed = 12, cb) {
-  if (!el || !text) return cb?.();
-
-  el.textContent = "";
-  el.style.opacity = "1";
-
-  let i = 0;
-  (function step() {
-    if (i < text.length) {
-      el.textContent += text[i++];
-      setTimeout(step, speed);
-    } else cb?.();
-  })();
-}
-
-/* FLY IN */
-function flyIn(el, delay = 0) {
-  if (!el) return;
-
-  el.style.opacity = "0";
-  el.style.transform = "translateY(30px)";
-  el.style.transition = "all 0.6s ease";
-
-  setTimeout(() => {
-    el.style.opacity = "1";
-    el.style.transform = "translateY(0)";
-  }, delay);
-}
-
 /* DATA */
 fetch(`data/${file}`)
   .then(res => res.json())
@@ -267,17 +234,9 @@ fetch(`data/${file}`)
     const kit = data.kits.find(k => k.id === id);
     if (!kit) return window.location.href = "index.html";
 
-    const title = document.getElementById("kitTitle");
-    const subtitle = document.getElementById("kitSubtitle");
-
-    subtitle.style.opacity = "0";
-
-    typeText(title, kit.name, 18, () => {
-      setTimeout(() => {
-        subtitle.style.opacity = "1";
-        typeText(subtitle, `${kit.mold} • ${kit.variant} • ${kit.year}`, 12);
-      }, 150);
-    });
+    document.getElementById("kitTitle").textContent = kit.name;
+    document.getElementById("kitSubtitle").textContent =
+      `${kit.mold} • ${kit.variant} • ${kit.year}`;
   });
 
 /* CONTENT */
@@ -289,26 +248,14 @@ fetch(kitPath + "content.html")
 
     const sections = temp.querySelectorAll(".section");
 
-    const overviewEl = document.getElementById("overview");
-    const triviaEl = document.getElementById("trivia");
+    sections.forEach(section => {
+      const title = section.querySelector("h2")?.textContent;
 
-    sections.forEach((section, i) => {
-      const title = section.querySelector("h2")?.textContent || "";
-
-      section.style.opacity = "0";
-      section.style.transform = "translateY(30px)";
-      section.style.transition = "all 0.6s ease";
-
-      if (title.toLowerCase().includes("overview")) {
-        overviewEl.appendChild(section);
+      if (title?.toLowerCase().includes("overview")) {
+        document.getElementById("overview").appendChild(section);
       } else {
-        triviaEl.appendChild(section);
+        document.getElementById("trivia").appendChild(section);
       }
-
-      setTimeout(() => {
-        section.style.opacity = "1";
-        section.style.transform = "translateY(0)";
-      }, 250 + i * 120);
     });
   });
 
@@ -317,8 +264,6 @@ const box = document.createElement("img");
 box.src = kitPath + "images/box.jpg";
 document.getElementById("boxart").appendChild(box);
 
-flyIn(box, 200);
-
 let index = 1;
 function loadNextImage() {
   const img = new Image();
@@ -326,7 +271,6 @@ function loadNextImage() {
 
   img.onload = () => {
     document.getElementById("gallery").appendChild(img);
-    flyIn(img, 50);
     index++;
     loadNextImage();
   };
@@ -337,14 +281,6 @@ loadNextImage();
 document.getElementById("homeBtn").onclick = () => {
   window.location.href = "index.html";
 };
-
-document.querySelectorAll("[data-grade]").forEach(btn => {
-  btn.onclick = () => {
-    const g = btn.getAttribute("data-grade");
-    if (!g) return;
-    window.location.href = `kits.html?grade=${g}`;
-  };
-});
 
 const gradesBtn = document.getElementById("gradesBtn");
 const dropdown = document.getElementById("gradesDropdown");
