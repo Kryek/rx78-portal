@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RX-78 Detail</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+    html, body {
+      margin: 0;
+      background: black;
+      color: white;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .app {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .title {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      opacity: 0.7;
+      margin-bottom: 20px;
+    }
+
+    img {
+      width: 100%;
+      margin-bottom: 10px;
+      border: 2px solid white;
+    }
+
+    .gallery img {
+      margin-top: 10px;
+    }
+
+    .section {
+      margin-top: 25px;
+    }
+
+    h2 {
+      font-size: 16px;
+      border-bottom: 2px solid white;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      padding-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="title" id="kitTitle"></div>
+  <div class="subtitle" id="kitSubtitle"></div>
+
+  <div id="boxart"></div>
+  <div class="gallery" id="gallery"></div>
+
+  <div id="kitContent"></div>
+
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const grade = params.get("grade");
+const id = params.get("id");
+
+// ✅ VALIDATION
+if (!grade || !id) {
+  window.location.href = "index.html";
+}
+
+// ✅ MAP GRADE → JSON FILE
+const gradeMap = {
+  HG: "hg-kits.json",
+  MG: "mg-kits.json",
+  RG: "rg-kits.json",
+  PG: "pg-kits.json",
+  SD: "sd-kits.json",
+  MEGASIZE: "megasize-kits.json",
+  MISC: "misc-kits.json",
+  CUSTOM: "custom-kits.json"
+};
+
+const file = gradeMap[grade];
+
+if (!file) {
+  window.location.href = "index.html";
+}
+
+// ✅ BUILD KIT PATH
+const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
+
+// ✅ FETCH JSON → FIND KIT
+fetch(`data/${file}`)
+  .then(res => res.json())
+  .then(data => {
+
+    const kit = data.kits.find(k => k.id === id);
+
+    if (!kit) {
+      window.location.href = "index.html";
+      return;
+    }
+
+    // ✅ TITLE
+    document.getElementById("kitTitle").textContent = kit.name;
+
+    document.getElementById("kitSubtitle").textContent =
+      `${kit.mold} • ${kit.variant} • ${kit.year}`;
+
+  });
+
+// ✅ LOAD CONTENT.HTML
+fetch(kitPath + "content.html")
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById("kitContent").innerHTML = html;
+  });
+
+// ✅ LOAD IMAGES (simple version)
+const boxartDiv = document.getElementById("boxart");
+const galleryDiv = document.getElementById("gallery");
+
+// You control naming
+const images = [
+  "boxart.jpg",
+  "1.jpg",
+  "2.jpg",
+  "3.jpg"
+];
+
+// Boxart
+const box = document.createElement("img");
+box.src = kitPath + "images/" + images[0];
+boxartDiv.appendChild(box);
+
+// Gallery
+images.slice(1).forEach(src => {
+  const img = document.createElement("img");
+  img.src = kitPath + "images/" + src;
+  galleryDiv.appendChild(img);
+});
+</script>
+
+</body>
+</html>
