@@ -47,35 +47,35 @@
       text-align: center;
     }
 
-    /* ✅ FIXED DROPDOWN (UNCHANGED) */
+    /* ✅ DROPDOWN FIX (NO FLASH / NO DOUBLE RENDER) */
     .dropdown {
       display: flex;
       flex-direction: column;
       gap: 6px;
 
       max-height: 0;
-      overflow: visible;
+      overflow: hidden;
 
-      opacity: 0;
       pointer-events: none;
-
-      transition: max-height 0.3s ease, opacity 0.2s ease;
     }
 
     .dropdown.open {
       max-height: 500px;
-      opacity: 1;
       pointer-events: auto;
     }
 
+    /* ✅ IMPORTANT: keep items hidden until animated in */
     .dropdown .nav-btn {
       width: 70px;
       padding: 6px 10px;
+
+      transform: skew(-20deg) translateX(-25px);
+      opacity: 0;
     }
 
     @keyframes flyInDropdown {
       from {
-        transform: skew(-20deg) translateX(-40px);
+        transform: skew(-20deg) translateX(-35px);
         opacity: 0;
       }
       to {
@@ -106,7 +106,7 @@
       .nav-btn { width: 80px; }
     }
 
-    /* ✅ OVERLAY */
+    /* OVERLAY */
     .overlay {
       position: fixed;
       inset: 0;
@@ -152,7 +152,6 @@
     }
 
     ul { padding-left: 18px; }
-
   </style>
 </head>
 
@@ -195,8 +194,10 @@
   <div class="subtitle" id="kitSubtitle"></div>
 
   <div id="overview"></div>
+
   <div id="boxart"></div>
   <div class="gallery" id="gallery"></div>
+
   <div id="trivia"></div>
 
 </div>
@@ -224,7 +225,7 @@ if (!file) window.location.href = "index.html";
 
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
-// title
+/* KIT DATA */
 fetch(`data/${file}`)
   .then(res => res.json())
   .then(data => {
@@ -236,14 +237,16 @@ fetch(`data/${file}`)
       `${kit.mold} • ${kit.variant} • ${kit.year}`;
   });
 
-// content
+/* CONTENT SPLIT */
 fetch(kitPath + "content.html")
   .then(res => res.text())
   .then(html => {
     const temp = document.createElement("div");
     temp.innerHTML = html;
 
-    temp.querySelectorAll(".section").forEach(section => {
+    const sections = temp.querySelectorAll(".section");
+
+    sections.forEach(section => {
       const title = section.querySelector("h2")?.textContent;
 
       if (title?.toLowerCase().includes("overview")) {
@@ -254,7 +257,7 @@ fetch(kitPath + "content.html")
     });
   });
 
-// images
+/* IMAGES */
 const box = document.createElement("img");
 box.src = kitPath + "images/box.jpg";
 document.getElementById("boxart").appendChild(box);
@@ -272,7 +275,7 @@ function loadNextImage() {
 }
 loadNextImage();
 
-// NAV
+/* NAV */
 document.getElementById("homeBtn").onclick = () => {
   window.location.href = "index.html";
 };
@@ -281,19 +284,10 @@ const gradesBtn = document.getElementById("gradesBtn");
 const dropdown = document.getElementById("gradesDropdown");
 const overlay = document.getElementById("gradesOverlay");
 
-// ✅ SAFE MOBILE SCROLL LOCK FIX
-function lockScroll() {
-  document.body.style.overflow = "hidden";
-}
-
-function unlockScroll() {
-  document.body.style.overflow = "";
-}
-
 gradesBtn.onclick = () => {
   if (window.innerWidth <= 600) {
     overlay.classList.add("open");
-    lockScroll();
+    document.body.style.overflow = "hidden";
   } else {
     const isOpen = dropdown.classList.toggle("open");
 
@@ -301,7 +295,7 @@ gradesBtn.onclick = () => {
       const items = dropdown.querySelectorAll(".nav-btn");
       items.forEach((item, i) => {
         item.style.animation = "none";
-        item.offsetHeight;
+        item.offsetHeight; // reset
         item.style.animation = `flyInDropdown 0.35s forwards ${i * 0.08}s`;
       });
     }
@@ -310,7 +304,7 @@ gradesBtn.onclick = () => {
 
 document.getElementById("closeOverlay").onclick = () => {
   overlay.classList.remove("open");
-  unlockScroll();
+  document.body.style.overflow = "";
 };
 
 document.querySelectorAll("[data-grade]").forEach(btn => {
