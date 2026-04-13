@@ -1,229 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>RX-78 Detail</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
-
-    html, body {
-      margin: 0;
-      background: black;
-      color: white;
-      font-family: 'Orbitron', sans-serif;
-    }
-
-    .app {
-      padding: 20px;
-      max-width: 900px;
-      margin: auto;
-    }
-
-    /* ✅ NAV */
-    .nav {
-      position: fixed;
-      top: 12px;
-      left: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 1000;
-
-      animation: navFlyIn 0.6s ease forwards;
-      opacity: 0;
-      transform: translateX(-30px);
-    }
-
-    @keyframes navFlyIn {
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    .nav-btn {
-      background: rgba(17,17,17,0.65);
-      border: 3px solid white;
-      padding: 8px 12px;
-      transform: skew(-20deg);
-      cursor: pointer;
-      width: 80px;
-    }
-
-    .nav-btn span {
-      display: block;
-      transform: skew(20deg);
-      font-size: 10px;
-      text-align: center;
-    }
-
-    /* DROPDOWN */
-    .dropdown {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      height: 0;
-      opacity: 0;
-      pointer-events: none;
-      overflow: visible;
-      padding-bottom: 8px;
-    }
-
-    .dropdown.open {
-      height: auto;
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .dropdown .nav-btn {
-      width: 70px;
-      padding: 6px 10px;
-      transform: skew(-20deg) translateX(-25px);
-      opacity: 0;
-    }
-
-    @keyframes flyInDropdown {
-      from {
-        transform: skew(-20deg) translateX(-35px);
-        opacity: 0;
-      }
-      to {
-        transform: skew(-20deg) translateX(0);
-        opacity: 1;
-      }
-    }
-
-    /* ====== LAYOUT SPLIT ====== */
-    .layout {
-  display: flex;
-  gap: 30px;
-  margin-top: 80px;
-
-  height: calc(100vh - 100px); /* gives scroll space */
-  overflow: hidden;
-}
-
-/* TEXT SIDE */
-.text-side {
-  flex: 1;
-  overflow-y: auto;
-  padding-right: 10px;
-
-  /* keeps it feeling clean */
-  scrollbar-width: thin;
-}
-
-/* IMAGE SIDE */
-.image-side {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  overflow-y: auto;
-  padding-right: 10px;
-
-  scrollbar-width: thin;
-
-  /* keeps your entrance animation */
-  animation: imageRise 0.8s ease forwards;
-  opacity: 0;
-  transform: translateY(40px);
-}
-
-    @keyframes imageRise {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes textTypeIn {
-      0% {
-        opacity: 0;
-        clip-path: inset(0 100% 0 0);
-      }
-      100% {
-        opacity: 1;
-        clip-path: inset(0 0 0 0);
-      }
-    }
-
-    /* TEXT SECTIONS */
-    .title { font-size: 24px; margin-bottom: 10px; }
-    .subtitle { font-size: 14px; opacity: 0.7; margin-bottom: 20px; }
-
-    h2 {
-      font-size: 16px;
-      border-bottom: 2px solid white;
-      padding-bottom: 5px;
-      margin-bottom: 10px;
-    }
-
-    img {
-      width: 100%;
-      border: 2px solid white;
-    }
-
-    /* MOBILE BACK TO STACK */
-   @media (max-width: 600px) {
-  .layout {
-    flex-direction: column;
-    height: auto;
-    overflow: visible;
-  }
-
-  .text-side,
-  .image-side {
-    overflow: visible;
-  }
-}
-
-  </style>
-</head>
-
-<body>
-
-<div class="nav">
-  <div class="nav-btn" id="homeBtn"><span>HOME</span></div>
-  <div class="nav-btn" id="gradesBtn"><span>GRADES</span></div>
-
-  <div class="dropdown" id="gradesDropdown">
-    <div class="nav-btn" data-grade="HG"><span>HG</span></div>
-    <div class="nav-btn" data-grade="MG"><span>MG</span></div>
-    <div class="nav-btn" data-grade="RG"><span>RG</span></div>
-    <div class="nav-btn" data-grade="PG"><span>PG</span></div>
-    <div class="nav-btn" data-grade="SD"><span>SD</span></div>
-    <div class="nav-btn" data-grade="MEGASIZE"><span>MEGA</span></div>
-    <div class="nav-btn"><span>MISC</span></div>
-    <div class="nav-btn"><span>CUSTOM</span></div>
-  </div>
-</div>
-
-<div class="app">
-
-  <div class="layout">
-
-    <!-- TEXT SIDE -->
-    <div class="text-side">
-      <div class="title" id="kitTitle"></div>
-      <div class="subtitle" id="kitSubtitle"></div>
-
-      <div id="overview"></div>
-      <div id="trivia"></div>
-    </div>
-
-    <!-- IMAGE SIDE -->
-    <div class="image-side">
-      <div id="boxart"></div>
-      <div id="gallery"></div>
-    </div>
-
-  </div>
-
-</div>
-
 <script>
 const params = new URLSearchParams(window.location.search);
 const grade = params.get("grade");
@@ -247,6 +21,24 @@ if (!file) window.location.href = "index.html";
 
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
+/* TYPEWRITER CORE */
+function typeText(el, text, speed = 18, callback) {
+  el.textContent = "";
+  let i = 0;
+
+  function tick() {
+    if (i < text.length) {
+      el.textContent += text.charAt(i);
+      i++;
+      setTimeout(tick, speed);
+    } else if (callback) {
+      callback();
+    }
+  }
+
+  tick();
+}
+
 /* DATA */
 fetch(`data/${file}`)
   .then(res => res.json())
@@ -254,9 +46,18 @@ fetch(`data/${file}`)
     const kit = data.kits.find(k => k.id === id);
     if (!kit) return window.location.href = "index.html";
 
-    document.getElementById("kitTitle").textContent = kit.name;
-    document.getElementById("kitSubtitle").textContent =
-      `${kit.mold} • ${kit.variant} • ${kit.year}`;
+    typeText(
+      document.getElementById("kitTitle"),
+      kit.name,
+      20,
+      () => {
+        typeText(
+          document.getElementById("kitSubtitle"),
+          `${kit.mold} • ${kit.variant} • ${kit.year}`,
+          12
+        );
+      }
+    );
   });
 
 /* CONTENT */
@@ -268,16 +69,34 @@ fetch(kitPath + "content.html")
 
     const sections = temp.querySelectorAll(".section");
 
-    sections.forEach(section => {
+    sections.forEach((section, idx) => {
       const title = section.querySelector("h2")?.textContent;
 
-      if (title?.toLowerCase().includes("overview")) {
-        document.getElementById("overview").appendChild(section);
-      } else {
-        document.getElementById("trivia").appendChild(section);
-      }
+      const target = title?.toLowerCase().includes("overview")
+        ? document.getElementById("overview")
+        : document.getElementById("trivia");
+
+      // wrap for staggered typing effect
+      const wrapper = document.createElement("div");
+      wrapper.style.opacity = "0";
+      wrapper.style.transform = "translateY(10px)";
+      wrapper.style.animation = `fadeInSection 0.4s ease forwards ${idx * 0.15}s`;
+
+      wrapper.appendChild(section);
+      target.appendChild(wrapper);
     });
   });
+
+/* FADE FOR TEXT SECTIONS */
+const style = document.createElement("style");
+style.innerHTML = `
+@keyframes fadeInSection {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}`;
+document.head.appendChild(style);
 
 /* IMAGES */
 const box = document.createElement("img");
@@ -318,6 +137,3 @@ gradesBtn.onclick = () => {
   }
 };
 </script>
-
-</body>
-</html>
