@@ -227,7 +227,24 @@ if (!file) window.location.href = "index.html";
 
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
-/* SIMPLE TEXT ANIMATION */
+/* KEEP YOUR WORKING TYPEWRITER (UNCHANGED LOGIC) */
+function typeText(el, text, speed = 12) {
+  if (!el || !text) return;
+
+  let i = 0;
+  el.textContent = "";
+
+  function step() {
+    if (i < text.length) {
+      el.textContent += text[i++];
+      setTimeout(step, speed);
+    }
+  }
+
+  step();
+}
+
+/* SIMPLE FLY-IN */
 function flyIn(el, delay = 0) {
   if (!el) return;
 
@@ -254,11 +271,15 @@ fetch(`data/${file}`)
     title.textContent = kit.name;
     subtitle.textContent = `${kit.mold} • ${kit.variant} • ${kit.year}`;
 
-    flyIn(title, 100);
-    flyIn(subtitle, 250);
+    /* KEEP YOUR WORKING TITLE ANIM */
+    typeText(title, kit.name, 18);
+
+    setTimeout(() => {
+      typeText(subtitle, `${kit.mold} • ${kit.variant} • ${kit.year}`, 12);
+    }, 300);
   });
 
-/* CONTENT */
+/* CONTENT (ONLY FLY-IN NOW) */
 fetch(kitPath + "content.html")
   .then(res => res.text())
   .then(html => {
@@ -273,13 +294,20 @@ fetch(kitPath + "content.html")
     sections.forEach((section, i) => {
       const title = section.querySelector("h2")?.textContent || "";
 
+      section.style.opacity = "0";
+      section.style.transform = "translateY(30px)";
+      section.style.transition = "all 0.6s ease";
+
       if (title.toLowerCase().includes("overview")) {
         overviewEl.appendChild(section);
-        flyIn(section, 200 + i * 120);
       } else {
         triviaEl.appendChild(section);
-        flyIn(section, 200 + i * 120);
       }
+
+      setTimeout(() => {
+        section.style.opacity = "1";
+        section.style.transform = "translateY(0)";
+      }, 200 + i * 120);
     });
   });
 
