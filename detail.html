@@ -12,14 +12,10 @@
       background: black;
       color: white;
       font-family: 'Orbitron', sans-serif;
-      height: 100%;
-  overflow: hidden; /* ✅ kills page scroll */
-    }
 
-    .layout {
-  height: 100vh;
-  overflow: hidden;
-}
+      height: 100%;
+      overflow: hidden; /* ✅ LOCK PAGE SCROLL */
+    }
 
     .app {
       padding: 20px;
@@ -192,7 +188,7 @@
 
   <div class="layout">
 
-    <!-- TEXT -->
+    <!-- TEXT SIDE -->
     <div class="text-side">
       <div class="title" id="kitTitle"></div>
       <div class="subtitle" id="kitSubtitle"></div>
@@ -201,7 +197,7 @@
       <div id="trivia"></div>
     </div>
 
-    <!-- IMAGE -->
+    <!-- IMAGE SIDE -->
     <div class="image-side">
       <div id="boxart"></div>
       <div id="gallery"></div>
@@ -234,7 +230,7 @@ if (!file) window.location.href = "index.html";
 
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
-/* TYPEWRITER (title/subtitle) */
+/* TYPEWRITER */
 function typeText(el, text, speed = 12, cb) {
   if (!el || !text) return cb?.();
 
@@ -274,16 +270,12 @@ fetch(`data/${file}`)
     const title = document.getElementById("kitTitle");
     const subtitle = document.getElementById("kitSubtitle");
 
-    const titleText = kit.name;
-    const subtitleText = `${kit.mold} • ${kit.variant} • ${kit.year}`;
-
-    /* 🔥 IMPORTANT: hide subtitle until animation starts */
     subtitle.style.opacity = "0";
 
-    typeText(title, titleText, 18, () => {
+    typeText(title, kit.name, 18, () => {
       setTimeout(() => {
         subtitle.style.opacity = "1";
-        typeText(subtitle, subtitleText, 12);
+        typeText(subtitle, `${kit.mold} • ${kit.variant} • ${kit.year}`, 12);
       }, 150);
     });
   });
@@ -295,7 +287,7 @@ fetch(kitPath + "content.html")
     const temp = document.createElement("div");
     temp.innerHTML = html;
 
-    const sections = Array.from(temp.querySelectorAll(".section"));
+    const sections = temp.querySelectorAll(".section");
 
     const overviewEl = document.getElementById("overview");
     const triviaEl = document.getElementById("trivia");
@@ -370,5 +362,6 @@ gradesBtn.onclick = () => {
   }
 };
 </script>
+
 </body>
 </html>
