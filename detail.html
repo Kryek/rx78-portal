@@ -70,10 +70,12 @@
 
     /* ✅ DROPDOWN BUTTON ANIMATION BASE */
     .dropdown .nav-btn {
-      width: 90px;
-      transform: skew(-20deg) translateX(-30px);
-      opacity: 0;
-    }
+  width: 70px; /* ✅ shorter width */
+  padding: 6px 10px; /* ✅ slightly tighter */
+
+  transform: skew(-20deg) translateX(-20px); /* ✅ less offset so it tucks under */
+  opacity: 0;
+}
 
     /* ✅ FLY IN ANIMATION */
     @keyframes flyInDropdown {
