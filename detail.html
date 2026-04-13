@@ -227,53 +227,48 @@ if (!file) window.location.href = "index.html";
 
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
-/* SAFE TYPEWRITER (TEXT ONLY, DOES NOT DESTROY HTML) */
-function typeText(el, text, speed = 12, cb) {
+/* TYPEWRITER (SAFE TEXT ONLY) */
+function typeText(el, text, speed = 10, cb) {
   if (!el || !text) return cb?.();
 
   let i = 0;
-  const original = text;
-
   el.textContent = "";
 
-  function step() {
-    if (i < original.length) {
-      el.textContent += original[i++];
+  (function step() {
+    if (i < text.length) {
+      el.textContent += text[i++];
       setTimeout(step, speed);
-    } else {
-      cb?.();
-    }
-  }
-
-  step();
+    } else cb?.();
+  })();
 }
 
-/* TYPE ONLY TEXT INSIDE ELEMENT (PRESERVES STRUCTURE) */
-function typeInsideSection(section, speed = 8, done) {
+/* SECTION TYPE EFFECT (NO DOM DESTRUCTION) */
+function revealSection(section, speed = 6, done) {
   if (!section) return done?.();
 
-  const nodes = Array.from(section.childNodes);
-  section.textContent = "";
+  // Create overlay layer
+  const overlay = document.createElement("div");
+  overlay.style.position = "relative";
 
-  let i = 0;
+  const clone = section.cloneNode(true);
+  clone.style.opacity = "0.15"; // keep layout visible underneath
 
-  function next() {
-    if (i >= nodes.length) return done?.();
+  const textLayer = document.createElement("div");
+  textLayer.style.position = "absolute";
+  textLayer.style.top = "0";
+  textLayer.style.left = "0";
+  textLayer.style.right = "0";
+  textLayer.style.whiteSpace = "pre-wrap";
 
-    const node = nodes[i++];
+  overlay.appendChild(clone);
+  overlay.appendChild(textLayer);
 
-    if (node.nodeType === Node.TEXT_NODE) {
-      const span = document.createElement("span");
-      section.appendChild(span);
+  section.innerHTML = "";
+  section.appendChild(overlay);
 
-      typeText(span, node.textContent.trim(), speed, next);
-    } else {
-      section.appendChild(node);
-      setTimeout(next, 10);
-    }
-  }
+  const text = clone.textContent.trim();
 
-  next();
+  typeText(textLayer, text, speed, done);
 }
 
 /* DATA */
@@ -291,7 +286,7 @@ fetch(`data/${file}`)
         `${kit.mold} • ${kit.variant} • ${kit.year}`,
         12
       );
-    }, 350);
+    }, 300);
   });
 
 /* CONTENT */
@@ -322,13 +317,12 @@ fetch(kitPath + "content.html")
 
     let i = 0;
 
-    function runNext() {
+    function run() {
       if (i >= queue.length) return;
-
-      typeInsideSection(queue[i++], 6, runNext);
+      revealSection(queue[i++], 4, run);
     }
 
-    setTimeout(runNext, 500);
+    setTimeout(run, 500);
   });
 
 /* IMAGES */
@@ -354,7 +348,6 @@ document.getElementById("homeBtn").onclick = () => {
   window.location.href = "index.html";
 };
 
-/* RESTORED GRADE NAVIGATION */
 document.querySelectorAll("[data-grade]").forEach(btn => {
   btn.onclick = () => {
     const g = btn.getAttribute("data-grade");
@@ -363,7 +356,6 @@ document.querySelectorAll("[data-grade]").forEach(btn => {
   };
 });
 
-/* DROPDOWN */
 const gradesBtn = document.getElementById("gradesBtn");
 const dropdown = document.getElementById("gradesDropdown");
 
