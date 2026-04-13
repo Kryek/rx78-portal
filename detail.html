@@ -38,6 +38,9 @@
       transform: skew(-20deg);
       cursor: pointer;
       width: 80px;
+      opacity: 0;
+      transform: skew(-20deg) translateX(-50px);
+      animation: fadeIn 0.4s forwards;
     }
 
     .nav-btn span {
@@ -47,52 +50,69 @@
       text-align: center;
     }
 
-    /* ✅ DROPDOWN (DESKTOP) */
+    /* ✅ DROPDOWN (DESKTOP ANIMATED) */
     .dropdown {
-      display: none;
+      display: flex;
       flex-direction: column;
-      margin-top: 5px;
       gap: 6px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
     }
 
     .dropdown.open {
-      display: flex;
+      max-height: 500px;
     }
 
     .dropdown .nav-btn {
       width: 90px;
+      opacity: 0;
+      transform: translateX(-30px);
     }
+
+    .dropdown.open .nav-btn {
+      animation: dropdownIn 0.4s forwards;
+    }
+
+    .dropdown.open .nav-btn:nth-child(1){ animation-delay: 0.05s; }
+    .dropdown.open .nav-btn:nth-child(2){ animation-delay: 0.1s; }
+    .dropdown.open .nav-btn:nth-child(3){ animation-delay: 0.15s; }
+    .dropdown.open .nav-btn:nth-child(4){ animation-delay: 0.2s; }
+    .dropdown.open .nav-btn:nth-child(5){ animation-delay: 0.25s; }
+    .dropdown.open .nav-btn:nth-child(6){ animation-delay: 0.3s; }
+    .dropdown.open .nav-btn:nth-child(7){ animation-delay: 0.35s; }
+    .dropdown.open .nav-btn:nth-child(8){ animation-delay: 0.4s; }
 
     /* ✅ MOBILE NAV BAR */
     @media (max-width: 600px) {
-  .nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start; /* ✅ changed */
-    gap: 10px; /* ✅ spacing between buttons */
-    padding: 0 10px;
-    background: rgba(0,0,0,0.9);
-  }
+      .nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        padding: 0 10px;
+        background: rgba(0,0,0,0.9);
+      }
 
-  body {
-    padding-top: 60px;
-  }
+      body {
+        padding-top: 60px;
+      }
 
-  .app {
-    padding-top: 20px;
-  }
+      .app {
+        padding-top: 20px;
+      }
 
-  .nav-btn {
-    width: 80px;
-  }
-}
+      .nav-btn {
+        width: 80px;
+      }
+    }
 
-    /* ✅ OVERLAY (MOBILE ONLY) */
+    /* ✅ OVERLAY */
     .overlay {
       position: fixed;
       inset: 0;
@@ -111,6 +131,8 @@
     .overlay .nav-btn {
       margin: 10px 0;
       width: 160px;
+      opacity: 1;
+      transform: skew(-20deg);
     }
 
     .close-btn {
@@ -156,17 +178,24 @@
     ul {
       padding-left: 18px;
     }
+
+    @keyframes fadeIn {
+      to { opacity: 1; transform: skew(-20deg) translateX(0); }
+    }
+
+    @keyframes dropdownIn {
+      to { opacity: 1; transform: translateX(0); }
+    }
+
   </style>
 </head>
 <body>
 
-<!-- ✅ NAV -->
+<!-- NAV -->
 <div class="nav">
   <div class="nav-btn" id="homeBtn"><span>HOME</span></div>
-
   <div class="nav-btn" id="gradesBtn"><span>GRADES</span></div>
 
-  <!-- Desktop dropdown -->
   <div class="dropdown" id="gradesDropdown">
     <div class="nav-btn" data-grade="HG"><span>HG</span></div>
     <div class="nav-btn" data-grade="MG"><span>MG</span></div>
@@ -179,7 +208,7 @@
   </div>
 </div>
 
-<!-- ✅ MOBILE OVERLAY -->
+<!-- MOBILE OVERLAY -->
 <div class="overlay" id="gradesOverlay">
   <div class="close-btn" id="closeOverlay">✕</div>
 
@@ -198,10 +227,11 @@
   <div class="title" id="kitTitle"></div>
   <div class="subtitle" id="kitSubtitle"></div>
 
+  <!-- ✅ MOVED CONTENT ABOVE -->
+  <div id="kitContent"></div>
+
   <div id="boxart"></div>
   <div class="gallery" id="gallery"></div>
-
-  <div id="kitContent"></div>
 
 </div>
 
@@ -250,12 +280,10 @@ fetch(kitPath + "content.html")
 const boxartDiv = document.getElementById("boxart");
 const galleryDiv = document.getElementById("gallery");
 
-// boxart
 const box = document.createElement("img");
 box.src = kitPath + "images/box.jpg";
 boxartDiv.appendChild(box);
 
-// gallery auto-load
 let index = 1;
 function loadNextImage() {
   const img = new Image();
@@ -269,7 +297,7 @@ function loadNextImage() {
 }
 loadNextImage();
 
-// ✅ NAV LOGIC
+// NAV LOGIC
 document.getElementById("homeBtn").onclick = () => {
   window.location.href = "index.html";
 };
