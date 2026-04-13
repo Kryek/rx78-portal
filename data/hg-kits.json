@@ -3,6 +3,7 @@
     {
       "id": "beyond-global-standard",
       "name": "HGBG RX-78-2 Gundam (Beyond Global)",
+      "mold": "Beyond Global",
       "variant": "Standard",
       "year": "2020",
       "notes": ""
@@ -10,6 +11,7 @@
     {
       "id": "g40-standard",
       "name": "HG Gundam G40 (Industrial Design Ver.)",
+      "mold": "G40",
       "variant": "Standard",
       "year": "2019",
       "notes": ""
@@ -17,6 +19,7 @@
     {
       "id": "revive-standard",
       "name": "HGUC RX-78-2 Gundam (Revive Ver.)",
+      "mold": "Revive Ver.",
       "variant": "Standard",
       "year": "2015",
       "notes": ""
