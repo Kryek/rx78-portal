@@ -272,8 +272,8 @@ function displayKits(list) {
     `;
 
     panel.addEventListener('click', () => {
-      window.location.href = kit.page;
-    });
+  window.location.href = `detail.html?grade=${grade}&id=${kit.id}`;
+});
 
     kitList.appendChild(panel);
 
