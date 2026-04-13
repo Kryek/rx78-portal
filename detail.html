@@ -49,21 +49,23 @@
 
     /* ✅ DROPDOWN FIX (NO FLASH / NO DOUBLE RENDER) */
     .dropdown {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 
-      max-height: 0;
-      overflow: hidden;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
 
-      pointer-events: none;
-    }
+  overflow: visible;
+  padding-bottom: 8px; /* ✅ fixes bottom-left clipping from skew */
+}
 
-    .dropdown.open {
-      max-height: 500px;
-      pointer-events: auto;
-    }
-
+.dropdown.open {
+  height: auto;
+  opacity: 1;
+  pointer-events: auto;
+}
     /* ✅ IMPORTANT: keep items hidden until animated in */
     .dropdown .nav-btn {
       width: 70px;
