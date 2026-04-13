@@ -31,7 +31,6 @@
       flex-direction: column;
       gap: 10px;
       z-index: 1000;
-
       animation: navFlyIn 0.6s ease forwards;
       opacity: 0;
       transform: translateX(-30px);
@@ -87,7 +86,7 @@
       to { transform: skew(-20deg) translateX(0); opacity: 1; }
     }
 
-    /* ✅ HEADER (NEW) */
+    /* HEADER */
     .header {
       display: flex;
       flex-direction: column;
@@ -97,10 +96,18 @@
       margin-bottom: 10px;
     }
 
-    .title { font-size: 24px; margin-bottom: 10px; }
-    .subtitle { font-size: 14px; opacity: 0.7; }
+    .title {
+      font-size: 24px;
+      margin-bottom: 10px;
+      opacity: 0;
+    }
 
-    /* LAYOUT SPLIT */
+    .subtitle {
+      font-size: 14px;
+      opacity: 0;
+    }
+
+    /* LAYOUT */
     .layout {
       display: flex;
       gap: 30px;
@@ -123,7 +130,6 @@
       overflow-y: auto;
       padding-right: 10px;
       scrollbar-width: thin;
-
       animation: imageRise 0.8s ease forwards;
       opacity: 0;
       transform: translateY(40px);
@@ -131,6 +137,13 @@
 
     @keyframes imageRise {
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* CONTENT ANIMATION FIX */
+    .section {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: all 0.6s ease;
     }
 
     h2 {
@@ -149,11 +162,6 @@
       .layout {
         flex-direction: column;
         height: auto;
-        overflow: visible;
-      }
-
-      .text-side,
-      .image-side {
         overflow: visible;
       }
     }
@@ -180,7 +188,6 @@
 
 <div class="app">
 
-  <!-- ✅ HEADER MOVED OUTSIDE TEXT COLUMN -->
   <div class="header">
     <div class="title" id="kitTitle"></div>
     <div class="subtitle" id="kitSubtitle"></div>
@@ -188,13 +195,11 @@
 
   <div class="layout">
 
-    <!-- TEXT SIDE -->
     <div class="text-side">
       <div id="overview"></div>
       <div id="trivia"></div>
     </div>
 
-    <!-- IMAGE SIDE -->
     <div class="image-side">
       <div id="boxart"></div>
       <div id="gallery"></div>
@@ -223,23 +228,41 @@ const gradeMap = {
 };
 
 const file = gradeMap[grade];
-if (!file) window.location.href = "index.html";
-
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
-/* DATA */
+/* TYPEWRITER */
+function typeText(el, text, speed = 15, cb) {
+  el.textContent = "";
+  let i = 0;
+
+  (function step() {
+    if (i < text.length) {
+      el.textContent += text[i++];
+      setTimeout(step, speed);
+    } else cb?.();
+  })();
+}
+
+/* HEADER ANIM RESTORED */
 fetch(`data/${file}`)
   .then(res => res.json())
   .then(data => {
     const kit = data.kits.find(k => k.id === id);
-    if (!kit) return window.location.href = "index.html";
 
-    document.getElementById("kitTitle").textContent = kit.name;
-    document.getElementById("kitSubtitle").textContent =
-      `${kit.mold} • ${kit.variant} • ${kit.year}`;
+    const title = document.getElementById("kitTitle");
+    const subtitle = document.getElementById("kitSubtitle");
+
+    const t = kit.name;
+    const s = `${kit.mold} • ${kit.variant} • ${kit.year}`;
+
+    typeText(title, t, 18, () => {
+      setTimeout(() => {
+        typeText(subtitle, s, 12);
+      }, 120);
+    });
   });
 
-/* CONTENT */
+/* CONTENT ANIM RESTORED */
 fetch(kitPath + "content.html")
   .then(res => res.text())
   .then(html => {
@@ -248,14 +271,19 @@ fetch(kitPath + "content.html")
 
     const sections = temp.querySelectorAll(".section");
 
-    sections.forEach(section => {
-      const title = section.querySelector("h2")?.textContent;
+    sections.forEach((section, i) => {
+      const title = section.querySelector("h2")?.textContent || "";
 
-      if (title?.toLowerCase().includes("overview")) {
+      if (title.toLowerCase().includes("overview")) {
         document.getElementById("overview").appendChild(section);
       } else {
         document.getElementById("trivia").appendChild(section);
       }
+
+      setTimeout(() => {
+        section.style.opacity = "1";
+        section.style.transform = "translateY(0)";
+      }, 200 + i * 120);
     });
   });
 
@@ -281,6 +309,14 @@ loadNextImage();
 document.getElementById("homeBtn").onclick = () => {
   window.location.href = "index.html";
 };
+
+document.querySelectorAll("[data-grade]").forEach(btn => {
+  btn.onclick = () => {
+    const g = btn.getAttribute("data-grade");
+    if (!g) return;
+    window.location.href = `kits.html?grade=${g}`;
+  };
+});
 
 const gradesBtn = document.getElementById("gradesBtn");
 const dropdown = document.getElementById("gradesDropdown");
