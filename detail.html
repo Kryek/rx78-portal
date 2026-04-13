@@ -55,9 +55,109 @@
     ul {
       padding-left: 18px;
     }
+
+    /* ✅ NAV */
+    #navContainer {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 20;
+    }
+
+    .navBtn {
+      background: rgba(17,17,17,0.65);
+      border: 3px solid white;
+      padding: 8px 12px;
+      transform: skew(-20deg);
+      cursor: pointer;
+    }
+
+    .navBtn span {
+      display: block;
+      transform: skew(20deg);
+      font-size: 10px;
+      text-align: center;
+    }
+
+    @media (max-width:600px){
+      #navContainer {
+        flex-direction: row;
+        top: 10px;
+        left: 10px;
+      }
+    }
+
+    /* ✅ OVERLAY */
+    #gradesOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 50;
+    }
+
+    #gradesOverlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #closeOverlay {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .overlayMenu {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .overlayItem {
+      font-size: 18px;
+      border: 2px solid white;
+      padding: 10px 20px;
+      text-align: center;
+      cursor: pointer;
+    }
+
   </style>
 </head>
 <body>
+
+<!-- ✅ NAV -->
+<div id="navContainer">
+  <div class="navBtn" id="homeBtn"><span>HOME</span></div>
+  <div class="navBtn" id="gradesBtn"><span>GRADES</span></div>
+</div>
+
+<!-- ✅ OVERLAY -->
+<div id="gradesOverlay">
+  <div id="closeOverlay">✕</div>
+
+  <div class="overlayMenu">
+    <div class="overlayItem" data-grade="SD">SD</div>
+    <div class="overlayItem" data-grade="HG">HG</div>
+    <div class="overlayItem" data-grade="RG">RG</div>
+    <div class="overlayItem" data-grade="MG">MG</div>
+    <div class="overlayItem" data-grade="PG">PG</div>
+    <div class="overlayItem" data-grade="MEGASIZE">MEGA SIZE</div>
+    <div class="overlayItem" data-grade="MISC">MISC</div>
+    <div class="overlayItem" data-grade="CUSTOM">CUSTOMS</div>
+  </div>
+</div>
 
 <div class="app">
 
@@ -129,16 +229,16 @@ fetch(kitPath + "content.html")
     document.getElementById("kitContent").innerHTML = html;
   });
 
-// ✅ LOAD IMAGES (simple version)
+// ✅ LOAD IMAGES
 const boxartDiv = document.getElementById("boxart");
 const galleryDiv = document.getElementById("gallery");
 
-// ✅ LOAD BOXART (always exists)
+// BOXART
 const box = document.createElement("img");
 box.src = kitPath + "images/box.jpg";
 boxartDiv.appendChild(box);
 
-// ✅ AUTO-LOAD NUMBERED GALLERY IMAGES
+// AUTO GALLERY
 let index = 1;
 
 function loadNextImage() {
@@ -148,18 +248,41 @@ function loadNextImage() {
   img.onload = () => {
     galleryDiv.appendChild(img);
     index++;
-    loadNextImage(); // try next image
+    loadNextImage();
   };
 
   img.onerror = () => {
-    // ❌ Stop when an image doesn't exist
     return;
   };
 }
 
-// start loading
 loadNextImage();
-  
+
+// ✅ NAV LOGIC
+
+// HOME → back to current grade
+document.getElementById("homeBtn").addEventListener("click", () => {
+  window.location.href = `kits.html?grade=${grade}`;
+});
+
+// OVERLAY
+const overlay = document.getElementById("gradesOverlay");
+
+document.getElementById("gradesBtn").addEventListener("click", () => {
+  overlay.classList.add("open");
+});
+
+document.getElementById("closeOverlay").addEventListener("click", () => {
+  overlay.classList.remove("open");
+});
+
+// SELECT GRADE
+document.querySelectorAll(".overlayItem").forEach(item => {
+  item.addEventListener("click", () => {
+    const selected = item.getAttribute("data-grade");
+    window.location.href = `kits.html?grade=${selected}`;
+  });
+});
 </script>
 
 </body>
