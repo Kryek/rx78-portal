@@ -12,66 +12,15 @@
       background: black;
       color: white;
       font-family: 'Orbitron', sans-serif;
-      height: 100%;
     }
 
-    /* ✅ FULL HEIGHT FOR DESKTOP SCROLL SPLIT */
     .app {
       padding: 20px;
       max-width: 900px;
       margin: auto;
-      height: 100vh;
-      box-sizing: border-box;
     }
 
-    /* ✅ DESKTOP 2-PANE LAYOUT */
-    .layout {
-      display: block;
-    }
-
-    @media (min-width: 900px) {
-      .layout {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 30px;
-        height: 100%;
-      }
-
-      /* ✅ LEFT SCROLL PANEL */
-      .info {
-        overflow-y: auto;
-        padding-right: 10px;
-        scrollbar-width: thin;
-        scrollbar-color: white black;
-      }
-
-      /* optional subtle fade feel */
-      .info::-webkit-scrollbar {
-        width: 6px;
-      }
-
-      .info::-webkit-scrollbar-thumb {
-        background: white;
-      }
-
-      /* ✅ RIGHT SCROLL PANEL */
-      .media {
-        overflow-y: auto;
-        padding-right: 10px;
-        scrollbar-width: thin;
-        scrollbar-color: white black;
-      }
-
-      .media::-webkit-scrollbar {
-        width: 6px;
-      }
-
-      .media::-webkit-scrollbar-thumb {
-        background: white;
-      }
-    }
-
-    /* NAV */
+    /* ✅ NAV */
     .nav {
       position: fixed;
       top: 12px;
@@ -80,6 +29,17 @@
       flex-direction: column;
       gap: 10px;
       z-index: 1000;
+
+      animation: navFlyIn 0.6s ease forwards;
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+
+    @keyframes navFlyIn {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
     .nav-btn {
@@ -134,65 +94,52 @@
       }
     }
 
-    /* MOBILE */
-    @media (max-width: 600px) {
-      .nav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 60px;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 10px;
-        padding: 0 10px;
-        background: rgba(0,0,0,0.9);
-      }
-
-      body { padding-top: 60px; }
-      .app { padding-top: 20px; }
-
-      .nav-btn { width: 80px; }
+    /* ====== LAYOUT SPLIT ====== */
+    .layout {
+      display: flex;
+      gap: 30px;
+      margin-top: 80px;
     }
 
-    /* OVERLAY */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.95);
-      display: none;
+    .text-side {
+      flex: 1;
+      animation: textTypeIn 1.2s steps(40, end) forwards;
+      white-space: pre-line;
+      opacity: 0;
+    }
+
+    .image-side {
+      flex: 1;
+      display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
+      gap: 10px;
+
+      animation: imageRise 0.8s ease forwards;
+      opacity: 0;
+      transform: translateY(40px);
     }
 
-    .overlay.open { display: flex; }
-
-    .overlay .nav-btn {
-      margin: 10px 0;
-      width: 160px;
+    @keyframes imageRise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    .close-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 18px;
-      cursor: pointer;
+    @keyframes textTypeIn {
+      0% {
+        opacity: 0;
+        clip-path: inset(0 100% 0 0);
+      }
+      100% {
+        opacity: 1;
+        clip-path: inset(0 0 0 0);
+      }
     }
 
+    /* TEXT SECTIONS */
     .title { font-size: 24px; margin-bottom: 10px; }
     .subtitle { font-size: 14px; opacity: 0.7; margin-bottom: 20px; }
-
-    img {
-      width: 100%;
-      margin-bottom: 10px;
-      border: 2px solid white;
-    }
-
-    .section { margin-top: 25px; }
 
     h2 {
       font-size: 16px;
@@ -201,13 +148,23 @@
       margin-bottom: 10px;
     }
 
-    ul { padding-left: 18px; }
+    img {
+      width: 100%;
+      border: 2px solid white;
+    }
+
+    /* MOBILE BACK TO STACK */
+    @media (max-width: 600px) {
+      .layout {
+        flex-direction: column;
+      }
+    }
+
   </style>
 </head>
 
 <body>
 
-<!-- NAV -->
 <div class="nav">
   <div class="nav-btn" id="homeBtn"><span>HOME</span></div>
   <div class="nav-btn" id="gradesBtn"><span>GRADES</span></div>
@@ -224,26 +181,12 @@
   </div>
 </div>
 
-<!-- MOBILE OVERLAY -->
-<div class="overlay" id="gradesOverlay">
-  <div class="close-btn" id="closeOverlay">✕</div>
-
-  <div class="nav-btn" data-grade="HG"><span>HG</span></div>
-  <div class="nav-btn" data-grade="MG"><span>MG</span></div>
-  <div class="nav-btn" data-grade="RG"><span>RG</span></div>
-  <div class="nav-btn" data-grade="PG"><span>PG</span></div>
-  <div class="nav-btn" data-grade="SD"><span>SD</span></div>
-  <div class="nav-btn" data-grade="MEGASIZE"><span>MEGA</span></div>
-  <div class="nav-btn"><span>MISC</span></div>
-  <div class="nav-btn"><span>CUSTOM</span></div>
-</div>
-
 <div class="app">
 
   <div class="layout">
 
-    <!-- LEFT -->
-    <div class="info">
+    <!-- TEXT SIDE -->
+    <div class="text-side">
       <div class="title" id="kitTitle"></div>
       <div class="subtitle" id="kitSubtitle"></div>
 
@@ -251,10 +194,10 @@
       <div id="trivia"></div>
     </div>
 
-    <!-- RIGHT -->
-    <div class="media">
+    <!-- IMAGE SIDE -->
+    <div class="image-side">
       <div id="boxart"></div>
-      <div class="gallery" id="gallery"></div>
+      <div id="gallery"></div>
     </div>
 
   </div>
@@ -284,6 +227,7 @@ if (!file) window.location.href = "index.html";
 
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
+/* DATA */
 fetch(`data/${file}`)
   .then(res => res.json())
   .then(data => {
@@ -295,6 +239,7 @@ fetch(`data/${file}`)
       `${kit.mold} • ${kit.variant} • ${kit.year}`;
   });
 
+/* CONTENT */
 fetch(kitPath + "content.html")
   .then(res => res.text())
   .then(html => {
@@ -314,6 +259,7 @@ fetch(kitPath + "content.html")
     });
   });
 
+/* IMAGES */
 const box = document.createElement("img");
 box.src = kitPath + "images/box.jpg";
 document.getElementById("boxart").appendChild(box);
@@ -331,44 +277,26 @@ function loadNextImage() {
 }
 loadNextImage();
 
-/* NAV (UNCHANGED) */
+/* NAV */
 document.getElementById("homeBtn").onclick = () => {
   window.location.href = "index.html";
 };
 
 const gradesBtn = document.getElementById("gradesBtn");
 const dropdown = document.getElementById("gradesDropdown");
-const overlay = document.getElementById("gradesOverlay");
 
 gradesBtn.onclick = () => {
-  if (window.innerWidth <= 600) {
-    overlay.classList.add("open");
-    document.body.style.overflow = "hidden";
-  } else {
-    const isOpen = dropdown.classList.toggle("open");
+  const isOpen = dropdown.classList.toggle("open");
 
-    if (isOpen) {
-      const items = dropdown.querySelectorAll(".nav-btn");
-      items.forEach((item, i) => {
-        item.style.animation = "none";
-        item.offsetHeight;
-        item.style.animation = `flyInDropdown 0.35s forwards ${i * 0.08}s`;
-      });
-    }
+  if (isOpen) {
+    const items = dropdown.querySelectorAll(".nav-btn");
+    items.forEach((item, i) => {
+      item.style.animation = "none";
+      item.offsetHeight;
+      item.style.animation = `flyInDropdown 0.35s forwards ${i * 0.08}s`;
+    });
   }
 };
-
-document.getElementById("closeOverlay").onclick = () => {
-  overlay.classList.remove("open");
-  document.body.style.overflow = "";
-};
-
-document.querySelectorAll("[data-grade]").forEach(btn => {
-  btn.onclick = () => {
-    const g = btn.getAttribute("data-grade");
-    window.location.href = `kits.html?grade=${g}`;
-  };
-});
 </script>
 
 </body>
