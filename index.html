@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>RX-78 Portal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
@@ -76,7 +76,6 @@
     scrollbar-color: white black;
     scrollbar-width: thin;
 
-    /* ✅ FADE TOP + BOTTOM ADDED */
     -webkit-mask-image: linear-gradient(
       to bottom,
       transparent 0%,
@@ -131,11 +130,16 @@
 
   .panel:hover { background: rgba(17,17,17,0.8); }
 
+  /* ✅ FIXED TEXT (responsive + no overflow) */
   .panel span {
     display: block;
     transform: skew(20deg);
     text-align: center;
-    font-size: 24px;
+
+    font-size: clamp(16px, 5vw, 24px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .panel::after {
@@ -181,9 +185,10 @@
     z-index: 20;
   }
 
+  /* ✅ WIDER DROPDOWN BUTTONS */
   .dropdown .panel {
-    width: 37.5vw;
-    max-width: 50%;
+    width: 45vw;
+    max-width: 60%;
     margin: 8px 0;
     background: rgba(17,17,17,0.55);
     transform: translateX(-50px);
@@ -195,10 +200,16 @@
     padding: 18px 20px;
   }
 
+  /* ✅ FIX DROPDOWN TEXT */
   .dropdown .panel span {
     transform: none;
     text-align: center;
     width: 100%;
+
+    font-size: clamp(12px, 3.5vw, 16px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .dropdown .panel::after,
@@ -219,7 +230,7 @@
     }
 
     .dropdown .panel span {
-      font-size: 16px;
+      font-size: clamp(12px, 4vw, 16px);
       letter-spacing: 1px;
     }
   }
@@ -318,7 +329,6 @@ setupDropdown('gradesPanel','gradesDropdown');
 document.querySelectorAll('.panel[data-link]').forEach(item=>{
   item.addEventListener('click',()=>{
 
-    // ✅ hide scrollbar instantly
     document.querySelector('.scroll-container').style.overflow = 'hidden';
 
     mainButtons.forEach((btn,i)=>{
@@ -337,7 +347,8 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
     }
   });
 });
-  window.addEventListener("pageshow", (event) => {
+
+window.addEventListener("pageshow", (event) => {
   if (event.persisted) {
     location.reload();
   }
