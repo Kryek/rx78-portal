@@ -227,33 +227,53 @@ if (!file) window.location.href = "index.html";
 
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
-/* SAFE TYPEWRITER */
-function typeText(el, text, speed = 16, cb) {
-  if (!el || !text) return;
+/* SAFE TYPEWRITER (TEXT ONLY, DOES NOT DESTROY HTML) */
+function typeText(el, text, speed = 12, cb) {
+  if (!el || !text) return cb?.();
+
+  let i = 0;
+  const original = text;
 
   el.textContent = "";
-  let i = 0;
 
   function step() {
-    if (i < text.length) {
-      el.textContent += text[i++];
+    if (i < original.length) {
+      el.textContent += original[i++];
       setTimeout(step, speed);
-    } else if (cb) {
-      cb();
+    } else {
+      cb?.();
     }
   }
 
   step();
 }
 
-/* TYPE WHOLE SECTION (NEW) */
-function typeSection(section, speed = 10, done) {
+/* TYPE ONLY TEXT INSIDE ELEMENT (PRESERVES STRUCTURE) */
+function typeInsideSection(section, speed = 8, done) {
   if (!section) return done?.();
 
-  const text = section.textContent.trim();
+  const nodes = Array.from(section.childNodes);
   section.textContent = "";
 
-  typeText(section, text, speed, done);
+  let i = 0;
+
+  function next() {
+    if (i >= nodes.length) return done?.();
+
+    const node = nodes[i++];
+
+    if (node.nodeType === Node.TEXT_NODE) {
+      const span = document.createElement("span");
+      section.appendChild(span);
+
+      typeText(span, node.textContent.trim(), speed, next);
+    } else {
+      section.appendChild(node);
+      setTimeout(next, 10);
+    }
+  }
+
+  next();
 }
 
 /* DATA */
@@ -293,24 +313,22 @@ fetch(kitPath + "content.html")
 
       if (title.toLowerCase().includes("overview")) {
         overviewEl.appendChild(section);
-        queue.push(section);
       } else {
         triviaEl.appendChild(section);
-        queue.push(section);
       }
+
+      queue.push(section);
     });
 
-    /* TYPE SECTIONS ONE BY ONE (SAFE SEQUENCE) */
     let i = 0;
 
     function runNext() {
       if (i >= queue.length) return;
 
-      const section = queue[i++];
-      typeSection(section, 8, runNext);
+      typeInsideSection(queue[i++], 6, runNext);
     }
 
-    setTimeout(runNext, 600);
+    setTimeout(runNext, 500);
   });
 
 /* IMAGES */
@@ -336,6 +354,16 @@ document.getElementById("homeBtn").onclick = () => {
   window.location.href = "index.html";
 };
 
+/* RESTORED GRADE NAVIGATION */
+document.querySelectorAll("[data-grade]").forEach(btn => {
+  btn.onclick = () => {
+    const g = btn.getAttribute("data-grade");
+    if (!g) return;
+    window.location.href = `kits.html?grade=${g}`;
+  };
+});
+
+/* DROPDOWN */
 const gradesBtn = document.getElementById("gradesBtn");
 const dropdown = document.getElementById("gradesDropdown");
 
@@ -352,6 +380,5 @@ gradesBtn.onclick = () => {
   }
 };
 </script>
-
 </body>
 </html>
