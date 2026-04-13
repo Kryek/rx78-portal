@@ -245,9 +245,11 @@ pageTitle.textContent = current.title;
 fetch(`data/${current.file}`)
   .then(res => res.json())
   .then(data => {
-    kits = data.kits;
-    displayKits(kits);
-  });
+    kits = data.kits.sort((a, b) => {
+      const moldCompare = a.mold.localeCompare(b.mold);
+      if (moldCompare !== 0) return moldCompare;
+      return a.variant.localeCompare(b.variant);
+    });
 
 function displayKits(list) {
   kitList.innerHTML = '';
