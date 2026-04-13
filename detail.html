@@ -227,8 +227,8 @@ if (!file) window.location.href = "index.html";
 
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
-/* SAFE TYPEWRITER (NON-BLOCKING) */
-function typeText(el, text, speed = 18) {
+/* SAFE TYPEWRITER */
+function typeText(el, text, speed = 16, cb) {
   if (!el || !text) return;
 
   el.textContent = "";
@@ -236,13 +236,24 @@ function typeText(el, text, speed = 18) {
 
   function step() {
     if (i < text.length) {
-      el.textContent += text[i];
-      i++;
+      el.textContent += text[i++];
       setTimeout(step, speed);
+    } else if (cb) {
+      cb();
     }
   }
 
   step();
+}
+
+/* TYPE WHOLE SECTION (NEW) */
+function typeSection(section, speed = 10, done) {
+  if (!section) return done?.();
+
+  const text = section.textContent.trim();
+  section.textContent = "";
+
+  typeText(section, text, speed, done);
 }
 
 /* DATA */
@@ -252,17 +263,15 @@ fetch(`data/${file}`)
     const kit = data.kits.find(k => k.id === id);
     if (!kit) return window.location.href = "index.html";
 
-    // title
     typeText(document.getElementById("kitTitle"), kit.name, 18);
 
-    // subtitle delayed slightly (safe sequencing)
     setTimeout(() => {
       typeText(
         document.getElementById("kitSubtitle"),
         `${kit.mold} • ${kit.variant} • ${kit.year}`,
         12
       );
-    }, 400);
+    }, 350);
   });
 
 /* CONTENT */
@@ -272,17 +281,36 @@ fetch(kitPath + "content.html")
     const temp = document.createElement("div");
     temp.innerHTML = html;
 
-    const sections = temp.querySelectorAll(".section");
+    const sections = Array.from(temp.querySelectorAll(".section"));
+
+    const overviewEl = document.getElementById("overview");
+    const triviaEl = document.getElementById("trivia");
+
+    const queue = [];
 
     sections.forEach(section => {
-      const title = section.querySelector("h2")?.textContent;
+      const title = section.querySelector("h2")?.textContent || "";
 
-      if (title?.toLowerCase().includes("overview")) {
-        document.getElementById("overview").appendChild(section);
+      if (title.toLowerCase().includes("overview")) {
+        overviewEl.appendChild(section);
+        queue.push(section);
       } else {
-        document.getElementById("trivia").appendChild(section);
+        triviaEl.appendChild(section);
+        queue.push(section);
       }
     });
+
+    /* TYPE SECTIONS ONE BY ONE (SAFE SEQUENCE) */
+    let i = 0;
+
+    function runNext() {
+      if (i >= queue.length) return;
+
+      const section = queue[i++];
+      typeSection(section, 8, runNext);
+    }
+
+    setTimeout(runNext, 600);
   });
 
 /* IMAGES */
