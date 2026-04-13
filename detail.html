@@ -70,20 +70,21 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 60px; /* define real height */
+    height: 60px;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start; /* ✅ changed */
+    gap: 10px; /* ✅ spacing between buttons */
     padding: 0 10px;
     background: rgba(0,0,0,0.9);
   }
 
   body {
-    padding-top: 60px; /* ✅ THIS is the key fix */
+    padding-top: 60px;
   }
 
   .app {
-    padding-top: 20px; /* back to normal spacing */
+    padding-top: 20px;
   }
 
   .nav-btn {
