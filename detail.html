@@ -20,7 +20,7 @@
       margin: auto;
     }
 
-    /* ✅ DESKTOP LAYOUT */
+    /* ✅ NEW DESKTOP LAYOUT */
     .layout {
       display: block;
     }
@@ -32,23 +32,12 @@
         gap: 30px;
         align-items: start;
       }
-
-      #overview,
-      #trivia {
-        grid-column: 1;
-      }
-
-      #boxart,
-      #gallery {
-        grid-column: 2;
-      }
-
-      #boxart img {
-        margin-bottom: 20px;
-      }
     }
 
-    /* ✅ NAV */
+    .info {}
+    .media {}
+
+    /* NAV */
     .nav {
       position: fixed;
       top: 12px;
@@ -75,16 +64,14 @@
       text-align: center;
     }
 
-    /* ✅ DROPDOWN FIX */
+    /* DROPDOWN */
     .dropdown {
       display: flex;
       flex-direction: column;
       gap: 6px;
-
       height: 0;
       opacity: 0;
       pointer-events: none;
-
       overflow: visible;
       padding-bottom: 8px;
     }
@@ -113,7 +100,7 @@
       }
     }
 
-    /* ✅ MOBILE NAV */
+    /* MOBILE NAV */
     @media (max-width: 600px) {
       .nav {
         position: fixed;
@@ -219,21 +206,25 @@
 
 <div class="app">
 
-  <div class="title" id="kitTitle"></div>
-  <div class="subtitle" id="kitSubtitle"></div>
-
-  <!-- ✅ NEW LAYOUT WRAPPER -->
+  <!-- ✅ NEW STRUCTURE -->
   <div class="layout">
 
-    <div id="overview"></div>
+    <!-- LEFT SIDE -->
+    <div class="info">
+      <div class="title" id="kitTitle"></div>
+      <div class="subtitle" id="kitSubtitle"></div>
 
-    <div id="boxart"></div>
-    <div class="gallery" id="gallery"></div>
+      <div id="overview"></div>
+      <div id="trivia"></div>
+    </div>
 
-    <div id="trivia"></div>
+    <!-- RIGHT SIDE -->
+    <div class="media">
+      <div id="boxart"></div>
+      <div class="gallery" id="gallery"></div>
+    </div>
 
   </div>
-
 </div>
 
 <script>
