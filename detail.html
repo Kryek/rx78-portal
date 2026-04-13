@@ -20,7 +20,7 @@
       margin: auto;
     }
 
-    /* ✅ NAV */
+    /* NAV */
     .nav {
       position: fixed;
       top: 12px;
@@ -94,43 +94,35 @@
       }
     }
 
-    /* ====== LAYOUT SPLIT ====== */
+    /* LAYOUT SPLIT */
     .layout {
-  display: flex;
-  gap: 30px;
-  margin-top: 80px;
+      display: flex;
+      gap: 30px;
+      margin-top: 80px;
+      height: calc(100vh - 100px);
+      overflow: hidden;
+    }
 
-  height: calc(100vh - 100px); /* gives scroll space */
-  overflow: hidden;
-}
+    .text-side {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 10px;
+      scrollbar-width: thin;
+    }
 
-/* TEXT SIDE */
-.text-side {
-  flex: 1;
-  overflow-y: auto;
-  padding-right: 10px;
+    .image-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      padding-right: 10px;
+      scrollbar-width: thin;
 
-  /* keeps it feeling clean */
-  scrollbar-width: thin;
-}
-
-/* IMAGE SIDE */
-.image-side {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  overflow-y: auto;
-  padding-right: 10px;
-
-  scrollbar-width: thin;
-
-  /* keeps your entrance animation */
-  animation: imageRise 0.8s ease forwards;
-  opacity: 0;
-  transform: translateY(40px);
-}
+      animation: imageRise 0.8s ease forwards;
+      opacity: 0;
+      transform: translateY(40px);
+    }
 
     @keyframes imageRise {
       to {
@@ -139,18 +131,7 @@
       }
     }
 
-    @keyframes textTypeIn {
-      0% {
-        opacity: 0;
-        clip-path: inset(0 100% 0 0);
-      }
-      100% {
-        opacity: 1;
-        clip-path: inset(0 0 0 0);
-      }
-    }
-
-    /* TEXT SECTIONS */
+    /* TEXT */
     .title { font-size: 24px; margin-bottom: 10px; }
     .subtitle { font-size: 14px; opacity: 0.7; margin-bottom: 20px; }
 
@@ -166,20 +147,19 @@
       border: 2px solid white;
     }
 
-    /* MOBILE BACK TO STACK */
-   @media (max-width: 600px) {
-  .layout {
-    flex-direction: column;
-    height: auto;
-    overflow: visible;
-  }
+    /* MOBILE */
+    @media (max-width: 600px) {
+      .layout {
+        flex-direction: column;
+        height: auto;
+        overflow: visible;
+      }
 
-  .text-side,
-  .image-side {
-    overflow: visible;
-  }
-}
-
+      .text-side,
+      .image-side {
+        overflow: visible;
+      }
+    }
   </style>
 </head>
 
@@ -205,7 +185,7 @@
 
   <div class="layout">
 
-    <!-- TEXT SIDE -->
+    <!-- TEXT -->
     <div class="text-side">
       <div class="title" id="kitTitle"></div>
       <div class="subtitle" id="kitSubtitle"></div>
@@ -214,7 +194,7 @@
       <div id="trivia"></div>
     </div>
 
-    <!-- IMAGE SIDE -->
+    <!-- IMAGE -->
     <div class="image-side">
       <div id="boxart"></div>
       <div id="gallery"></div>
@@ -247,6 +227,24 @@ if (!file) window.location.href = "index.html";
 
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
+/* SAFE TYPEWRITER (NON-BLOCKING) */
+function typeText(el, text, speed = 18) {
+  if (!el || !text) return;
+
+  el.textContent = "";
+  let i = 0;
+
+  function step() {
+    if (i < text.length) {
+      el.textContent += text[i];
+      i++;
+      setTimeout(step, speed);
+    }
+  }
+
+  step();
+}
+
 /* DATA */
 fetch(`data/${file}`)
   .then(res => res.json())
@@ -254,9 +252,17 @@ fetch(`data/${file}`)
     const kit = data.kits.find(k => k.id === id);
     if (!kit) return window.location.href = "index.html";
 
-    document.getElementById("kitTitle").textContent = kit.name;
-    document.getElementById("kitSubtitle").textContent =
-      `${kit.mold} • ${kit.variant} • ${kit.year}`;
+    // title
+    typeText(document.getElementById("kitTitle"), kit.name, 18);
+
+    // subtitle delayed slightly (safe sequencing)
+    setTimeout(() => {
+      typeText(
+        document.getElementById("kitSubtitle"),
+        `${kit.mold} • ${kit.variant} • ${kit.year}`,
+        12
+      );
+    }, 400);
   });
 
 /* CONTENT */
