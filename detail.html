@@ -20,6 +20,34 @@
       margin: auto;
     }
 
+    /* ✅ DESKTOP LAYOUT */
+    .layout {
+      display: block;
+    }
+
+    @media (min-width: 900px) {
+      .layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        align-items: start;
+      }
+
+      #overview,
+      #trivia {
+        grid-column: 1;
+      }
+
+      #boxart,
+      #gallery {
+        grid-column: 2;
+      }
+
+      #boxart img {
+        margin-bottom: 20px;
+      }
+    }
+
     /* ✅ NAV */
     .nav {
       position: fixed;
@@ -47,30 +75,29 @@
       text-align: center;
     }
 
-    /* ✅ DROPDOWN FIX (NO FLASH / NO DOUBLE RENDER) */
+    /* ✅ DROPDOWN FIX */
     .dropdown {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
 
-  height: 0;
-  opacity: 0;
-  pointer-events: none;
+      height: 0;
+      opacity: 0;
+      pointer-events: none;
 
-  overflow: visible;
-  padding-bottom: 8px; /* ✅ fixes bottom-left clipping from skew */
-}
+      overflow: visible;
+      padding-bottom: 8px;
+    }
 
-.dropdown.open {
-  height: auto;
-  opacity: 1;
-  pointer-events: auto;
-}
-    /* ✅ IMPORTANT: keep items hidden until animated in */
+    .dropdown.open {
+      height: auto;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     .dropdown .nav-btn {
       width: 70px;
       padding: 6px 10px;
-
       transform: skew(-20deg) translateX(-25px);
       opacity: 0;
     }
@@ -195,12 +222,17 @@
   <div class="title" id="kitTitle"></div>
   <div class="subtitle" id="kitSubtitle"></div>
 
-  <div id="overview"></div>
+  <!-- ✅ NEW LAYOUT WRAPPER -->
+  <div class="layout">
 
-  <div id="boxart"></div>
-  <div class="gallery" id="gallery"></div>
+    <div id="overview"></div>
 
-  <div id="trivia"></div>
+    <div id="boxart"></div>
+    <div class="gallery" id="gallery"></div>
+
+    <div id="trivia"></div>
+
+  </div>
 
 </div>
 
@@ -297,7 +329,7 @@ gradesBtn.onclick = () => {
       const items = dropdown.querySelectorAll(".nav-btn");
       items.forEach((item, i) => {
         item.style.animation = "none";
-        item.offsetHeight; // reset
+        item.offsetHeight;
         item.style.animation = `flyInDropdown 0.35s forwards ${i * 0.08}s`;
       });
     }
