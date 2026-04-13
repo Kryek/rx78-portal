@@ -248,16 +248,37 @@ fetch(`data/${file}`)
   .then(res => res.json())
   .then(data => {
     const kit = data.kits.find(k => k.id === id);
+    if (!kit) return window.location.href = "index.html";
 
     const title = document.getElementById("kitTitle");
     const subtitle = document.getElementById("kitSubtitle");
 
-    const t = kit.name;
-    const s = `${kit.mold} • ${kit.variant} • ${kit.year}`;
+    const titleText = kit.name;
+    const subtitleText = `${kit.mold} • ${kit.variant} • ${kit.year}`;
 
-    typeText(title, t, 18, () => {
+    // ✅ HARD RESET VISIBILITY (fixes "invisible forever" bug)
+    title.style.opacity = "1";
+    subtitle.style.opacity = "1";
+
+    title.textContent = "";
+    subtitle.textContent = "";
+
+    function typeText(el, text, speed = 14, cb) {
+      let i = 0;
+
+      function step() {
+        if (i < text.length) {
+          el.textContent += text[i++];
+          setTimeout(step, speed);
+        } else cb?.();
+      }
+
+      step();
+    }
+
+    typeText(title, titleText, 18, () => {
       setTimeout(() => {
-        typeText(subtitle, s, 12);
+        typeText(subtitle, subtitleText, 12);
       }, 120);
     });
   });
