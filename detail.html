@@ -47,23 +47,44 @@
       text-align: center;
     }
 
-    /* ✅ FIXED DROPDOWN */
+    /* ✅ FIXED DROPDOWN (NO CLIP + SMOOTH) */
     .dropdown {
       display: flex;
       flex-direction: column;
       gap: 6px;
 
       max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
+      overflow: visible; /* ✅ FIX CLIPPING */
+
+      opacity: 0;
+      pointer-events: none;
+
+      transition: max-height 0.3s ease, opacity 0.2s ease;
     }
 
     .dropdown.open {
       max-height: 500px;
+      opacity: 1;
+      pointer-events: auto;
     }
 
+    /* ✅ DROPDOWN BUTTON ANIMATION BASE */
     .dropdown .nav-btn {
       width: 90px;
+      transform: skew(-20deg) translateX(-30px);
+      opacity: 0;
+    }
+
+    /* ✅ FLY IN ANIMATION */
+    @keyframes flyInDropdown {
+      from {
+        transform: skew(-20deg) translateX(-40px);
+        opacity: 0;
+      }
+      to {
+        transform: skew(-20deg) translateX(0);
+        opacity: 1;
+      }
     }
 
     /* ✅ MOBILE NAV */
@@ -175,13 +196,11 @@
   <div class="title" id="kitTitle"></div>
   <div class="subtitle" id="kitSubtitle"></div>
 
-  <!-- ✅ OVERVIEW GOES HERE -->
   <div id="overview"></div>
 
   <div id="boxart"></div>
   <div class="gallery" id="gallery"></div>
 
-  <!-- ✅ TRIVIA GOES HERE -->
   <div id="trivia"></div>
 
 </div>
@@ -220,7 +239,7 @@ fetch(`data/${file}`)
       `${kit.mold} • ${kit.variant} • ${kit.year}`;
   });
 
-// ✅ SPLIT CONTENT
+// content split
 fetch(kitPath + "content.html")
   .then(res => res.text())
   .then(html => {
@@ -234,8 +253,6 @@ fetch(kitPath + "content.html")
 
       if (title?.toLowerCase().includes("overview")) {
         document.getElementById("overview").appendChild(section);
-      } else if (title?.toLowerCase().includes("trivia")) {
-        document.getElementById("trivia").appendChild(section);
       } else {
         document.getElementById("trivia").appendChild(section);
       }
@@ -273,7 +290,16 @@ gradesBtn.onclick = () => {
   if (window.innerWidth <= 600) {
     overlay.classList.add("open");
   } else {
-    dropdown.classList.toggle("open");
+    const isOpen = dropdown.classList.toggle("open");
+
+    if (isOpen) {
+      const items = dropdown.querySelectorAll(".nav-btn");
+      items.forEach((item, i) => {
+        item.style.animation = "none";
+        item.offsetHeight;
+        item.style.animation = `flyInDropdown 0.35s forwards ${i * 0.08}s`;
+      });
+    }
   }
 };
 
