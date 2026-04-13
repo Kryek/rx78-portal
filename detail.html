@@ -20,7 +20,7 @@
       margin: auto;
     }
 
-    /* ✅ NAV (DESKTOP DEFAULT) */
+    /* ✅ NAV */
     .nav {
       position: fixed;
       top: 12px;
@@ -38,9 +38,6 @@
       transform: skew(-20deg);
       cursor: pointer;
       width: 80px;
-      opacity: 0;
-      transform: skew(-20deg) translateX(-50px);
-      animation: fadeIn 0.4s forwards;
     }
 
     .nav-btn span {
@@ -50,11 +47,12 @@
       text-align: center;
     }
 
-    /* ✅ DROPDOWN (DESKTOP ANIMATED) */
+    /* ✅ FIXED DROPDOWN */
     .dropdown {
       display: flex;
       flex-direction: column;
       gap: 6px;
+
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease;
@@ -66,24 +64,9 @@
 
     .dropdown .nav-btn {
       width: 90px;
-      opacity: 0;
-      transform: translateX(-30px);
     }
 
-    .dropdown.open .nav-btn {
-      animation: dropdownIn 0.4s forwards;
-    }
-
-    .dropdown.open .nav-btn:nth-child(1){ animation-delay: 0.05s; }
-    .dropdown.open .nav-btn:nth-child(2){ animation-delay: 0.1s; }
-    .dropdown.open .nav-btn:nth-child(3){ animation-delay: 0.15s; }
-    .dropdown.open .nav-btn:nth-child(4){ animation-delay: 0.2s; }
-    .dropdown.open .nav-btn:nth-child(5){ animation-delay: 0.25s; }
-    .dropdown.open .nav-btn:nth-child(6){ animation-delay: 0.3s; }
-    .dropdown.open .nav-btn:nth-child(7){ animation-delay: 0.35s; }
-    .dropdown.open .nav-btn:nth-child(8){ animation-delay: 0.4s; }
-
-    /* ✅ MOBILE NAV BAR */
+    /* ✅ MOBILE NAV */
     @media (max-width: 600px) {
       .nav {
         position: fixed;
@@ -99,17 +82,10 @@
         background: rgba(0,0,0,0.9);
       }
 
-      body {
-        padding-top: 60px;
-      }
+      body { padding-top: 60px; }
+      .app { padding-top: 20px; }
 
-      .app {
-        padding-top: 20px;
-      }
-
-      .nav-btn {
-        width: 80px;
-      }
+      .nav-btn { width: 80px; }
     }
 
     /* ✅ OVERLAY */
@@ -124,15 +100,11 @@
       z-index: 2000;
     }
 
-    .overlay.open {
-      display: flex;
-    }
+    .overlay.open { display: flex; }
 
     .overlay .nav-btn {
       margin: 10px 0;
       width: 160px;
-      opacity: 1;
-      transform: skew(-20deg);
     }
 
     .close-btn {
@@ -143,16 +115,8 @@
       cursor: pointer;
     }
 
-    .title {
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-
-    .subtitle {
-      font-size: 14px;
-      opacity: 0.7;
-      margin-bottom: 20px;
-    }
+    .title { font-size: 24px; margin-bottom: 10px; }
+    .subtitle { font-size: 14px; opacity: 0.7; margin-bottom: 20px; }
 
     img {
       width: 100%;
@@ -160,13 +124,7 @@
       border: 2px solid white;
     }
 
-    .gallery img {
-      margin-top: 10px;
-    }
-
-    .section {
-      margin-top: 25px;
-    }
+    .section { margin-top: 25px; }
 
     h2 {
       font-size: 16px;
@@ -175,17 +133,7 @@
       margin-bottom: 10px;
     }
 
-    ul {
-      padding-left: 18px;
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; transform: skew(-20deg) translateX(0); }
-    }
-
-    @keyframes dropdownIn {
-      to { opacity: 1; transform: translateX(0); }
-    }
+    ul { padding-left: 18px; }
 
   </style>
 </head>
@@ -227,11 +175,14 @@
   <div class="title" id="kitTitle"></div>
   <div class="subtitle" id="kitSubtitle"></div>
 
-  <!-- ✅ MOVED CONTENT ABOVE -->
-  <div id="kitContent"></div>
+  <!-- ✅ OVERVIEW GOES HERE -->
+  <div id="overview"></div>
 
   <div id="boxart"></div>
   <div class="gallery" id="gallery"></div>
+
+  <!-- ✅ TRIVIA GOES HERE -->
+  <div id="trivia"></div>
 
 </div>
 
@@ -240,9 +191,7 @@ const params = new URLSearchParams(window.location.search);
 const grade = params.get("grade");
 const id = params.get("id");
 
-if (!grade || !id) {
-  window.location.href = "index.html";
-}
+if (!grade || !id) window.location.href = "index.html";
 
 const gradeMap = {
   HG: "hg-kits.json",
@@ -271,18 +220,32 @@ fetch(`data/${file}`)
       `${kit.mold} • ${kit.variant} • ${kit.year}`;
   });
 
+// ✅ SPLIT CONTENT
 fetch(kitPath + "content.html")
   .then(res => res.text())
   .then(html => {
-    document.getElementById("kitContent").innerHTML = html;
+    const temp = document.createElement("div");
+    temp.innerHTML = html;
+
+    const sections = temp.querySelectorAll(".section");
+
+    sections.forEach(section => {
+      const title = section.querySelector("h2")?.textContent;
+
+      if (title?.toLowerCase().includes("overview")) {
+        document.getElementById("overview").appendChild(section);
+      } else if (title?.toLowerCase().includes("trivia")) {
+        document.getElementById("trivia").appendChild(section);
+      } else {
+        document.getElementById("trivia").appendChild(section);
+      }
+    });
   });
 
-const boxartDiv = document.getElementById("boxart");
-const galleryDiv = document.getElementById("gallery");
-
+// images
 const box = document.createElement("img");
 box.src = kitPath + "images/box.jpg";
-boxartDiv.appendChild(box);
+document.getElementById("boxart").appendChild(box);
 
 let index = 1;
 function loadNextImage() {
@@ -290,14 +253,14 @@ function loadNextImage() {
   img.src = kitPath + "images/" + index + ".jpg";
 
   img.onload = () => {
-    galleryDiv.appendChild(img);
+    document.getElementById("gallery").appendChild(img);
     index++;
     loadNextImage();
   };
 }
 loadNextImage();
 
-// NAV LOGIC
+// NAV
 document.getElementById("homeBtn").onclick = () => {
   window.location.href = "index.html";
 };
