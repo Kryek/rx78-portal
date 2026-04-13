@@ -13,7 +13,9 @@
       color: white;
       font-family: 'Orbitron', sans-serif;
       height: 100%;
-      overflow: hidden;
+
+      /* ✅ FIX: allow scrolling globally again */
+      overflow: auto;
     }
 
     .app {
@@ -56,7 +58,7 @@
       text-align: center;
     }
 
-    /* DROPDOWN */
+    /* DROPDOWN (desktop stays unchanged) */
     .dropdown {
       display: flex;
       flex-direction: column;
@@ -93,7 +95,7 @@
       align-items: center;
       text-align: center;
       margin-top: 20px;
-  margin-bottom: 10px;
+      margin-bottom: 10px;
     }
 
     .title {
@@ -110,10 +112,10 @@
     /* LAYOUT */
     .layout {
       display: flex;
-  gap: 30px;
-  margin-top: 20px; /* ✅ adds clean separation from header */
-  height: calc(100vh - 140px);
-  overflow: hidden;
+      gap: 30px;
+      margin-top: 20px;
+      height: calc(100vh - 140px);
+      overflow: hidden;
     }
 
     .text-side {
@@ -140,7 +142,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* CONTENT ANIMATION FIX */
     .section {
       opacity: 0;
       transform: translateY(25px);
@@ -159,23 +160,107 @@
       border: 2px solid white;
     }
 
+    /* ===================== */
+    /* ✅ MOBILE FIX SYSTEM */
+    /* ===================== */
+
     @media (max-width: 600px) {
+
+      /* allow scrolling again */
+      html, body {
+        overflow: auto;
+      }
+
       .layout {
         flex-direction: column;
         height: auto;
         overflow: visible;
       }
+
+      .text-side,
+      .image-side {
+        overflow: visible;
+      }
+
+      /* top bar nav */
+      .nav {
+        flex-direction: row;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 55px;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0 10px;
+        background: rgba(0,0,0,0.9);
+      }
+
+      .nav-btn {
+        width: auto;
+        padding: 6px 14px;
+      }
     }
+
+    /* ===================== */
+    /* MOBILE OVERLAY */
+    /* ===================== */
+
+    .mobile-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .mobile-overlay.open {
+      display: flex;
+    }
+
+    .mobile-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
   </style>
 </head>
 
 <body>
 
+<!-- NAV -->
 <div class="nav">
   <div class="nav-btn" id="homeBtn"><span>HOME</span></div>
   <div class="nav-btn" id="gradesBtn"><span>GRADES</span></div>
 
   <div class="dropdown" id="gradesDropdown">
+    <div class="nav-btn" data-grade="HG"><span>HG</span></div>
+    <div class="nav-btn" data-grade="MG"><span>MG</span></div>
+    <div class="nav-btn" data-grade="RG"><span>RG</span></div>
+    <div class="nav-btn" data-grade="PG"><span>PG</span></div>
+    <div class="nav-btn" data-grade="SD"><span>SD</span></div>
+    <div class="nav-btn" data-grade="MEGASIZE"><span>MEGA</span></div>
+    <div class="nav-btn"><span>MISC</span></div>
+    <div class="nav-btn"><span>CUSTOM</span></div>
+  </div>
+</div>
+
+<!-- ✅ MOBILE OVERLAY -->
+<div class="mobile-overlay" id="mobileOverlay">
+  <div class="close-btn" id="closeOverlay">✕</div>
+
+  <div class="mobile-list">
     <div class="nav-btn" data-grade="HG"><span>HG</span></div>
     <div class="nav-btn" data-grade="MG"><span>MG</span></div>
     <div class="nav-btn" data-grade="RG"><span>RG</span></div>
@@ -231,119 +316,14 @@ const gradeMap = {
 const file = gradeMap[grade];
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
-/* TYPEWRITER */
-function typeText(el, text, speed = 15, cb) {
-  el.textContent = "";
-  let i = 0;
-
-  (function step() {
-    if (i < text.length) {
-      el.textContent += text[i++];
-      setTimeout(step, speed);
-    } else cb?.();
-  })();
-}
-
-/* HEADER ANIM RESTORED */
-fetch(`data/${file}`)
-  .then(res => res.json())
-  .then(data => {
-    const kit = data.kits.find(k => k.id === id);
-    if (!kit) return window.location.href = "index.html";
-
-    const title = document.getElementById("kitTitle");
-    const subtitle = document.getElementById("kitSubtitle");
-
-    const titleText = kit.name;
-    const subtitleText = `${kit.mold} • ${kit.variant} • ${kit.year}`;
-
-    // ✅ HARD RESET VISIBILITY (fixes "invisible forever" bug)
-    title.style.opacity = "1";
-    subtitle.style.opacity = "1";
-
-    title.textContent = "";
-    subtitle.textContent = "";
-
-    function typeText(el, text, speed = 14, cb) {
-      let i = 0;
-
-      function step() {
-        if (i < text.length) {
-          el.textContent += text[i++];
-          setTimeout(step, speed);
-        } else cb?.();
-      }
-
-      step();
-    }
-
-    typeText(title, titleText, 18, () => {
-      setTimeout(() => {
-        typeText(subtitle, subtitleText, 12);
-      }, 120);
-    });
-  });
-
-/* CONTENT ANIM RESTORED */
-fetch(kitPath + "content.html")
-  .then(res => res.text())
-  .then(html => {
-    const temp = document.createElement("div");
-    temp.innerHTML = html;
-
-    const sections = temp.querySelectorAll(".section");
-
-    sections.forEach((section, i) => {
-      const title = section.querySelector("h2")?.textContent || "";
-
-      if (title.toLowerCase().includes("overview")) {
-        document.getElementById("overview").appendChild(section);
-      } else {
-        document.getElementById("trivia").appendChild(section);
-      }
-
-      setTimeout(() => {
-        section.style.opacity = "1";
-        section.style.transform = "translateY(0)";
-      }, 200 + i * 120);
-    });
-  });
-
-/* IMAGES */
-const box = document.createElement("img");
-box.src = kitPath + "images/box.jpg";
-document.getElementById("boxart").appendChild(box);
-
-let index = 1;
-function loadNextImage() {
-  const img = new Image();
-  img.src = kitPath + "images/" + index + ".jpg";
-
-  img.onload = () => {
-    document.getElementById("gallery").appendChild(img);
-    index++;
-    loadNextImage();
-  };
-}
-loadNextImage();
-
 /* NAV */
 document.getElementById("homeBtn").onclick = () => {
   window.location.href = "index.html";
 };
 
-document.querySelectorAll("[data-grade]").forEach(btn => {
-  btn.onclick = () => {
-    const g = btn.getAttribute("data-grade");
-    if (!g) return;
-    window.location.href = `kits.html?grade=${g}`;
-  };
-});
-
-const gradesBtn = document.getElementById("gradesBtn");
+/* DESKTOP DROPDOWN */
 const dropdown = document.getElementById("gradesDropdown");
-
-gradesBtn.onclick = () => {
+document.getElementById("gradesBtn").onclick = () => {
   const isOpen = dropdown.classList.toggle("open");
 
   if (isOpen) {
@@ -355,6 +335,31 @@ gradesBtn.onclick = () => {
     });
   }
 };
+
+/* MOBILE OVERLAY */
+const mobileOverlay = document.getElementById("mobileOverlay");
+const closeOverlay = document.getElementById("closeOverlay");
+
+document.getElementById("gradesBtn").addEventListener("click", () => {
+  if (window.innerWidth <= 600) {
+    mobileOverlay.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+});
+
+closeOverlay.onclick = () => {
+  mobileOverlay.classList.remove("open");
+  document.body.style.overflow = "auto";
+};
+
+document.querySelectorAll("[data-grade]").forEach(btn => {
+  btn.onclick = () => {
+    const g = btn.getAttribute("data-grade");
+    if (!g) return;
+    window.location.href = `kits.html?grade=${g}`;
+  };
+});
+
 </script>
 
 </body>
