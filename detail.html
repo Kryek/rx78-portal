@@ -96,28 +96,41 @@
 
     /* ====== LAYOUT SPLIT ====== */
     .layout {
-      display: flex;
-      gap: 30px;
-      margin-top: 80px;
-    }
+  display: flex;
+  gap: 30px;
+  margin-top: 80px;
 
-    .text-side {
-      flex: 1;
-      animation: textTypeIn 1.2s steps(40, end) forwards;
-      white-space: pre-line;
-      opacity: 0;
-    }
+  height: calc(100vh - 100px); /* gives scroll space */
+  overflow: hidden;
+}
 
-    .image-side {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+/* TEXT SIDE */
+.text-side {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 10px;
 
-      animation: imageRise 0.8s ease forwards;
-      opacity: 0;
-      transform: translateY(40px);
-    }
+  /* keeps it feeling clean */
+  scrollbar-width: thin;
+}
+
+/* IMAGE SIDE */
+.image-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  overflow-y: auto;
+  padding-right: 10px;
+
+  scrollbar-width: thin;
+
+  /* keeps your entrance animation */
+  animation: imageRise 0.8s ease forwards;
+  opacity: 0;
+  transform: translateY(40px);
+}
 
     @keyframes imageRise {
       to {
@@ -154,11 +167,18 @@
     }
 
     /* MOBILE BACK TO STACK */
-    @media (max-width: 600px) {
-      .layout {
-        flex-direction: column;
-      }
-    }
+   @media (max-width: 600px) {
+  .layout {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+
+  .text-side,
+  .image-side {
+    overflow: visible;
+  }
+}
 
   </style>
 </head>
