@@ -8,11 +8,15 @@
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
     html, body {
-      margin: 0;
-      background: black;
-      color: white;
-      font-family: 'Orbitron', sans-serif;
-    }
+  height: 100%;
+  overflow: hidden; /* ✅ kills page scroll */
+}
+
+/* allow only inner panes to scroll */
+.layout {
+  height: 100vh;
+  overflow: hidden;
+}
 
     .app {
       padding: 20px;
@@ -227,24 +231,23 @@ if (!file) window.location.href = "index.html";
 
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
-/* KEEP YOUR WORKING TYPEWRITER (UNCHANGED LOGIC) */
-function typeText(el, text, speed = 12) {
-  if (!el || !text) return;
+/* TYPEWRITER (title/subtitle) */
+function typeText(el, text, speed = 12, cb) {
+  if (!el || !text) return cb?.();
+
+  el.textContent = "";
+  el.style.opacity = "1";
 
   let i = 0;
-  el.textContent = "";
-
-  function step() {
+  (function step() {
     if (i < text.length) {
       el.textContent += text[i++];
       setTimeout(step, speed);
-    }
-  }
-
-  step();
+    } else cb?.();
+  })();
 }
 
-/* SIMPLE FLY-IN */
+/* FLY IN */
 function flyIn(el, delay = 0) {
   if (!el) return;
 
@@ -268,18 +271,21 @@ fetch(`data/${file}`)
     const title = document.getElementById("kitTitle");
     const subtitle = document.getElementById("kitSubtitle");
 
-    title.textContent = kit.name;
-    subtitle.textContent = `${kit.mold} • ${kit.variant} • ${kit.year}`;
+    const titleText = kit.name;
+    const subtitleText = `${kit.mold} • ${kit.variant} • ${kit.year}`;
 
-    /* KEEP YOUR WORKING TITLE ANIM */
-    typeText(title, kit.name, 18);
+    /* 🔥 IMPORTANT: hide subtitle until animation starts */
+    subtitle.style.opacity = "0";
 
-    setTimeout(() => {
-      typeText(subtitle, `${kit.mold} • ${kit.variant} • ${kit.year}`, 12);
-    }, 300);
+    typeText(title, titleText, 18, () => {
+      setTimeout(() => {
+        subtitle.style.opacity = "1";
+        typeText(subtitle, subtitleText, 12);
+      }, 150);
+    });
   });
 
-/* CONTENT (ONLY FLY-IN NOW) */
+/* CONTENT */
 fetch(kitPath + "content.html")
   .then(res => res.text())
   .then(html => {
@@ -307,7 +313,7 @@ fetch(kitPath + "content.html")
       setTimeout(() => {
         section.style.opacity = "1";
         section.style.transform = "translateY(0)";
-      }, 200 + i * 120);
+      }, 250 + i * 120);
     });
   });
 
