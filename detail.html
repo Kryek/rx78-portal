@@ -133,13 +133,32 @@ fetch(kitPath + "content.html")
 const boxartDiv = document.getElementById("boxart");
 const galleryDiv = document.getElementById("gallery");
 
-// You control naming
-const images = [
-  "box.jpg",
-  "1.jpg",
-  "2.jpg",
-  "3.jpg"
-];
+// ✅ LOAD BOXART (always exists)
+const box = document.createElement("img");
+box.src = kitPath + "images/box.jpg";
+boxartDiv.appendChild(box);
+
+// ✅ AUTO-LOAD NUMBERED GALLERY IMAGES
+let index = 1;
+
+function loadNextImage() {
+  const img = new Image();
+  img.src = kitPath + "images/" + index + ".jpg";
+
+  img.onload = () => {
+    galleryDiv.appendChild(img);
+    index++;
+    loadNextImage(); // try next image
+  };
+
+  img.onerror = () => {
+    // ❌ Stop when an image doesn't exist
+    return;
+  };
+}
+
+// start loading
+loadNextImage();
 
 // Boxart
 const box = document.createElement("img");
