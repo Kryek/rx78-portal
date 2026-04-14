@@ -453,7 +453,42 @@ document.querySelectorAll("[data-grade]").forEach(btn => {
     const g = btn.getAttribute("data-grade");
     window.location.href = `kits.html?grade=${g}`;
   };
-});
+}
+/* QR DETECTION + ANIMATION */
+const fromQR = new URLSearchParams(window.location.search).get("src") === "qr";
+
+if (fromQR) {
+  const overlay = document.getElementById("qrEntry");
+  const text = document.getElementById("qrText");
+
+  overlay.style.display = "flex";
+
+  const sequence = [
+    "QR AUTHENTICATED",
+    "ACCESS GRANTED",
+    "ENTRY LOADED"
+  ];
+
+  let i = 0;
+
+  const interval = setInterval(() => {
+    i++;
+
+    if (i < sequence.length) {
+      text.textContent = sequence[i];
+    } else {
+      clearInterval(interval);
+
+      text.style.opacity = "0";
+
+      overlay.style.transition = "clip-path 1.2s ease";
+      overlay.style.clipPath = "circle(0% at 50% 50%)";
+
+      setTimeout(() => overlay.remove(), 1300);
+    }
+  }, 800);
+}
+                                                 );
 </script>
 
 </body>
