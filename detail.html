@@ -199,6 +199,16 @@
   from { transform: rotate(360deg); }
   to { transform: rotate(0deg); }
 }
+.qr-text::after {
+  content: "_";
+  margin-left: 4px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
 
     /* ✅ DESKTOP FIXED */
     @media (min-width: 768px) {
@@ -465,7 +475,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const overlay = document.getElementById("qrEntry");
   const text = document.getElementById("qrText");
 
-  if (!overlay || !text) return; // 🔥 safety
+  if (!overlay || !text) return;
 
   overlay.style.display = "flex";
 
@@ -475,24 +485,59 @@ document.addEventListener("DOMContentLoaded", () => {
     "ENTRY LOADED"
   ];
 
-  let i = 0;
+  let lineIndex = 0;
 
-  const interval = setInterval(() => {
-    i++;
+  function typeLine(line, callback) {
+    let i = 0;
+    text.textContent = "";
 
-    if (i < sequence.length) {
-      text.textContent = sequence[i];
+    const typing = setInterval(() => {
+      text.textContent += line[i];
+      i++;
+
+      if (i >= line.length) {
+        clearInterval(typing);
+
+        setTimeout(() => deleteLine(callback), 500); // pause before delete
+      }
+    }, 40); // typing speed
+  }
+
+  function deleteLine(callback) {
+    let current = text.textContent;
+
+    const deleting = setInterval(() => {
+      current = current.slice(0, -1);
+      text.textContent = current;
+
+      if (current.length === 0) {
+        clearInterval(deleting);
+        callback();
+      }
+    }, 20); // delete speed
+  }
+
+  function nextLine() {
+    lineIndex++;
+
+    if (lineIndex < sequence.length) {
+      typeLine(sequence[lineIndex], nextLine);
     } else {
-      clearInterval(interval);
-
-      text.style.opacity = "0";
-
-      overlay.style.transition = "clip-path 1.2s ease";
-      overlay.style.clipPath = "circle(0% at 50% 50%)";
-
-      setTimeout(() => overlay.remove(), 1300);
+      finishSequence();
     }
-  }, 800);
+  }
+
+  function finishSequence() {
+    text.style.opacity = "0";
+
+    overlay.style.transition = "clip-path 1.2s ease";
+    overlay.style.clipPath = "circle(0% at 50% 50%)";
+
+    setTimeout(() => overlay.remove(), 1300);
+  }
+
+  // start
+  typeLine(sequence[0], nextLine);
 });
 </script>
 
