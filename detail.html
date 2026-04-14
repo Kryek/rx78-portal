@@ -20,7 +20,6 @@
       margin: auto;
       box-sizing: border-box;
 
-      /* 🔥 PAGE FADE */
       opacity: 0;
       animation: pageFade 0.6s ease forwards;
     }
@@ -136,31 +135,33 @@
       cursor: pointer;
     }
 
-    .title { 
-      font-size: 24px; 
+    /* 🔥 TYPEWRITER TITLE */
+    .title {
+      font-size: 24px;
       margin-bottom: 10px;
-
-      /* 🔥 HEADER ANIM */
-      opacity: 0;
-      transform: translateY(-10px);
-      animation: fadeDown 0.5s ease forwards;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid white;
+      width: 0;
+      animation: typing 1.2s steps(20, end) forwards, blink 1s infinite;
     }
 
-    .subtitle { 
-      font-size: 14px; 
-      opacity: 0.7; 
-      margin-bottom: 20px;
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
 
-      /* 🔥 HEADER ANIM */
+    .subtitle {
+      font-size: 14px;
       opacity: 0;
-      transform: translateY(-10px);
+      margin-bottom: 20px;
       animation: fadeDown 0.5s ease forwards;
-      animation-delay: 0.15s;
+      animation-delay: 1.2s;
     }
 
     @keyframes fadeDown {
       to {
-        opacity: 1;
+        opacity: 0.7;
         transform: translateY(0);
       }
     }
@@ -187,7 +188,7 @@
 
     ul { padding-left: 18px; }
 
-    /* QR SYSTEM (UNCHANGED) */
+    /* QR SYSTEM */
 
     #qrEntry {
       position: fixed;
@@ -268,6 +269,7 @@
         flex-shrink: 0;
       }
 
+      /* 🔥 FLY UP PANELS */
       .detail-left {
         flex: 0 0 50%;
         max-height: 100%;
@@ -275,11 +277,10 @@
         border: 2px solid white;
         padding: 15px;
 
-        /* 🔥 SLIDE IN */
-        transform: translateX(-40px);
+        transform: translateY(40px);
         opacity: 0;
-        animation: slideLeft 0.6s ease forwards;
-        animation-delay: 0.2s;
+        animation: slideUp 0.6s ease forwards;
+        animation-delay: 0.3s;
       }
 
       .detail-right {
@@ -290,23 +291,15 @@
         border: 2px solid white;
         padding: 15px;
 
-        /* 🔥 SLIDE IN */
-        transform: translateX(40px);
+        transform: translateY(40px);
         opacity: 0;
-        animation: slideRight 0.6s ease forwards;
-        animation-delay: 0.2s;
+        animation: slideUp 0.6s ease forwards;
+        animation-delay: 0.4s;
       }
 
-      @keyframes slideLeft {
+      @keyframes slideUp {
         to {
-          transform: translateX(0);
-          opacity: 1;
-        }
-      }
-
-      @keyframes slideRight {
-        to {
-          transform: translateX(0);
+          transform: translateY(0);
           opacity: 1;
         }
       }
@@ -416,6 +409,19 @@ if (!file) window.location.href = "index.html";
 
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
+/* TYPEWRITER FIX (dynamic text) */
+function typeTitle(text) {
+  const el = document.getElementById("kitTitle");
+  el.textContent = "";
+  let i = 0;
+
+  const typing = setInterval(() => {
+    el.textContent += text[i];
+    i++;
+    if (i >= text.length) clearInterval(typing);
+  }, 50);
+}
+
 /* KIT DATA */
 fetch(`data/${file}`)
   .then(res => res.json())
@@ -423,7 +429,8 @@ fetch(`data/${file}`)
     const kit = data.kits.find(k => k.id === id);
     if (!kit) return window.location.href = "index.html";
 
-    document.getElementById("kitTitle").textContent = kit.name;
+    typeTitle(kit.name);
+
     document.getElementById("kitSubtitle").textContent =
       `${kit.mold} • ${kit.variant} • ${kit.year}`;
   });
@@ -448,7 +455,7 @@ fetch(kitPath + "content.html")
     });
   });
 
-/* IMAGES (FADE IN) */
+/* IMAGES */
 const box = document.createElement("img");
 box.src = kitPath + "images/box.jpg";
 box.style.opacity = "0";
