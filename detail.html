@@ -159,43 +159,48 @@
     /* ✅ DESKTOP ONLY */
     @media (min-width: 768px) {
 
-      html, body {
-        height: 100%;
-        overflow: hidden; /* 🔥 lock whole page */
-      }
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
 
-      .app {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
+  .app {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-      .detail-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto 1fr; /* header + content */
-        gap: 20px 40px;
-        height: 100%;
-      }
+  .detail-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 20px 40px;
+    height: 100%;
+    overflow: hidden; /* 🔥 hard containment */
+  }
 
-      /* 🔥 HEADER spanning both columns */
-      .detail-header {
-        grid-column: 1 / -1;
-      }
+  /* 🔥 HEADER */
+  .detail-header {
+    grid-column: 1 / -1;
+    text-align: center; /* ✅ center title/subtitle */
+  }
 
-      /* 🔥 SCROLL AREAS ONLY */
-      .detail-left,
-      .detail-right {
-        overflow-y: auto;
-        padding-right: 10px;
-      }
+  /* 🔥 CRITICAL FIX */
+  .detail-left,
+  .detail-right {
+    overflow-y: auto;
+    padding-right: 10px;
 
-      .detail-right img {
-        width: 100%;
-        height: auto;
-        margin-bottom: 15px;
-      }
-    }
+    min-height: 0;     /* ✅ allows proper shrinking */
+    max-height: 100%;  /* ✅ prevents overflow escape */
+  }
+
+  .detail-right img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+  }
+}
   </style>
 </head>
 
