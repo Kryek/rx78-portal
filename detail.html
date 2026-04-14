@@ -429,9 +429,15 @@ fetch(`data/${file}`)
     const kit = data.kits.find(k => k.id === id);
     if (!kit) return window.location.href = "index.html";
 
-    document.getElementById("kitTitle").textContent = kit.name;
-    document.getElementById("kitSubtitle").textContent =
-      `${kit.mold} • ${kit.variant} • ${kit.year}`;
+    const titleEl = document.getElementById("kitTitle");
+const subEl = document.getElementById("kitSubtitle");
+
+titleEl.dataset.text = kit.name;
+subEl.dataset.text = `${kit.mold} • ${kit.variant} • ${kit.year}`;
+
+// keep empty initially to prevent flash
+titleEl.textContent = "";
+subEl.textContent = "";
   });
 
 /* CONTENT SPLIT */
@@ -606,27 +612,44 @@ function startDetailAnimations() {
   const left = document.querySelector(".detail-left");
   const right = document.querySelector(".detail-right");
   const title = document.getElementById("kitTitle");
+  const subtitle = document.getElementById("kitSubtitle");
 
   if (left) left.classList.add("show");
   if (right) right.classList.add("show");
 
-  if (!title) return;
+  if (!title || !subtitle) return;
 
-  const fullText = title.textContent;
-  title.textContent = "";
-  title.classList.add("typewriter");
+  const titleText = title.dataset.text || "";
+  const subText = subtitle.dataset.text || "";
 
-  let i = 0;
+  function typeElement(el, text, speed, callback) {
+    let i = 0;
+    el.textContent = "";
+    el.classList.add("typewriter");
 
-  function type() {
-    if (i < fullText.length) {
-      title.textContent += fullText[i];
-      i++;
-      setTimeout(type, 50);
+    function type() {
+      if (i < text.length) {
+        el.textContent += text[i];
+        i++;
+        setTimeout(type, speed);
+      } else {
+        el.classList.remove("typewriter");
+        el.classList.add("done");
+        if (callback) callback();
+      }
     }
+
+    type();
   }
 
-  setTimeout(type, 200);
+  // title first, then subtitle
+  setTimeout(() => {
+    typeElement(title, titleText, 50, () => {
+      setTimeout(() => {
+        typeElement(subtitle, subText, 30);
+      }, 200);
+    });
+  }, 200);
 }
 
 </script>
