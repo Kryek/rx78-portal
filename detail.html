@@ -453,7 +453,7 @@ document.querySelectorAll("[data-grade]").forEach(btn => {
     const g = btn.getAttribute("data-grade");
     window.location.href = `kits.html?grade=${g}`;
   };
-}
+});
 /* QR DETECTION + ANIMATION */
 const fromQR = new URLSearchParams(window.location.search).get("src") === "qr";
 
