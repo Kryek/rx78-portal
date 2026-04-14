@@ -147,6 +147,57 @@
     }
 
     ul { padding-left: 18px; }
+    /* ============================= */
+/* QR ENTRY OVERLAY SYSTEM */
+/* ============================= */
+
+#qrEntry {
+  position: fixed;
+  inset: 0;
+  background: black;
+  z-index: 9999;
+  display: none; /* 🔥 hidden by default */
+  align-items: center;
+  justify-content: center;
+  clip-path: circle(150% at 50% 50%);
+}
+
+.qr-center {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring {
+  position: absolute;
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: 50%;
+  inset: 0;
+}
+
+.r1 { animation: spin 6s linear infinite; }
+.r2 { inset: 18px; animation: spinReverse 8s linear infinite; opacity: 0.7; }
+.r3 { inset: 36px; animation: spin 10s linear infinite; opacity: 0.4; }
+
+.qr-text {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-align: center;
+  transition: opacity 0.4s ease;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinReverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
 
     /* ✅ DESKTOP FIXED */
     @media (min-width: 768px) {
@@ -225,57 +276,7 @@
   scrollbar-color: white transparent;
 }
       
-/* ============================= */
-/* QR ENTRY OVERLAY SYSTEM */
-/* ============================= */
 
-#qrEntry {
-  position: fixed;
-  inset: 0;
-  background: black;
-  z-index: 9999;
-  display: none; /* 🔥 hidden by default */
-  align-items: center;
-  justify-content: center;
-  clip-path: circle(150% at 50% 50%);
-}
-
-.qr-center {
-  position: relative;
-  width: 220px;
-  height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.ring {
-  position: absolute;
-  border: 1px solid rgba(255,255,255,0.6);
-  border-radius: 50%;
-  inset: 0;
-}
-
-.r1 { animation: spin 6s linear infinite; }
-.r2 { inset: 18px; animation: spinReverse 8s linear infinite; opacity: 0.7; }
-.r3 { inset: 36px; animation: spin 10s linear infinite; opacity: 0.4; }
-
-.qr-text {
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-align: center;
-  transition: opacity 0.4s ease;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes spinReverse {
-  from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
-}
     }
   </style>
 </head>
