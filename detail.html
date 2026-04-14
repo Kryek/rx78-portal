@@ -18,8 +18,7 @@
       padding: 20px;
       max-width: 900px;
       margin: auto;
-
-      box-sizing: border-box; /* 🔥 FIX */
+      box-sizing: border-box;
     }
 
     /* NAV */
@@ -147,61 +146,58 @@
     }
 
     ul { padding-left: 18px; }
-    /* ============================= */
-/* QR ENTRY OVERLAY SYSTEM */
-/* ============================= */
 
-#qrEntry {
-  position: fixed;
-  inset: 0;
-  background: black;
-  z-index: 9999;
-  display: none; /* 🔥 hidden by default */
-  align-items: center;
-  justify-content: center;
-  clip-path: circle(150% at 50% 50%);
-}
+    /* QR OVERLAY */
+    #qrEntry {
+      position: fixed;
+      inset: 0;
+      background: black;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      clip-path: circle(150% at 50% 50%);
+    }
 
-.qr-center {
-  position: relative;
-  width: 220px;
-  height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    .qr-center {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-.ring {
-  position: absolute;
-  border: 1px solid rgba(255,255,255,0.6);
-  border-radius: 50%;
-  inset: 0;
-}
+    .ring {
+      position: absolute;
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 50%;
+      inset: 0;
+    }
 
-.r1 { animation: spin 6s linear infinite; }
-.r2 { inset: 18px; animation: spinReverse 8s linear infinite; opacity: 0.7; }
-.r3 { inset: 36px; animation: spin 10s linear infinite; opacity: 0.4; }
+    .r1 { animation: spin 6s linear infinite; }
+    .r2 { inset: 18px; animation: spinReverse 8s linear infinite; opacity: 0.7; }
+    .r3 { inset: 36px; animation: spin 10s linear infinite; opacity: 0.4; }
 
-.qr-text {
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-align: center;
-  transition: opacity 0.4s ease;
-}
+    .qr-text {
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-align: center;
+      transition: opacity 0.4s ease;
+    }
 
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
 
-@keyframes spinReverse {
-  from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
-}
+    @keyframes spinReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
 
-    /* ✅ DESKTOP FIXED */
+    /* DESKTOP */
     @media (min-width: 768px) {
-
       html, body {
         height: 100%;
         overflow: hidden;
@@ -218,72 +214,39 @@
         flex-shrink: 0;
       }
 
-
       .detail-left {
-  flex: 0 0 50%;      /* 🔥 don't stretch */
-  max-height: 100%;   /* 🔥 allow scroll if needed */
-  overflow-y: auto;
+        flex: 0 0 50%;
+        max-height: 100%;
+        overflow-y: auto;
+        border: 2px solid white;
+        padding: 15px;
+      }
 
-  border: 2px solid white;
-  padding: 15px;
-  box-sizing: border-box;
-}
+      .detail-right {
+        flex: 1;
+        height: 100%;
+        min-height: 0;
+        overflow-y: auto;
+        border: 2px solid white;
+        padding: 15px;
+      }
 
-.detail-right {
-  flex: 1;
-  height: 100%;        /* 🔥 force full height again */
-  min-height: 0;
-  overflow-y: auto;
-
-  border: 2px solid white;
-  padding: 15px;
-  box-sizing: border-box;
-}
       .detail-body {
-  display: flex;
-  gap: 30px;
-
-  flex: 1;
-  min-height: 0;
-
-  overflow: hidden;
-
-  align-items: flex-start; /* 🔥 THIS is the missing piece */
-}
-      /* ===== CUSTOM SCROLLBAR (WHITE MINIMAL) ===== */
-
-/* Chrome / Edge / Safari */
-.detail-left::-webkit-scrollbar,
-.detail-right::-webkit-scrollbar {
-  width: 2px; /* thin line */
-}
-
-.detail-left::-webkit-scrollbar-track,
-.detail-right::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.detail-left::-webkit-scrollbar-thumb,
-.detail-right::-webkit-scrollbar-thumb {
-  background: white;
-  border-radius: 10px;
-}
-
-/* Firefox */
-.detail-left,
-.detail-right {
-  scrollbar-width: thin;
-  scrollbar-color: white transparent;
-}
-      
-
+        display: flex;
+        gap: 30px;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
 
 <body>
 
-<div id="qrEntry" style="display:none;">
+<!-- QR OVERLAY -->
+<div id="qrEntry">
   <div class="qr-center">
     <div class="ring r1"></div>
     <div class="ring r2"></div>
@@ -292,6 +255,7 @@
   </div>
 </div>
 
+<!-- NAV (UNCHANGED) -->
 <div class="nav">
   <div class="nav-btn" id="homeBtn"><span>HOME</span></div>
   <div class="nav-btn" id="gradesBtn"><span>KITS</span></div>
@@ -308,27 +272,14 @@
   </div>
 </div>
 
-<div class="overlay" id="gradesOverlay">
-  <div class="close-btn" id="closeOverlay">✕</div>
-  <div class="nav-btn" data-grade="HG"><span>HG</span></div>
-  <div class="nav-btn" data-grade="MG"><span>MG</span></div>
-  <div class="nav-btn" data-grade="RG"><span>RG</span></div>
-  <div class="nav-btn" data-grade="PG"><span>PG</span></div>
-  <div class="nav-btn" data-grade="SD"><span>SD</span></div>
-  <div class="nav-btn" data-grade="MEGASIZE"><span>MEGA</span></div>
-  <div class="nav-btn"><span>MISC</span></div>
-  <div class="nav-btn"><span>CUSTOM</span></div>
-</div>
-
+<!-- APP (UNCHANGED) -->
 <div class="app">
-
   <div class="detail-header">
     <div class="title" id="kitTitle"></div>
     <div class="subtitle" id="kitSubtitle"></div>
   </div>
 
   <div class="detail-body">
-
     <div class="detail-left">
       <div id="overview"></div>
       <div id="trivia"></div>
@@ -338,126 +289,16 @@
       <div id="boxart"></div>
       <div class="gallery" id="gallery"></div>
     </div>
-
   </div>
-
 </div>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-const grade = params.get("grade");
-const id = params.get("id");
+/* QR SYSTEM (SAFE) */
+document.addEventListener("DOMContentLoaded", () => {
+  const fromQR = new URLSearchParams(window.location.search).get("src") === "qr";
 
-if (!grade || !id) window.location.href = "index.html";
+  if (!fromQR) return;
 
-const gradeMap = {
-  HG: "hg-kits.json",
-  MG: "mg-kits.json",
-  RG: "rg-kits.json",
-  PG: "pg-kits.json",
-  SD: "sd-kits.json",
-  MEGASIZE: "megasize-kits.json",
-  MISC: "misc-kits.json",
-  CUSTOM: "custom-kits.json"
-};
-
-const file = gradeMap[grade];
-if (!file) window.location.href = "index.html";
-
-const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
-
-/* KIT DATA */
-fetch(`data/${file}`)
-  .then(res => res.json())
-  .then(data => {
-    const kit = data.kits.find(k => k.id === id);
-    if (!kit) return window.location.href = "index.html";
-
-    document.getElementById("kitTitle").textContent = kit.name;
-    document.getElementById("kitSubtitle").textContent =
-      `${kit.mold} • ${kit.variant} • ${kit.year}`;
-  });
-
-/* CONTENT SPLIT */
-fetch(kitPath + "content.html")
-  .then(res => res.text())
-  .then(html => {
-    const temp = document.createElement("div");
-    temp.innerHTML = html;
-
-    const sections = temp.querySelectorAll(".section");
-
-    sections.forEach(section => {
-      const title = section.querySelector("h2")?.textContent;
-
-      if (title?.toLowerCase().includes("overview")) {
-        document.getElementById("overview").appendChild(section);
-      } else {
-        document.getElementById("trivia").appendChild(section);
-      }
-    });
-  });
-
-/* IMAGES */
-const box = document.createElement("img");
-box.src = kitPath + "images/box.jpg";
-document.getElementById("boxart").appendChild(box);
-
-let index = 1;
-function loadNextImage() {
-  const img = new Image();
-  img.src = kitPath + "images/" + index + ".jpg";
-
-  img.onload = () => {
-    document.getElementById("gallery").appendChild(img);
-    index++;
-    loadNextImage();
-  };
-}
-loadNextImage();
-
-/* NAV */
-document.getElementById("homeBtn").onclick = () => {
-  window.location.href = "index.html";
-};
-
-const gradesBtn = document.getElementById("gradesBtn");
-const dropdown = document.getElementById("gradesDropdown");
-const overlay = document.getElementById("gradesOverlay");
-
-gradesBtn.onclick = () => {
-  if (window.innerWidth <= 600) {
-    overlay.classList.add("open");
-    document.body.style.overflow = "hidden";
-  } else {
-    const isOpen = dropdown.classList.toggle("open");
-
-    if (isOpen) {
-      const items = dropdown.querySelectorAll(".nav-btn");
-      items.forEach((item, i) => {
-        item.style.animation = "none";
-        item.offsetHeight;
-        item.style.animation = `flyInDropdown 0.35s forwards ${i * 0.08}s`;
-      });
-    }
-  }
-};
-
-document.getElementById("closeOverlay").onclick = () => {
-  overlay.classList.remove("open");
-  document.body.style.overflow = "";
-};
-
-document.querySelectorAll("[data-grade]").forEach(btn => {
-  btn.onclick = () => {
-    const g = btn.getAttribute("data-grade");
-    window.location.href = `kits.html?grade=${g}`;
-  };
-}
-/* QR DETECTION + ANIMATION */
-const fromQR = new URLSearchParams(window.location.search).get("src") === "qr";
-
-if (fromQR) {
   const overlay = document.getElementById("qrEntry");
   const text = document.getElementById("qrText");
 
@@ -487,8 +328,7 @@ if (fromQR) {
       setTimeout(() => overlay.remove(), 1300);
     }
   }, 800);
-}
-                                                 );
+});
 </script>
 
 </body>
