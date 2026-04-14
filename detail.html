@@ -392,6 +392,46 @@ document.querySelectorAll("[data-grade]").forEach(btn => {
     window.location.href = `kits.html?grade=${g}`;
   };
 });
+
+/* ============================= */
+/* QR SYSTEM (SAFE ADD-ON ONLY) */
+/* ============================= */
+document.addEventListener("DOMContentLoaded", () => {
+  const fromQR = new URLSearchParams(window.location.search).get("src") === "qr";
+  if (!fromQR) return;
+
+  const overlay = document.getElementById("qrEntry");
+  const text = document.getElementById("qrText");
+
+  if (!overlay || !text) return; // 🔥 safety
+
+  overlay.style.display = "flex";
+
+  const sequence = [
+    "QR AUTHENTICATED",
+    "ACCESS GRANTED",
+    "ENTRY LOADED"
+  ];
+
+  let i = 0;
+
+  const interval = setInterval(() => {
+    i++;
+
+    if (i < sequence.length) {
+      text.textContent = sequence[i];
+    } else {
+      clearInterval(interval);
+
+      text.style.opacity = "0";
+
+      overlay.style.transition = "clip-path 1.2s ease";
+      overlay.style.clipPath = "circle(0% at 50% 50%)";
+
+      setTimeout(() => overlay.remove(), 1300);
+    }
+  }, 800);
+});
 </script>
 
 </body>
