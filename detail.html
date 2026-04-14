@@ -320,10 +320,18 @@
 }
 
 /* title cursor */
-#kitTitle.typewriter::after {
+#kitTitle.typewriter::after,
+#kitSubtitle.typewriter::after {
   content: "_";
   margin-left: 6px;
   animation: blink 1s infinite;
+}
+
+/* stop cursor when done */
+#kitTitle.done::after,
+#kitSubtitle.done::after {
+  content: "";
+  animation: none;
 }
   </style>
 </head>
@@ -578,8 +586,10 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     overlay.remove();
 
-    // 🔥 trigger page anim AFTER QR
-    startDetailAnimations();
+    // 🔥 trigger page animations AFTER QR finishes
+    if (window.startDetailAnimations) {
+      window.startDetailAnimations();
+    }
 
   }, 1300);
 }
