@@ -20,7 +20,7 @@
       margin: auto;
     }
 
-    /* NAV */
+    /* ✅ NAV */
     .nav {
       position: fixed;
       top: 12px;
@@ -47,26 +47,32 @@
       text-align: center;
     }
 
-    .dropdown {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      height: 0;
-      opacity: 0;
-      pointer-events: none;
-      overflow: visible;
-      padding-bottom: 8px;
-    }
+    /* ✅ DROPDOWN FIX (NO FLASH / NO DOUBLE RENDER) */
+    /* ✅ DROPDOWN FIX (NO CLIP AT ALL) */
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 
-    .dropdown.open {
-      height: auto;
-      opacity: 1;
-      pointer-events: auto;
-    }
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
 
+  overflow: visible;
+  padding-bottom: 8px; /* ✅ fixes bottom-left clipping from skew */
+}
+
+.dropdown.open {
+  height: auto;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+    /* ✅ IMPORTANT: keep items hidden until animated in */
     .dropdown .nav-btn {
       width: 70px;
       padding: 6px 10px;
+
       transform: skew(-20deg) translateX(-25px);
       opacity: 0;
     }
@@ -82,6 +88,7 @@
       }
     }
 
+    /* ✅ MOBILE NAV */
     @media (max-width: 600px) {
       .nav {
         position: fixed;
@@ -91,6 +98,7 @@
         height: 60px;
         flex-direction: row;
         align-items: center;
+        justify-content: flex-start;
         gap: 10px;
         padding: 0 10px;
         background: rgba(0,0,0,0.9);
@@ -98,8 +106,11 @@
 
       body { padding-top: 60px; }
       .app { padding-top: 20px; }
+
+      .nav-btn { width: 80px; }
     }
 
+    /* OVERLAY */
     .overlay {
       position: fixed;
       inset: 0;
@@ -122,6 +133,7 @@
       position: absolute;
       top: 20px;
       right: 20px;
+      font-size: 18px;
       cursor: pointer;
     }
 
@@ -140,61 +152,19 @@
       font-size: 16px;
       border-bottom: 2px solid white;
       padding-bottom: 5px;
+      margin-bottom: 10px;
     }
 
-    .detail-container {
-      display: block;
-    }
-
-    /* ✅ FINAL DESKTOP */
-    @media (min-width: 768px) {
-
-      html, body {
-        height: 100%;
-        overflow: hidden;
-      }
-
-      .app {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .detail-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto 1fr;
-        gap: 20px 40px;
-
-        height: 100%;
-        overflow: hidden;
-
-        align-items: stretch; /* 🔥 important */
-      }
-
-      .detail-header {
-        grid-column: 1 / -1;
-        text-align: center;
-      }
-
-      .detail-left,
-      .detail-right {
-        min-height: 0;
-        overflow-y: auto;
-
-        border: 2px solid white;
-        padding: 15px;
-        box-sizing: border-box;
-      }
-    }
+    ul { padding-left: 18px; }
   </style>
 </head>
 
 <body>
 
+<!-- NAV -->
 <div class="nav">
   <div class="nav-btn" id="homeBtn"><span>HOME</span></div>
-  <div class="nav-btn" id="gradesBtn"><span>KITS</span></div>
+  <div class="nav-btn" id="gradesBtn"><span>GRADES</span></div>
 
   <div class="dropdown" id="gradesDropdown">
     <div class="nav-btn" data-grade="HG"><span>HG</span></div>
@@ -202,34 +172,37 @@
     <div class="nav-btn" data-grade="RG"><span>RG</span></div>
     <div class="nav-btn" data-grade="PG"><span>PG</span></div>
     <div class="nav-btn" data-grade="SD"><span>SD</span></div>
-    <div class="nav-btn" data-grade="MEGA"><span>MEGA</span></div>
+    <div class="nav-btn" data-grade="MEGASIZE"><span>MEGA</span></div>
+    <div class="nav-btn" data-grade="MISC"><span>MISC</span></div>
+    <div class="nav-btn" data-grade="CUSTOM"><span>CUSTOM</span></div>
   </div>
 </div>
 
+<!-- MOBILE OVERLAY -->
 <div class="overlay" id="gradesOverlay">
   <div class="close-btn" id="closeOverlay">✕</div>
+
+  <div class="nav-btn" data-grade="HG"><span>HG</span></div>
+  <div class="nav-btn" data-grade="MG"><span>MG</span></div>
+  <div class="nav-btn" data-grade="RG"><span>RG</span></div>
+  <div class="nav-btn" data-grade="PG"><span>PG</span></div>
+  <div class="nav-btn" data-grade="SD"><span>SD</span></div>
+  <div class="nav-btn" data-grade="MEGASIZE"><span>MEGA</span></div>
+  <div class="nav-btn" data-grade="MISC"><span>MISC</span></div>
+  <div class="nav-btn" data-grade="CUSTOM"><span>CUSTOM</span></div>
 </div>
 
 <div class="app">
 
-  <div class="detail-container">
+  <div class="title" id="kitTitle"></div>
+  <div class="subtitle" id="kitSubtitle"></div>
 
-    <div class="detail-header">
-      <div class="title" id="kitTitle"></div>
-      <div class="subtitle" id="kitSubtitle"></div>
-    </div>
+  <div id="overview"></div>
 
-    <div class="detail-left">
-      <div id="overview"></div>
-      <div id="trivia"></div>
-    </div>
+  <div id="boxart"></div>
+  <div class="gallery" id="gallery"></div>
 
-    <div class="detail-right">
-      <div id="boxart"></div>
-      <div id="gallery"></div>
-    </div>
-
-  </div>
+  <div id="trivia"></div>
 
 </div>
 
@@ -238,33 +211,112 @@ const params = new URLSearchParams(window.location.search);
 const grade = params.get("grade");
 const id = params.get("id");
 
+if (!grade || !id) window.location.href = "index.html";
+
+const gradeMap = {
+  HG: "hg-kits.json",
+  MG: "mg-kits.json",
+  RG: "rg-kits.json",
+  PG: "pg-kits.json",
+  SD: "sd-kits.json",
+  MEGASIZE: "megasize-kits.json",
+  MISC: "misc-kits.json",
+  CUSTOM: "custom-kits.json"
+};
+
+const file = gradeMap[grade];
+if (!file) window.location.href = "index.html";
+
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
-/* Title */
-document.getElementById("kitTitle").textContent = id.toUpperCase();
+/* KIT DATA */
+fetch(`data/${file}`)
+  .then(res => res.json())
+  .then(data => {
+    const kit = data.kits.find(k => k.id === id);
+    if (!kit) return window.location.href = "index.html";
 
-/* Content */
+    document.getElementById("kitTitle").textContent = kit.name;
+    document.getElementById("kitSubtitle").textContent =
+      `${kit.mold} • ${kit.variant} • ${kit.year}`;
+  });
+
+/* CONTENT SPLIT */
 fetch(kitPath + "content.html")
   .then(res => res.text())
   .then(html => {
-    document.getElementById("overview").innerHTML = html;
+    const temp = document.createElement("div");
+    temp.innerHTML = html;
+
+    const sections = temp.querySelectorAll(".section");
+
+    sections.forEach(section => {
+      const title = section.querySelector("h2")?.textContent;
+
+      if (title?.toLowerCase().includes("overview")) {
+        document.getElementById("overview").appendChild(section);
+      } else {
+        document.getElementById("trivia").appendChild(section);
+      }
+    });
   });
 
-/* Images */
+/* IMAGES */
 const box = document.createElement("img");
 box.src = kitPath + "images/box.jpg";
 document.getElementById("boxart").appendChild(box);
 
-let i = 1;
-function load() {
+let index = 1;
+function loadNextImage() {
   const img = new Image();
-  img.src = kitPath + "images/" + i + ".jpg";
+  img.src = kitPath + "images/" + index + ".jpg";
+
   img.onload = () => {
     document.getElementById("gallery").appendChild(img);
-    i++; load();
+    index++;
+    loadNextImage();
   };
 }
-load();
+loadNextImage();
+
+/* NAV */
+document.getElementById("homeBtn").onclick = () => {
+  window.location.href = "index.html";
+};
+
+const gradesBtn = document.getElementById("gradesBtn");
+const dropdown = document.getElementById("gradesDropdown");
+const overlay = document.getElementById("gradesOverlay");
+
+gradesBtn.onclick = () => {
+  if (window.innerWidth <= 600) {
+    overlay.classList.add("open");
+    document.body.style.overflow = "hidden";
+  } else {
+    const isOpen = dropdown.classList.toggle("open");
+
+    if (isOpen) {
+      const items = dropdown.querySelectorAll(".nav-btn");
+      items.forEach((item, i) => {
+        item.style.animation = "none";
+        item.offsetHeight; // reset
+        item.style.animation = `flyInDropdown 0.35s forwards ${i * 0.08}s`;
+      });
+    }
+  }
+};
+
+document.getElementById("closeOverlay").onclick = () => {
+  overlay.classList.remove("open");
+  document.body.style.overflow = "";
+};
+
+document.querySelectorAll("[data-grade]").forEach(btn => {
+  btn.onclick = () => {
+    const g = btn.getAttribute("data-grade");
+    window.location.href = `kits.html?grade=${g}`;
+  };
+});
 </script>
 
 </body>
