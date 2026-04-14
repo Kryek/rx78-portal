@@ -151,7 +151,7 @@
 
     ul { padding-left: 18px; }
 
-    /* ✅ NEW: layout wrapper (mobile safe) */
+    /* ✅ BASE (mobile safe) */
     .detail-container {
       display: block;
     }
@@ -159,14 +159,31 @@
     /* ✅ DESKTOP ONLY */
     @media (min-width: 768px) {
 
+      html, body {
+        height: 100%;
+        overflow: hidden; /* 🔥 lock whole page */
+      }
+
+      .app {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
       .detail-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 40px;
-        height: 100vh;
-        overflow: hidden;
+        grid-template-rows: auto 1fr; /* header + content */
+        gap: 20px 40px;
+        height: 100%;
       }
 
+      /* 🔥 HEADER spanning both columns */
+      .detail-header {
+        grid-column: 1 / -1;
+      }
+
+      /* 🔥 SCROLL AREAS ONLY */
       .detail-left,
       .detail-right {
         overflow-y: auto;
@@ -217,14 +234,16 @@
 
 <div class="app">
 
-  <!-- ✅ NEW WRAPPER -->
   <div class="detail-container">
+
+    <!-- 🔥 NEW HEADER -->
+    <div class="detail-header">
+      <div class="title" id="kitTitle"></div>
+      <div class="subtitle" id="kitSubtitle"></div>
+    </div>
 
     <!-- LEFT -->
     <div class="detail-left">
-      <div class="title" id="kitTitle"></div>
-      <div class="subtitle" id="kitSubtitle"></div>
-
       <div id="overview"></div>
       <div id="trivia"></div>
     </div>
