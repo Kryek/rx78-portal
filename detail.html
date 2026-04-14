@@ -184,7 +184,7 @@
         text-align: center;
       }
 
-      /* ✅ FIXED SCROLL + CONTAINMENT */
+      /* ✅ FINAL FIX */
       .detail-left,
       .detail-right {
         border: 2px solid white;
@@ -194,6 +194,7 @@
 
         overflow-y: auto;
         min-height: 0;
+        max-height: 100%; /* 🔥 prevents overflow past screen */
       }
 
       .detail-right img {
