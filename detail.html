@@ -159,40 +159,21 @@
     /* ✅ DESKTOP ONLY */
     @media (min-width: 768px) {
 
-  html, body {
-    height: 100%;
-    overflow: hidden;
-  }
-
-  .app {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .detail-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr;
-    gap: 20px 40px;
-    height: 100%;
-    overflow: hidden; /* 🔥 hard containment */
-  }
-
-  /* 🔥 HEADER */
-  .detail-header {
-    grid-column: 1 / -1;
-    text-align: center; /* ✅ center title/subtitle */
-  }
-
-  /* 🔥 CRITICAL FIX */
   .detail-left,
   .detail-right {
     overflow-y: auto;
     padding-right: 10px;
 
-    min-height: 0;     /* ✅ allows proper shrinking */
-    max-height: 100%;  /* ✅ prevents overflow escape */
+    min-height: 0;
+    max-height: 100%;
+  }
+
+  /* 🔥 RIGHT COLUMN CONTAINER FIX */
+  .detail-right {
+    border: 2px solid white;
+    padding: 15px;
+    padding-bottom: 25px; /* ✅ keeps content away from bottom edge */
+    box-sizing: border-box;
   }
 
   .detail-right img {
