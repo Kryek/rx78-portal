@@ -20,7 +20,7 @@
       margin: auto;
     }
 
-    /* ✅ NAV */
+    /* NAV */
     .nav {
       position: fixed;
       top: 12px;
@@ -82,7 +82,6 @@
       }
     }
 
-    /* ✅ MOBILE NAV */
     @media (max-width: 600px) {
       .nav {
         position: fixed;
@@ -92,7 +91,6 @@
         height: 60px;
         flex-direction: row;
         align-items: center;
-        justify-content: flex-start;
         gap: 10px;
         padding: 0 10px;
         background: rgba(0,0,0,0.9);
@@ -100,11 +98,8 @@
 
       body { padding-top: 60px; }
       .app { padding-top: 20px; }
-
-      .nav-btn { width: 80px; }
     }
 
-    /* OVERLAY */
     .overlay {
       position: fixed;
       inset: 0;
@@ -127,7 +122,6 @@
       position: absolute;
       top: 20px;
       right: 20px;
-      font-size: 18px;
       cursor: pointer;
     }
 
@@ -146,67 +140,58 @@
       font-size: 16px;
       border-bottom: 2px solid white;
       padding-bottom: 5px;
-      margin-bottom: 10px;
     }
-
-    ul { padding-left: 18px; }
 
     .detail-container {
       display: block;
     }
 
-   @media (min-width: 768px) {
+    /* ✅ FINAL DESKTOP */
+    @media (min-width: 768px) {
 
-  html, body {
-    height: 100%;
-    overflow: hidden;
-  }
+      html, body {
+        height: 100%;
+        overflow: hidden;
+      }
 
-  .app {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+      .app {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
 
-  .detail-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr;
-    gap: 20px 40px;
+      .detail-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 1fr;
+        gap: 20px 40px;
 
-    height: 100%;
-    overflow: hidden; /* 🔥 IMPORTANT: clip everything */
-  }
+        height: 100%;
+        overflow: hidden;
 
-  .detail-header {
-    grid-column: 1 / -1;
-    text-align: center;
-  }
+        align-items: stretch; /* 🔥 important */
+      }
 
-  /* 🔥 FINAL STABLE COLUMN SETUP */
-  .detail-left,
-  .detail-right {
-    min-height: 0;          /* allow shrinking */
-    overflow-y: auto;       /* scroll inside */
+      .detail-header {
+        grid-column: 1 / -1;
+        text-align: center;
+      }
 
-    border: 2px solid white;
-    padding: 15px;
-    padding-bottom: 25px;
-    box-sizing: border-box;
-  }
+      .detail-left,
+      .detail-right {
+        min-height: 0;
+        overflow-y: auto;
 
-  .detail-right img {
-    width: 100%;
-    height: auto;
-    margin-bottom: 15px;
-  }
-}
+        border: 2px solid white;
+        padding: 15px;
+        box-sizing: border-box;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-<!-- NAV -->
 <div class="nav">
   <div class="nav-btn" id="homeBtn"><span>HOME</span></div>
   <div class="nav-btn" id="gradesBtn"><span>KITS</span></div>
@@ -217,24 +202,12 @@
     <div class="nav-btn" data-grade="RG"><span>RG</span></div>
     <div class="nav-btn" data-grade="PG"><span>PG</span></div>
     <div class="nav-btn" data-grade="SD"><span>SD</span></div>
-    <div class="nav-btn" data-grade="MEGASIZE"><span>MEGA</span></div>
-    <div class="nav-btn" data-grade="MISC"><span>MISC</span></div>
-    <div class="nav-btn" data-grade="CUSTOM"><span>CUSTOM</span></div>
+    <div class="nav-btn" data-grade="MEGA"><span>MEGA</span></div>
   </div>
 </div>
 
-<!-- MOBILE OVERLAY -->
 <div class="overlay" id="gradesOverlay">
   <div class="close-btn" id="closeOverlay">✕</div>
-
-  <div class="nav-btn" data-grade="HG"><span>HG</span></div>
-  <div class="nav-btn" data-grade="MG"><span>MG</span></div>
-  <div class="nav-btn" data-grade="RG"><span>RG</span></div>
-  <div class="nav-btn" data-grade="PG"><span>PG</span></div>
-  <div class="nav-btn" data-grade="SD"><span>SD</span></div>
-  <div class="nav-btn" data-grade="MEGASIZE"><span>MEGA</span></div>
-  <div class="nav-btn" data-grade="MISC"><span>MISC</span></div>
-  <div class="nav-btn" data-grade="CUSTOM"><span>CUSTOM</span></div>
 </div>
 
 <div class="app">
@@ -253,7 +226,7 @@
 
     <div class="detail-right">
       <div id="boxart"></div>
-      <div class="gallery" id="gallery"></div>
+      <div id="gallery"></div>
     </div>
 
   </div>
@@ -261,7 +234,37 @@
 </div>
 
 <script>
-/* unchanged JS */
+const params = new URLSearchParams(window.location.search);
+const grade = params.get("grade");
+const id = params.get("id");
+
+const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
+
+/* Title */
+document.getElementById("kitTitle").textContent = id.toUpperCase();
+
+/* Content */
+fetch(kitPath + "content.html")
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById("overview").innerHTML = html;
+  });
+
+/* Images */
+const box = document.createElement("img");
+box.src = kitPath + "images/box.jpg";
+document.getElementById("boxart").appendChild(box);
+
+let i = 1;
+function load() {
+  const img = new Image();
+  img.src = kitPath + "images/" + i + ".jpg";
+  img.onload = () => {
+    document.getElementById("gallery").appendChild(img);
+    i++; load();
+  };
+}
+load();
 </script>
 
 </body>
