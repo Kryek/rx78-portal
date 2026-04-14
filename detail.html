@@ -192,7 +192,6 @@
         box-sizing: border-box;
       }
 
-      /* scrollbars */
       .detail-left::-webkit-scrollbar,
       .detail-right::-webkit-scrollbar {
         width: 2px;
@@ -297,19 +296,17 @@
 </div>
 
 <script>
-/* NAV FIX (unchanged logic) */
-document.querySelectorAll("[data-grade]").forEach(btn => {
-  btn.onclick = () => {
-    const g = btn.getAttribute("data-grade");
-    window.location.href = `kits.html?grade=${g}`;
-  };
-});
+document.addEventListener("DOMContentLoaded", () => {
 
-/* QR DETECTION */
-const fromQR = new URLSearchParams(window.location.search).get("src") === "qr";
-
-if (fromQR) {
+  const fromQR = new URLSearchParams(window.location.search).get("src") === "qr";
   const overlay = document.getElementById("qrEntry");
+
+  // ✅ FIX: instantly remove overlay if NOT QR
+  if (!fromQR) {
+    overlay.remove();
+    return;
+  }
+
   const text = document.getElementById("qrText");
 
   const sequence = [
@@ -336,7 +333,8 @@ if (fromQR) {
       setTimeout(() => overlay.remove(), 1300);
     }
   }, 800);
-}
+
+});
 </script>
 
 </body>
