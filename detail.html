@@ -72,6 +72,26 @@
       transform: skew(-20deg) translateX(-25px);
       opacity: 0;
     }
+    /* NAV ENTRY ANIM */
+.nav-btn {
+  opacity: 0;
+  transform: skew(-20deg) translateX(-40px);
+}
+
+.nav-btn.show {
+  animation: navFlyIn 0.5s ease forwards;
+}
+
+@keyframes navFlyIn {
+  from {
+    opacity: 0;
+    transform: skew(-20deg) translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: skew(-20deg) translateX(0);
+  }
+}
 
     @keyframes flyInDropdown {
       from {
@@ -654,10 +674,25 @@ function startDetailAnimations() {
 
         // 👉 ONLY after BOTH finish → animate boxes
         if (left) left.classList.add("show");
-        if (right) right.classList.add("show");
+if (right) right.classList.add("show");
+
+// wait for box animation to finish, then nav
+setTimeout(() => {
+  animateNav();
+}, 500);
 
       });
     }, 200);
+  });
+}
+
+  function animateNav() {
+  const buttons = document.querySelectorAll(".nav > .nav-btn");
+
+  buttons.forEach((btn, i) => {
+    setTimeout(() => {
+      btn.classList.add("show");
+    }, i * 100); // stagger
   });
 }
 
