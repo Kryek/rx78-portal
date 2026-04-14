@@ -177,16 +177,25 @@
         overflow: hidden; /* 🔥 FINAL CONTAINMENT */
       }
 
-      .detail-left,
-      .detail-right {
-        flex: 1;
-        min-height: 0;
-        overflow-y: auto;
+      .detail-left {
+  flex: 0 0 50%;      /* 🔥 don't stretch */
+  max-height: 100%;   /* 🔥 allow scroll if needed */
+  overflow-y: auto;
 
-        border: 2px solid white;
-        padding: 15px;
-        box-sizing: border-box;
-      }
+  border: 2px solid white;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.detail-right {
+  flex: 1;            /* 🔥 keep filling space */
+  min-height: 0;
+  overflow-y: auto;
+
+  border: 2px solid white;
+  padding: 15px;
+  box-sizing: border-box;
+}
     }
   </style>
 </head>
