@@ -20,7 +20,7 @@
       margin: auto;
     }
 
-    /* ✅ NAV */
+    /* NAV */
     .nav {
       position: fixed;
       top: 12px;
@@ -47,32 +47,26 @@
       text-align: center;
     }
 
-    /* ✅ DROPDOWN FIX (NO FLASH / NO DOUBLE RENDER) */
-    /* ✅ DROPDOWN FIX (NO CLIP AT ALL) */
-.dropdown {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+    .dropdown {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      height: 0;
+      opacity: 0;
+      pointer-events: none;
+      overflow: visible;
+      padding-bottom: 8px;
+    }
 
-  height: 0;
-  opacity: 0;
-  pointer-events: none;
+    .dropdown.open {
+      height: auto;
+      opacity: 1;
+      pointer-events: auto;
+    }
 
-  overflow: visible;
-  padding-bottom: 8px; /* ✅ fixes bottom-left clipping from skew */
-}
-
-.dropdown.open {
-  height: auto;
-  opacity: 1;
-  pointer-events: auto;
-}
-
-    /* ✅ IMPORTANT: keep items hidden until animated in */
     .dropdown .nav-btn {
       width: 70px;
       padding: 6px 10px;
-
       transform: skew(-20deg) translateX(-25px);
       opacity: 0;
     }
@@ -88,7 +82,6 @@
       }
     }
 
-    /* ✅ MOBILE NAV */
     @media (max-width: 600px) {
       .nav {
         position: fixed;
@@ -110,7 +103,6 @@
       .nav-btn { width: 80px; }
     }
 
-    /* OVERLAY */
     .overlay {
       position: fixed;
       inset: 0;
@@ -156,6 +148,44 @@
     }
 
     ul { padding-left: 18px; }
+
+    /* ✅ DESKTOP LAYOUT (SAFE FLEX VERSION) */
+    @media (min-width: 768px) {
+
+      html, body {
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .app {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .detail-header {
+        text-align: center;
+        flex-shrink: 0;
+      }
+
+      .detail-body {
+        display: flex;
+        gap: 30px;
+        flex: 1;
+        min-height: 0;
+      }
+
+      .detail-left,
+      .detail-right {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+
+        border: 2px solid white;
+        padding: 15px;
+        box-sizing: border-box;
+      }
+    }
   </style>
 </head>
 
@@ -194,19 +224,31 @@
 
 <div class="app">
 
-  <div class="title" id="kitTitle"></div>
-  <div class="subtitle" id="kitSubtitle"></div>
+  <!-- ✅ WRAPPED HEADER -->
+  <div class="detail-header">
+    <div class="title" id="kitTitle"></div>
+    <div class="subtitle" id="kitSubtitle"></div>
+  </div>
 
-  <div id="overview"></div>
+  <!-- ✅ WRAPPED BODY -->
+  <div class="detail-body">
 
-  <div id="boxart"></div>
-  <div class="gallery" id="gallery"></div>
+    <div class="detail-left">
+      <div id="overview"></div>
+      <div id="trivia"></div>
+    </div>
 
-  <div id="trivia"></div>
+    <div class="detail-right">
+      <div id="boxart"></div>
+      <div class="gallery" id="gallery"></div>
+    </div>
+
+  </div>
 
 </div>
 
 <script>
+/* YOUR ORIGINAL JS — UNCHANGED */
 const params = new URLSearchParams(window.location.search);
 const grade = params.get("grade");
 const id = params.get("id");
@@ -229,7 +271,6 @@ if (!file) window.location.href = "index.html";
 
 const kitPath = `kits/${grade.toLowerCase()}/${id}/`;
 
-/* KIT DATA */
 fetch(`data/${file}`)
   .then(res => res.json())
   .then(data => {
@@ -241,7 +282,6 @@ fetch(`data/${file}`)
       `${kit.mold} • ${kit.variant} • ${kit.year}`;
   });
 
-/* CONTENT SPLIT */
 fetch(kitPath + "content.html")
   .then(res => res.text())
   .then(html => {
@@ -261,7 +301,6 @@ fetch(kitPath + "content.html")
     });
   });
 
-/* IMAGES */
 const box = document.createElement("img");
 box.src = kitPath + "images/box.jpg";
 document.getElementById("boxart").appendChild(box);
@@ -279,7 +318,6 @@ function loadNextImage() {
 }
 loadNextImage();
 
-/* NAV */
 document.getElementById("homeBtn").onclick = () => {
   window.location.href = "index.html";
 };
@@ -299,7 +337,7 @@ gradesBtn.onclick = () => {
       const items = dropdown.querySelectorAll(".nav-btn");
       items.forEach((item, i) => {
         item.style.animation = "none";
-        item.offsetHeight; // reset
+        item.offsetHeight;
         item.style.animation = `flyInDropdown 0.35s forwards ${i * 0.08}s`;
       });
     }
