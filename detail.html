@@ -622,9 +622,6 @@ function startDetailAnimations() {
   const title = document.getElementById("kitTitle");
   const subtitle = document.getElementById("kitSubtitle");
 
-  if (left) left.classList.add("show");
-  if (right) right.classList.add("show");
-
   if (!title || !subtitle) return;
 
   const titleText = title.dataset.text || "";
@@ -650,14 +647,18 @@ function startDetailAnimations() {
     type();
   }
 
-  // title first, then subtitle
-  setTimeout(() => {
-    typeElement(title, titleText, 50, () => {
-      setTimeout(() => {
-        typeElement(subtitle, subText, 30);
-      }, 200);
-    });
-  }, 200);
+  // 🔥 SEQUENCE
+  typeElement(title, titleText, 50, () => {
+    setTimeout(() => {
+      typeElement(subtitle, subText, 30, () => {
+
+        // 👉 ONLY after BOTH finish → animate boxes
+        if (left) left.classList.add("show");
+        if (right) right.classList.add("show");
+
+      });
+    }, 200);
+  });
 }
 
 </script>
