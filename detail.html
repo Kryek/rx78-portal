@@ -498,9 +498,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (i >= line.length) {
         clearInterval(typing);
 
-        setTimeout(() => deleteLine(callback), 500); // pause before delete
+        setTimeout(() => deleteLine(callback), 800); // pause before delete
       }
-    }, 80); // typing speed
+    }, 60); // typing speed
   }
 
   function deleteLine(callback) {
