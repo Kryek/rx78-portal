@@ -159,47 +159,49 @@
     /* ✅ DESKTOP ONLY */
     @media (min-width: 768px) {
 
-  html, body {
-    height: 100%;
-    overflow: hidden;
-  }
+      html, body {
+        height: 100%;
+        overflow: hidden;
+      }
 
-  .app {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+      .app {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
 
-  .detail-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr;
-    gap: 20px 40px;
-    height: 100%;
-    overflow: hidden; /* 🔥 hard containment */
-  }
+      .detail-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 1fr;
+        gap: 20px 40px;
+        height: 100%;
+        overflow: hidden;
+      }
 
-  /* 🔥 HEADER */
-  .detail-header {
-    grid-column: 1 / -1;
-    text-align: center; /* ✅ center title/subtitle */
-  }
+      .detail-header {
+        grid-column: 1 / -1;
+        text-align: center;
+      }
 
-  /* 🔥 CRITICAL FIX */
-  .detail-left,
-  .detail-right {
-    border: 2px solid white;
-    padding: 15px;
-    padding-bottom: 25px; /* ✅ keeps content away from bottom edge */
-    box-sizing: border-box;
-  }
+      /* ✅ FIXED SCROLL + CONTAINMENT */
+      .detail-left,
+      .detail-right {
+        border: 2px solid white;
+        padding: 15px;
+        padding-bottom: 25px;
+        box-sizing: border-box;
 
-  .detail-right img {
-    width: 100%;
-    height: auto;
-    margin-bottom: 15px;
-  }
-}
+        overflow-y: auto;
+        min-height: 0;
+      }
+
+      .detail-right img {
+        width: 100%;
+        height: auto;
+        margin-bottom: 15px;
+      }
+    }
   </style>
 </head>
 
@@ -240,19 +242,16 @@
 
   <div class="detail-container">
 
-    <!-- 🔥 NEW HEADER -->
     <div class="detail-header">
       <div class="title" id="kitTitle"></div>
       <div class="subtitle" id="kitSubtitle"></div>
     </div>
 
-    <!-- LEFT -->
     <div class="detail-left">
       <div id="overview"></div>
       <div id="trivia"></div>
     </div>
 
-    <!-- RIGHT -->
     <div class="detail-right">
       <div id="boxart"></div>
       <div class="gallery" id="gallery"></div>
