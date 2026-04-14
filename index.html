@@ -216,6 +216,34 @@
   .dropdown .panel::before {
     content: none;
   }
+    #entryGate {
+  position: fixed;
+  inset: 0;
+  background: black;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.gate-center {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#enterBtn {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 2px;
+}
 
   @media (max-width: 600px) {
     .panel {
@@ -254,6 +282,15 @@
   </style>
 </head>
 <body>
+<div id="entryGate">
+  <div class="gate-center">
+    <div class="ring r1"></div>
+    <div class="ring r2"></div>
+    <div class="ring r3"></div>
+
+    <button id="enterBtn">ENTER SYSTEM</button>
+  </div>
+</div>
 
 <div class="app">
   <div class="bg-image" id="bgImage"></div>
@@ -352,6 +389,27 @@ window.addEventListener("pageshow", (event) => {
   if (event.persisted) {
     location.reload();
   }
+});
+  document.addEventListener("DOMContentLoaded", () => {
+  const overlay = document.getElementById("entryGate");
+  const btn = document.getElementById("enterBtn");
+
+  const now = Date.now();
+  const lastAccess = localStorage.getItem("lastAccessTime");
+
+  const TEN_MIN = 10 * 60 * 1000;
+
+  // 🔥 show if first time OR expired
+  if (!lastAccess || (now - lastAccess) > TEN_MIN) {
+    overlay.style.display = "flex";
+  }
+
+  btn.onclick = () => {
+    overlay.style.display = "none";
+
+    // 🔥 save current time
+    localStorage.setItem("lastAccessTime", Date.now());
+  };
 });
 </script>
 
