@@ -122,6 +122,21 @@
 #overview { order: 2; }
 #gallery { order: 3; }
 #trivia { order: 4; }
+
+      #boxart,
+  #overview,
+  #gallery,
+  #trivia {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+
+  #boxart.show,
+  #overview.show,
+  #gallery.show,
+  #trivia.show {
+    animation: flyUp 0.6s ease forwards;
+  }
       .nav {
         position: fixed;
         top: 0;
@@ -690,8 +705,27 @@ function startDetailAnimations() {
       typeElement(subtitle, subText, 30, () => {
 
         // 👉 ONLY after BOTH finish → animate boxes
-        if (left) left.classList.add("show");
-if (right) right.classList.add("show");
+        if (window.innerWidth <= 600) {
+  // 📱 MOBILE → animate sections
+  const sections = [
+    document.getElementById("boxart"),
+    document.getElementById("overview"),
+    document.getElementById("gallery"),
+    document.getElementById("trivia")
+  ];
+
+  sections.forEach((el, i) => {
+    if (!el) return;
+    setTimeout(() => {
+      el.classList.add("show");
+    }, i * 150);
+  });
+
+} else {
+  // 💻 DESKTOP → keep original behavior
+  if (left) left.classList.add("show");
+  if (right) right.classList.add("show");
+}
 
 // wait for box animation to finish, then nav
 setTimeout(() => {
