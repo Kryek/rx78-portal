@@ -199,6 +199,31 @@
 
   align-items: flex-start; /* 🔥 THIS is the missing piece */
 }
+      /* ===== CUSTOM SCROLLBAR (WHITE MINIMAL) ===== */
+
+/* Chrome / Edge / Safari */
+.detail-left::-webkit-scrollbar,
+.detail-right::-webkit-scrollbar {
+  width: 2px; /* thin line */
+}
+
+.detail-left::-webkit-scrollbar-track,
+.detail-right::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.detail-left::-webkit-scrollbar-thumb,
+.detail-right::-webkit-scrollbar-thumb {
+  background: white;
+  border-radius: 10px;
+}
+
+/* Firefox */
+.detail-left,
+.detail-right {
+  scrollbar-width: thin;
+  scrollbar-color: white transparent;
+}
     }
   </style>
 </head>
