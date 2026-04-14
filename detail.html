@@ -18,8 +18,16 @@
       padding: 20px;
       max-width: 900px;
       margin: auto;
+      box-sizing: border-box;
 
-      box-sizing: border-box; /* 🔥 FIX */
+      /* 🔥 PAGE FADE */
+      opacity: 0;
+      animation: pageFade 0.6s ease forwards;
+    }
+
+    @keyframes pageFade {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     /* NAV */
@@ -128,13 +136,44 @@
       cursor: pointer;
     }
 
-    .title { font-size: 24px; margin-bottom: 10px; }
-    .subtitle { font-size: 14px; opacity: 0.7; margin-bottom: 20px; }
+    .title { 
+      font-size: 24px; 
+      margin-bottom: 10px;
+
+      /* 🔥 HEADER ANIM */
+      opacity: 0;
+      transform: translateY(-10px);
+      animation: fadeDown 0.5s ease forwards;
+    }
+
+    .subtitle { 
+      font-size: 14px; 
+      opacity: 0.7; 
+      margin-bottom: 20px;
+
+      /* 🔥 HEADER ANIM */
+      opacity: 0;
+      transform: translateY(-10px);
+      animation: fadeDown 0.5s ease forwards;
+      animation-delay: 0.15s;
+    }
+
+    @keyframes fadeDown {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
     img {
       width: 100%;
       margin-bottom: 10px;
       border: 2px solid white;
+      transition: transform 0.3s ease;
+    }
+
+    img:hover {
+      transform: scale(1.02);
     }
 
     .section { margin-top: 25px; }
@@ -148,69 +187,69 @@
 
     ul { padding-left: 18px; }
 
-    /* ============================= */
-/* QR ENTRY OVERLAY SYSTEM */
-/* ============================= */
+    /* QR SYSTEM (UNCHANGED) */
 
-#qrEntry {
-  position: fixed;
-  inset: 0;
-  background: black;
-  z-index: 9999;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  clip-path: circle(150% at 50% 50%);
-}
+    #qrEntry {
+      position: fixed;
+      inset: 0;
+      background: black;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      clip-path: circle(150% at 50% 50%);
+    }
 
-.qr-center {
-  position: relative;
-  width: 220px;
-  height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    .qr-center {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-.ring {
-  position: absolute;
-  border: 3px dashed rgba(255,255,255,0.6);
-  border-radius: 50%;
-  inset: 0;
-}
+    .ring {
+      position: absolute;
+      border: 3px dashed rgba(255,255,255,0.6);
+      border-radius: 50%;
+      inset: 0;
+    }
 
-.r1 { animation: spin 6s linear infinite; }
-.r2 { inset: 18px; animation: spinReverse 8s linear infinite; opacity: 0.7; }
-.r3 { inset: 36px; animation: spin 10s linear infinite; opacity: 0.4; }
+    .r1 { animation: spin 6s linear infinite; }
+    .r2 { inset: 18px; animation: spinReverse 8s linear infinite; opacity: 0.7; }
+    .r3 { inset: 36px; animation: spin 10s linear infinite; opacity: 0.4; }
 
-.qr-text {
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-align: center;
-  transition: opacity 0.4s ease;
-}
+    .qr-text {
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-align: center;
+      transition: opacity 0.4s ease;
+    }
 
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
 
-@keyframes spinReverse {
-  from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
-}
-.qr-text::after {
-  content: "_";
-  margin-left: 4px;
-  animation: blink 1s infinite;
-}
+    @keyframes spinReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
 
-@keyframes blink {
-  0%, 50%, 100% { opacity: 1; }
-  25%, 75% { opacity: 0; }
-}
+    .qr-text::after {
+      content: "_";
+      margin-left: 4px;
+      animation: blink 1s infinite;
+    }
 
-    /* ✅ DESKTOP FIXED */
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0; }
+    }
+
+    /* DESKTOP */
+
     @media (min-width: 768px) {
 
       html, body {
@@ -229,70 +268,79 @@
         flex-shrink: 0;
       }
 
-
       .detail-left {
-  flex: 0 0 50%;      /* 🔥 don't stretch */
-  max-height: 100%;   /* 🔥 allow scroll if needed */
-  overflow-y: auto;
+        flex: 0 0 50%;
+        max-height: 100%;
+        overflow-y: auto;
+        border: 2px solid white;
+        padding: 15px;
 
-  border: 2px solid white;
-  padding: 15px;
-  box-sizing: border-box;
-}
+        /* 🔥 SLIDE IN */
+        transform: translateX(-40px);
+        opacity: 0;
+        animation: slideLeft 0.6s ease forwards;
+        animation-delay: 0.2s;
+      }
 
-.detail-right {
-  flex: 1;
-  height: 100%;        /* 🔥 force full height again */
-  min-height: 0;
-  overflow-y: auto;
+      .detail-right {
+        flex: 1;
+        height: 100%;
+        min-height: 0;
+        overflow-y: auto;
+        border: 2px solid white;
+        padding: 15px;
 
-  border: 2px solid white;
-  padding: 15px;
-  box-sizing: border-box;
-}
+        /* 🔥 SLIDE IN */
+        transform: translateX(40px);
+        opacity: 0;
+        animation: slideRight 0.6s ease forwards;
+        animation-delay: 0.2s;
+      }
+
+      @keyframes slideLeft {
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideRight {
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
       .detail-body {
-  display: flex;
-  gap: 30px;
+        display: flex;
+        gap: 30px;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+        align-items: flex-start;
+      }
 
-  flex: 1;
-  min-height: 0;
+      .detail-left::-webkit-scrollbar,
+      .detail-right::-webkit-scrollbar {
+        width: 2px;
+      }
 
-  overflow: hidden;
+      .detail-left::-webkit-scrollbar-thumb,
+      .detail-right::-webkit-scrollbar-thumb {
+        background: white;
+      }
 
-  align-items: flex-start; /* 🔥 THIS is the missing piece */
-}
-      /* ===== CUSTOM SCROLLBAR (WHITE MINIMAL) ===== */
-
-/* Chrome / Edge / Safari */
-.detail-left::-webkit-scrollbar,
-.detail-right::-webkit-scrollbar {
-  width: 2px; /* thin line */
-}
-
-.detail-left::-webkit-scrollbar-track,
-.detail-right::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.detail-left::-webkit-scrollbar-thumb,
-.detail-right::-webkit-scrollbar-thumb {
-  background: white;
-  border-radius: 10px;
-}
-
-/* Firefox */
-.detail-left,
-.detail-right {
-  scrollbar-width: thin;
-  scrollbar-color: white transparent;
-}
+      .detail-left,
+      .detail-right {
+        scrollbar-width: thin;
+        scrollbar-color: white transparent;
+      }
     }
   </style>
 </head>
 
 <body>
 
-<!-- QR OVERLAY -->
 <div id="qrEntry" style="display:none;">
   <div class="qr-center">
     <div class="ring r1"></div>
@@ -320,14 +368,6 @@
 
 <div class="overlay" id="gradesOverlay">
   <div class="close-btn" id="closeOverlay">✕</div>
-  <div class="nav-btn" data-grade="HG"><span>HG</span></div>
-  <div class="nav-btn" data-grade="MG"><span>MG</span></div>
-  <div class="nav-btn" data-grade="RG"><span>RG</span></div>
-  <div class="nav-btn" data-grade="PG"><span>PG</span></div>
-  <div class="nav-btn" data-grade="SD"><span>SD</span></div>
-  <div class="nav-btn" data-grade="MEGASIZE"><span>MEGA</span></div>
-  <div class="nav-btn"><span>MISC</span></div>
-  <div class="nav-btn"><span>CUSTOM</span></div>
 </div>
 
 <div class="app">
@@ -388,7 +428,7 @@ fetch(`data/${file}`)
       `${kit.mold} • ${kit.variant} • ${kit.year}`;
   });
 
-/* CONTENT SPLIT */
+/* CONTENT */
 fetch(kitPath + "content.html")
   .then(res => res.text())
   .then(html => {
@@ -408,137 +448,34 @@ fetch(kitPath + "content.html")
     });
   });
 
-/* IMAGES */
+/* IMAGES (FADE IN) */
 const box = document.createElement("img");
 box.src = kitPath + "images/box.jpg";
+box.style.opacity = "0";
+
+box.onload = () => {
+  box.style.transition = "opacity 0.5s ease";
+  box.style.opacity = "1";
+};
+
 document.getElementById("boxart").appendChild(box);
 
 let index = 1;
 function loadNextImage() {
   const img = new Image();
   img.src = kitPath + "images/" + index + ".jpg";
+  img.style.opacity = "0";
 
   img.onload = () => {
+    img.style.transition = "opacity 0.5s ease";
+    img.style.opacity = "1";
+
     document.getElementById("gallery").appendChild(img);
     index++;
     loadNextImage();
   };
 }
 loadNextImage();
-
-/* NAV */
-document.getElementById("homeBtn").onclick = () => {
-  window.location.href = "index.html";
-};
-
-const gradesBtn = document.getElementById("gradesBtn");
-const dropdown = document.getElementById("gradesDropdown");
-const overlay = document.getElementById("gradesOverlay");
-
-gradesBtn.onclick = () => {
-  if (window.innerWidth <= 600) {
-    overlay.classList.add("open");
-    document.body.style.overflow = "hidden";
-  } else {
-    const isOpen = dropdown.classList.toggle("open");
-
-    if (isOpen) {
-      const items = dropdown.querySelectorAll(".nav-btn");
-      items.forEach((item, i) => {
-        item.style.animation = "none";
-        item.offsetHeight;
-        item.style.animation = `flyInDropdown 0.35s forwards ${i * 0.08}s`;
-      });
-    }
-  }
-};
-
-document.getElementById("closeOverlay").onclick = () => {
-  overlay.classList.remove("open");
-  document.body.style.overflow = "";
-};
-
-document.querySelectorAll("[data-grade]").forEach(btn => {
-  btn.onclick = () => {
-    const g = btn.getAttribute("data-grade");
-    window.location.href = `kits.html?grade=${g}`;
-  };
-});
-
-/* ============================= */
-/* QR SYSTEM (SAFE ADD-ON ONLY) */
-/* ============================= */
-document.addEventListener("DOMContentLoaded", () => {
-  const fromQR = new URLSearchParams(window.location.search).get("src") === "qr";
-  if (!fromQR) return;
-
-  const overlay = document.getElementById("qrEntry");
-  const text = document.getElementById("qrText");
-
-  if (!overlay || !text) return;
-
-  overlay.style.display = "flex";
-
-  const sequence = [
-    "QR AUTHENTICATED",
-    "ACCESS GRANTED",
-    "ENTRY LOADED"
-  ];
-
-  let lineIndex = 0;
-
-  function typeLine(line, callback) {
-    let i = 0;
-    text.textContent = "";
-
-    const typing = setInterval(() => {
-      text.textContent += line[i];
-      i++;
-
-      if (i >= line.length) {
-        clearInterval(typing);
-
-        setTimeout(() => deleteLine(callback), 800); // pause before delete
-      }
-    }, 60); // typing speed
-  }
-
-  function deleteLine(callback) {
-    let current = text.textContent;
-
-    const deleting = setInterval(() => {
-      current = current.slice(0, -1);
-      text.textContent = current;
-
-      if (current.length === 0) {
-        clearInterval(deleting);
-        callback();
-      }
-    }, 20); // delete speed
-  }
-
-  function nextLine() {
-    lineIndex++;
-
-    if (lineIndex < sequence.length) {
-      typeLine(sequence[lineIndex], nextLine);
-    } else {
-      finishSequence();
-    }
-  }
-
-  function finishSequence() {
-    text.style.opacity = "0";
-
-    overlay.style.transition = "clip-path 1.2s ease";
-    overlay.style.clipPath = "circle(0% at 50% 50%)";
-
-    setTimeout(() => overlay.remove(), 1300);
-  }
-
-  // start
-  typeLine(sequence[0], nextLine);
-});
 </script>
 
 </body>
