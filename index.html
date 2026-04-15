@@ -25,6 +25,17 @@
   }
 
   .bg-image {
+    #bgActive {
+  position: absolute;
+  inset: 0;
+  background-image: url('rx78-bg-active.png');
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
     position: absolute;
     inset: 0;
     background-image: url('rx78-bg.png');
@@ -235,6 +246,17 @@
   justify-content: center;
 }
 
+#bootText {
+  position: absolute;
+  color: white;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+  letter-spacing: 2px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  text-align: center;
+}
+
 #enterBtn {
   background: transparent;
   border: 2px solid white;
@@ -284,17 +306,21 @@
 <body>
 <div id="entryGate">
   <div class="gate-center">
+
     <div class="ring r1"></div>
     <div class="ring r2"></div>
     <div class="ring r3"></div>
 
+    <div id="bootText">INITIALIZING</div>
+
     <button id="enterBtn">ENTER SYSTEM</button>
+
   </div>
 </div>
 
 <div class="app">
   <div class="bg-image" id="bgImage"></div>
-
+  <div class="bg-image" id="bgActive"></div>
   <div class="content">
     <div class="hero"></div>
 
@@ -386,6 +412,54 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
 });
 
 window.addEventListener("pageshow", (event) => {
+  /* ============================= */
+/* ENTER SYSTEM BOOT SEQUENCE */
+/* ============================= */
+
+const overlay = document.getElementById("entryGate");
+const enterBtn = document.getElementById("enterBtn");
+const bootText = document.getElementById("bootText");
+
+const bgIdle = document.getElementById("bgImage");
+const bgActive = document.getElementById("bgActive");
+
+function setActive(on) {
+  bgActive.style.opacity = on ? "1" : "0";
+  bgIdle.style.opacity = on ? "0.2" : "1";
+}
+
+enterBtn.addEventListener("click", () => {
+
+  // STEP 1 — hide button
+  enterBtn.style.opacity = "0";
+
+  // STEP 2 — show boot text
+  bootText.style.opacity = "1";
+  bootText.textContent = "CREDENTIAL CONFIRMED";
+
+  // STEP 3 — start circles + ramp background
+  setTimeout(() => {
+    bootText.textContent = "SYSTEM ONLINE";
+    setActive(true);
+  }, 600);
+
+  // STEP 4 — hold state
+  setTimeout(() => {
+
+    // STEP 5 — fade everything out
+    overlay.style.opacity = "0";
+    overlay.style.transition = "opacity 0.8s ease";
+
+    setTimeout(() => {
+      overlay.style.display = "none";
+
+      // STEP 6 — UI already exists → trigger your existing animations here if needed
+
+    }, 800);
+
+  }, 2200);
+
+});
   if (event.persisted) {
     location.reload();
   }
