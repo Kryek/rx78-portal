@@ -33,7 +33,7 @@
   background-repeat: no-repeat;
   z-index: 0;
 
-  transition: transform 0.8s ease;
+  transition: transform 0.8s ease, opacity 0.8s ease;
 }
 
 #bgActive {
@@ -496,10 +496,12 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
   const bgIdle = document.getElementById("bgImage");
   const bgActive = document.getElementById("bgActive");
 
-  // 👇 Force initial state ONLY for skip case
+  // 🔥 critical reset
+  bgIdle.style.transform = "translateX(0%)";
+
+  // fade setup
   bgIdle.style.opacity = "0";
 
-  // 🌌 Fade in base background
   setTimeout(() => {
     bgIdle.style.transition = "opacity 0.8s ease";
     bgIdle.style.opacity = "1";
