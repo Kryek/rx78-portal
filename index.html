@@ -25,7 +25,26 @@
   }
 
   .bg-image {
-    #bgActive {
+  position: absolute;
+  inset: 0;
+  background-image: url('rx78-bg.png');
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  transition: transform 0.8s ease, opacity 1s ease;
+  will-change: transform, opacity;
+}
+
+.bg-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+}
+
+/* ACTIVE BACKGROUND LAYER */
+#bgActive {
   position: absolute;
   inset: 0;
   background-image: url('rx78-bg-active.png');
@@ -36,23 +55,6 @@
   opacity: 0;
   transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
-    position: absolute;
-    inset: 0;
-    background-image: url('rx78-bg.png');
-    background-size: cover;
-    background-position: top center;
-    background-repeat: no-repeat;
-    z-index: 0;
-    transition: transform 0.8s ease;
-    will-change: transform;
-  }
-
-  .bg-image::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-  }
 
   .content {
     position: relative;
@@ -272,6 +274,20 @@
   z-index: 10;
 }
 
+#enterBtn {
+  position: relative;
+  z-index: 10;
+}
+
+#bootText {
+  z-index: 5;
+  pointer-events: none;
+}
+
+.ring {
+  pointer-events: none;
+}
+
 #bootText {
   z-index: 5;
   pointer-events: none;
@@ -314,6 +330,27 @@
   @keyframes fadeOutDropdown {
     to { transform: translateX(-100px); opacity:0; }
   }
+
+  .ring {
+  position: absolute;
+  border: 2px solid rgba(255,255,255,0.5);
+  border-radius: 50%;
+  inset: 0;
+}
+
+.r1 { animation: spin 6s linear infinite; }
+.r2 { inset: 18px; animation: spinReverse 8s linear infinite; opacity: 0.7; }
+.r3 { inset: 36px; animation: spin 10s linear infinite; opacity: 0.4; }
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinReverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
 
   </style>
 </head>
@@ -454,9 +491,10 @@ function startBootSequence() {
   const bgActive = document.getElementById("bgActive");
 
   function setActive(on) {
-    bgActive.style.opacity = on ? "1" : "0";
-    bgIdle.style.opacity = on ? "0.2" : "1";
-  }
+  bgActive.style.opacity = on ? "1" : "0";
+  bgIdle.style.opacity = on ? "0.15" : "1";
+  bgIdle.style.filter = on ? "brightness(0.8) contrast(1.2)" : "none";
+}
 
   // STEP 1
   enterBtn.style.opacity = "0";
