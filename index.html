@@ -642,6 +642,19 @@ setTimeout(() => {
 
 }, 5000);
 }
+window.addEventListener("pageshow", () => {
+  const bg = document.getElementById("bgImage");
+
+  // HARD RESET STATE EVERY TIME PAGE IS SHOWN
+  bg.style.transition = "none";
+  bg.style.transform = "translateX(0%)";
+
+  bg.offsetHeight;
+
+  requestAnimationFrame(() => {
+    bg.style.transition = "transform 0.8s ease";
+  });
+});
 </script>
 
 </body>
