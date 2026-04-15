@@ -267,6 +267,20 @@
   letter-spacing: 2px;
 }
 
+#enterBtn {
+  position: relative;
+  z-index: 10;
+}
+
+#bootText {
+  z-index: 5;
+  pointer-events: none;
+}
+
+.ring {
+  pointer-events: none;
+}
+
   @media (max-width: 600px) {
     .panel {
       width: 80vw;
@@ -411,80 +425,67 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
   });
 });
 
-window.addEventListener("pageshow", (event) => {
-  /* ============================= */
-/* ENTER SYSTEM BOOT SEQUENCE */
-/* ============================= */
 
-const overlay = document.getElementById("entryGate");
-const enterBtn = document.getElementById("enterBtn");
-const bootText = document.getElementById("bootText");
-
-const bgIdle = document.getElementById("bgImage");
-const bgActive = document.getElementById("bgActive");
-
-function setActive(on) {
-  bgActive.style.opacity = on ? "1" : "0";
-  bgIdle.style.opacity = on ? "0.2" : "1";
-}
-
-enterBtn.addEventListener("click", () => {
-
-  // STEP 1 — hide button
-  enterBtn.style.opacity = "0";
-
-  // STEP 2 — show boot text
-  bootText.style.opacity = "1";
-  bootText.textContent = "CREDENTIAL CONFIRMED";
-
-  // STEP 3 — start circles + ramp background
-  setTimeout(() => {
-    bootText.textContent = "SYSTEM ONLINE";
-    setActive(true);
-  }, 600);
-
-  // STEP 4 — hold state
-  setTimeout(() => {
-
-    // STEP 5 — fade everything out
-    overlay.style.opacity = "0";
-    overlay.style.transition = "opacity 0.8s ease";
-
-    setTimeout(() => {
-      overlay.style.display = "none";
-
-      // STEP 6 — UI already exists → trigger your existing animations here if needed
-
-    }, 800);
-
-  }, 2200);
-
-});
-  if (event.persisted) {
-    location.reload();
-  }
-});
   document.addEventListener("DOMContentLoaded", () => {
   const overlay = document.getElementById("entryGate");
   const btn = document.getElementById("enterBtn");
 
   const now = Date.now();
   const lastAccess = localStorage.getItem("lastAccessTime");
-
   const TEN_MIN = 10 * 60 * 1000;
 
-  // 🔥 show if first time OR expired
   if (!lastAccess || (now - lastAccess) > TEN_MIN) {
     overlay.style.display = "flex";
   }
 
-  btn.onclick = () => {
-    overlay.style.display = "none";
-
-    // 🔥 save current time
+  btn.addEventListener("click", () => {
+    startBootSequence();
     localStorage.setItem("lastAccessTime", Date.now());
-  };
+  });
 });
+  
+function startBootSequence() {
+
+  const overlay = document.getElementById("entryGate");
+  const enterBtn = document.getElementById("enterBtn");
+  const bootText = document.getElementById("bootText");
+
+  const bgIdle = document.getElementById("bgImage");
+  const bgActive = document.getElementById("bgActive");
+
+  function setActive(on) {
+    bgActive.style.opacity = on ? "1" : "0";
+    bgIdle.style.opacity = on ? "0.2" : "1";
+  }
+
+  // STEP 1
+  enterBtn.style.opacity = "0";
+  enterBtn.style.pointerEvents = "none";
+
+  // STEP 2
+  bootText.style.opacity = "1";
+  bootText.textContent = "CREDENTIAL CONFIRMED";
+
+  // STEP 3
+  setTimeout(() => {
+    bootText.textContent = "SYSTEM ONLINE";
+    setActive(true);
+  }, 600);
+
+  // STEP 4
+  setTimeout(() => {
+    overlay.style.transition = "opacity 0.8s ease";
+    overlay.style.opacity = "0";
+
+    setTimeout(() => {
+      overlay.style.display = "none";
+
+      // optional: trigger nav anims here later
+
+    }, 800);
+
+  }, 2200);
+}
 </script>
 
 </body>
