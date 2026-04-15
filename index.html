@@ -46,7 +46,7 @@
   z-index: 0;
 
   opacity: 0;
-  transition: opacity 3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 
@@ -538,7 +538,7 @@ function startBootSequence() {
 
     bgActive.style.opacity = "1";
 
-  }, 4000);
+  }, 3500);
 
   // PHASE 3 — HOLD state
   setTimeout(() => {
@@ -546,7 +546,7 @@ function startBootSequence() {
     // keep everything stable for 2 seconds
     // (this is your “sustain moment”)
 
-  }, 600 + 3000);
+  }, 600 + 3500);
 
  // PHASE 4 — EXIT transition
 setTimeout(() => {
@@ -578,7 +578,7 @@ setTimeout(() => {
     bgActive.style.opacity = "0";
   }, 800); // 👈 tweak this (600–1000 sweet spot)
 
-}, 6000);
+}, 7000);
 }
 </script>
 
