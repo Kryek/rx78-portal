@@ -34,7 +34,6 @@
   z-index: 0;
 
   transition: transform 0.8s ease;
-  opacity: 0;
 }
 
 #bgActive {
@@ -492,42 +491,19 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
   overlay.style.display = "flex";
 
 } else {
-  // ✅ SKIP BOOT → soft system wake
+  // ✅ SKIP BOOT → instantly unlock UI
+  bootComplete = true;
 
-  const bgIdle = document.getElementById("bgImage");
-  const bgActive = document.getElementById("bgActive");
+  const buttons = document.querySelectorAll(".button-container > .panel");
 
-  // 🌌 Fade in base background
-  bgIdle.style.transition = "opacity 0.8s ease";
-  bgIdle.style.opacity = "1";
-
-  // ⚡ Optional: quick “activation flicker”
-  setTimeout(() => {
-    bgActive.style.transition = "opacity 0.3s ease-out";
-    bgActive.style.opacity = "1";
+  buttons.forEach((btn, i) => {
+    btn.style.opacity = "0";
+    btn.style.transform = "skew(-20deg) translateX(-100px)";
 
     setTimeout(() => {
-      bgActive.style.transition = "opacity 1.2s ease";
-      bgActive.style.opacity = "0";
-    }, 250);
-  }, 300);
-
-  // 🎛 Delay UI slightly so background leads
-  setTimeout(() => {
-    bootComplete = true;
-
-    const buttons = document.querySelectorAll(".button-container > .panel");
-
-    buttons.forEach((btn, i) => {
-      btn.style.opacity = "0";
-      btn.style.transform = "skew(-20deg) translateX(-100px)";
-
-      setTimeout(() => {
-        btn.style.animation = `flyIn 0.7s forwards`;
-      }, i * 120);
-    });
-
-  }, 400);
+      btn.style.animation = `flyIn 0.7s forwards`;
+    }, i * 120);
+  });
 }
 
   btn.addEventListener("click", () => {
