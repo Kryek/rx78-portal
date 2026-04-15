@@ -32,7 +32,7 @@
   background-position: top center;
   background-repeat: no-repeat;
   z-index: 0;
-  opacity: 0;
+
   transition: transform 0.8s ease;
 }
 
@@ -492,35 +492,7 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
 
 
   document.addEventListener("DOMContentLoaded", () => {
-const fromKits = sessionStorage.getItem("fromKits");
-sessionStorage.removeItem("fromKits");
 
-const bg = document.getElementById("bgImage");
-
-if (!fromKits) {
-  // ✅ normal entry → fade in
-  bg.style.opacity = "0";
-
-  setTimeout(() => {
-    bg.style.transition = "opacity 0.8s ease";
-    bg.style.opacity = "1";
-  }, 50);
-
-} else {
-  // ✅ coming from kits → instant show (no fade)
-  bg.style.opacity = "1";
-}
-  // ✅ ALWAYS reset transform state so slide animation can re-trigger properly
-bg.style.transition = "none";
-bg.style.transform = "translateX(0%)";
-
-// force reflow so browser "locks in" reset state
-bg.offsetHeight;
-
-// restore transition AFTER reset
-requestAnimationFrame(() => {
-  bg.style.transition = "transform 0.8s ease";
-});
   const resetZone = document.getElementById("resetBoot");
 
 resetZone.addEventListener("click", () => {
@@ -642,19 +614,6 @@ setTimeout(() => {
 
 }, 5000);
 }
-window.addEventListener("pageshow", () => {
-  const bg = document.getElementById("bgImage");
-
-  // HARD RESET STATE EVERY TIME PAGE IS SHOWN
-  bg.style.transition = "none";
-  bg.style.transform = "translateX(0%)";
-
-  bg.offsetHeight;
-
-  requestAnimationFrame(() => {
-    bg.style.transition = "transform 0.8s ease";
-  });
-});
 </script>
 
 </body>
