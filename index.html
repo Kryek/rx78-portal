@@ -269,6 +269,18 @@
   letter-spacing: 2px;
 }
 
+#resetBoot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 80px;
+  z-index: 10000;
+
+  /* fully invisible but clickable */
+  background: transparent;
+}
+
 #enterBtn {
   position: relative;
   z-index: 10;
@@ -372,6 +384,7 @@
   </style>
 </head>
 <body>
+<div id="resetBoot"></div>
 <div id="entryGate">
   <div class="gate-center">
 
@@ -479,6 +492,21 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
 
 
   document.addEventListener("DOMContentLoaded", () => {
+
+  const resetZone = document.getElementById("resetBoot");
+
+resetZone.addEventListener("click", () => {
+  localStorage.removeItem("lastAccessTime");
+
+  console.log("Boot timer reset");
+
+  // optional: quick visual feedback for dev
+  resetZone.style.background = "rgba(255,255,255,0.1)";
+  setTimeout(() => {
+    resetZone.style.background = "transparent";
+  }, 150);
+});
+    
   const overlay = document.getElementById("entryGate");
   const btn = document.getElementById("enterBtn");
 
