@@ -34,6 +34,7 @@
   z-index: 0;
 
   transition: transform 0.8s ease;
+  opacity: 1;
 }
 
 #bgActive {
@@ -433,6 +434,7 @@
 </div>
 
 <script>
+const fromKits = document.referrer.includes("kits.html");
 const bgImage = document.getElementById('bgImage');
 const mainButtons = document.querySelectorAll('.button-container > .panel');
 
@@ -492,7 +494,13 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
 
 
   document.addEventListener("DOMContentLoaded", () => {
-
+if (!fromKits) {
+  bgImage.style.opacity = "0";
+  requestAnimationFrame(() => {
+    bgImage.style.transition = "opacity 1.2s ease";
+    bgImage.style.opacity = "1";
+  });
+}
   const resetZone = document.getElementById("resetBoot");
 
 resetZone.addEventListener("click", () => {
