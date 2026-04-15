@@ -32,7 +32,7 @@
   background-position: top center;
   background-repeat: no-repeat;
   z-index: 0;
-
+  opacity: 0;
   transition: transform 0.8s ease;
 }
 
@@ -492,7 +492,24 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
 
 
   document.addEventListener("DOMContentLoaded", () => {
+const fromKits = sessionStorage.getItem("fromKits");
+sessionStorage.removeItem("fromKits");
 
+const bg = document.getElementById("bgImage");
+
+if (!fromKits) {
+  // ✅ normal entry → fade in
+  bg.style.opacity = "0";
+
+  setTimeout(() => {
+    bg.style.transition = "opacity 0.8s ease";
+    bg.style.opacity = "1";
+  }, 50);
+
+} else {
+  // ✅ coming from kits → instant show (no fade)
+  bg.style.opacity = "1";
+}
   const resetZone = document.getElementById("resetBoot");
 
 resetZone.addEventListener("click", () => {
