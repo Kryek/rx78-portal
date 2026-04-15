@@ -32,18 +32,11 @@
   background-position: top center;
   background-repeat: no-repeat;
   z-index: 0;
-  transition: transform 0.8s ease, opacity 1s ease;
-  will-change: transform, opacity;
+
+  opacity: 1;
+  transition: opacity 1s ease, transform 0.8s ease;
 }
 
-.bg-image::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-}
-
-/* ACTIVE BACKGROUND LAYER */
 #bgActive {
   position: absolute;
   inset: 0;
@@ -52,9 +45,11 @@
   background-position: top center;
   background-repeat: no-repeat;
   z-index: 0;
+
   opacity: 0;
-  transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 1s ease;
 }
+
 
   .content {
     position: relative;
@@ -490,39 +485,54 @@ function startBootSequence() {
   const bgIdle = document.getElementById("bgImage");
   const bgActive = document.getElementById("bgActive");
 
-  function setActive(on) {
-  bgActive.style.opacity = on ? "1" : "0";
-  bgIdle.style.opacity = on ? "0.15" : "1";
-  bgIdle.style.filter = on ? "brightness(0.8) contrast(1.2)" : "none";
-}
-
-  // STEP 1
+  // PHASE 1 — lock button
   enterBtn.style.opacity = "0";
   enterBtn.style.pointerEvents = "none";
 
-  // STEP 2
   bootText.style.opacity = "1";
   bootText.textContent = "CREDENTIAL CONFIRMED";
 
-  // STEP 3
+  // PHASE 2 — activate background + system online
   setTimeout(() => {
+
     bootText.textContent = "SYSTEM ONLINE";
-    setActive(true);
+
+    bgActive.style.opacity = "1";
+    bgIdle.style.opacity = "0.2";
+
   }, 600);
 
-  // STEP 4
+  // PHASE 3 — HOLD state
   setTimeout(() => {
-    overlay.style.transition = "opacity 0.8s ease";
+
+    // keep everything stable for 2 seconds
+    // (this is your “sustain moment”)
+
+  }, 600 + 2000);
+
+  // PHASE 4 — EXIT transition
+  setTimeout(() => {
+
+    overlay.style.transition = "opacity 0.9s ease";
     overlay.style.opacity = "0";
+
+    // IMPORTANT: fade activation OFF during exit
+    bgActive.style.opacity = "0";
+    bgIdle.style.opacity = "1";
 
     setTimeout(() => {
       overlay.style.display = "none";
 
-      // optional: trigger nav anims here later
+      // 🔥 trigger nav animations here
+      document.querySelectorAll(".panel").forEach((btn, i) => {
+        setTimeout(() => {
+          btn.style.animation = `flyIn 0.7s forwards`;
+        }, i * 120);
+      });
 
-    }, 800);
+    }, 900);
 
-  }, 2200);
+  }, 2600);
 }
 </script>
 
