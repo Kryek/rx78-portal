@@ -46,7 +46,7 @@
   z-index: 0;
 
   opacity: 0;
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 
@@ -548,35 +548,37 @@ function startBootSequence() {
 
   }, 600 + 3000);
 
-  // PHASE 4 — EXIT transition
-  setTimeout(() => {
+ // PHASE 4 — EXIT transition
+setTimeout(() => {
 
-    overlay.style.transition = "opacity 0.9s ease";
-    overlay.style.opacity = "0";
+  // 🔥 NAV STARTS IMMEDIATELY after SYSTEM ONLINE phase
+  bootComplete = true;
 
-    // IMPORTANT: fade activation OFF during exit
-    bgActive.style.opacity = "0";
+  const buttons = document.querySelectorAll(".button-container > .panel");
+
+  buttons.forEach((btn, i) => {
+    btn.style.opacity = "0";
+    btn.style.transform = "skew(-20deg) translateX(-100px)";
 
     setTimeout(() => {
-      overlay.style.display = "none";
+      btn.style.animation = `flyIn 0.7s forwards`;
+    }, i * 120);
+  });
 
-      // 🔥 trigger nav animations here
-      bootComplete = true;
-
-const buttons = document.querySelectorAll(".button-container > .panel");
-
-buttons.forEach((btn, i) => {
-  btn.style.opacity = "0";
-  btn.style.transform = "skew(-20deg) translateX(-100px)";
+  // 🎭 overlay fades AFTER nav already started
+  overlay.style.transition = "opacity 0.9s ease";
+  overlay.style.opacity = "0";
 
   setTimeout(() => {
-    btn.style.animation = `flyIn 0.7s forwards`;
-  }, i * 120);
-});
+    overlay.style.display = "none";
+  }, 900);
 
-    }, 900);
+  // 🌌 background fades OUT independently (linger effect)
+  setTimeout(() => {
+    bgActive.style.opacity = "0";
+  }, 800); // 👈 tweak this (600–1000 sweet spot)
 
-  }, 6000);
+}, 6000);
 }
 </script>
 
