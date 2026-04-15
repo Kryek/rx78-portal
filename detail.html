@@ -105,6 +105,22 @@
     }
 
     @media (max-width: 600px) {
+      /* MOBILE overlay animation base state */
+#boxart,
+#overview,
+#gallery,
+#trivia {
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+/* animate in */
+#boxart.show,
+#overview.show,
+#gallery.show,
+#trivia.show {
+  animation: flyUp 0.6s ease forwards;
+}
       /* 🔥 MOBILE LAYOUT FIX */
 .detail-body {
   display: flex;
