@@ -72,6 +72,21 @@
     width: calc(66% - 20px);
   }
 
+  #bgActive {
+  position: absolute;
+  inset: 0;
+  background-image: url('rx78-bg-active.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+
+  /* MUST match bgImage positioning system */
+  transform: translateX(50%);
+
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
   .menu {
     flex: 1;
     overflow-y: auto;
@@ -198,6 +213,7 @@
 
 <div class="app">
   <div class="bg-image" id="bgImage"></div>
+  <div class="bg-image" id="bgActive"></div>
 
   <div class="content">
 
@@ -218,6 +234,7 @@
 <script>
 const params = new URLSearchParams(window.location.search);
 const grade = params.get("grade");
+const bgActive = document.getElementById("bgActive");
 
 // ✅ REDIRECT IF INVALID OR MISSING
 const gradeMap = {
@@ -282,10 +299,11 @@ function displayKits(list) {
 
   // trigger fade
   fade.style.opacity = "1";
+  bgActive.style.opacity = "1";
 
   setTimeout(() => {
     window.location.href = `detail.html?grade=${grade}&id=${kit.id}`;
-  }, 700);
+  }, 1000);
 });
 
     kitList.appendChild(panel);
