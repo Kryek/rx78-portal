@@ -34,7 +34,6 @@
   z-index: 0;
 
   transition: transform 0.8s ease;
-  opacity: 0;
 }
 
 #bgActive {
@@ -497,11 +496,16 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
   const bgIdle = document.getElementById("bgImage");
   const bgActive = document.getElementById("bgActive");
 
-  // 🌌 Fade in base background
-  bgIdle.style.transition = "opacity 0.8s ease";
-  bgIdle.style.opacity = "1";
+  // 👇 Force initial state ONLY for skip case
+  bgIdle.style.opacity = "0";
 
-  // ⚡ Optional: quick “activation flicker”
+  // 🌌 Fade in base background
+  setTimeout(() => {
+    bgIdle.style.transition = "opacity 0.8s ease";
+    bgIdle.style.opacity = "1";
+  }, 50);
+
+  // ⚡ subtle activation pulse (optional but safe)
   setTimeout(() => {
     bgActive.style.transition = "opacity 0.3s ease-out";
     bgActive.style.opacity = "1";
@@ -512,7 +516,7 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
     }, 250);
   }, 300);
 
-  // 🎛 Delay UI slightly so background leads
+  // 🎛 UI comes after
   setTimeout(() => {
     bootComplete = true;
 
