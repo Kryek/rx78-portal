@@ -633,7 +633,18 @@ setTimeout(() => {
 }
 window.addEventListener("pageshow", (event) => {
   if (event.persisted) {
-    location.reload();
+    const bg = document.getElementById("bgImage");
+
+    // reset then re-trigger animation
+    bg.style.transition = "none";
+    bg.style.transform = "translateX(0%)";
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        bg.style.transition = "transform 0.8s ease";
+        bg.style.transform = "translateX(50%)";
+      });
+    });
   }
 });
 </script>
