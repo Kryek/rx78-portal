@@ -534,11 +534,13 @@ function startBootSequence() {
   // PHASE 2 — activate background + system online
   setTimeout(() => {
 
-    bootText.textContent = "SYSTEM ONLINE";
+  bootText.textContent = "SYSTEM ONLINE";
 
-    bgActive.style.opacity = "1";
+  // ⚡ FAST activation
+  bgActive.style.transition = "opacity 0.25s ease-out";
+  bgActive.style.opacity = "1";
 
-  }, 3500);
+}, 3500);
 
   // PHASE 3 — HOLD state
   setTimeout(() => {
@@ -575,8 +577,12 @@ setTimeout(() => {
 
   // 🌌 background fades OUT independently (linger effect)
   setTimeout(() => {
-    bgActive.style.opacity = "0";
-  }, 800); // 👈 tweak this (600–1000 sweet spot)
+
+  // 🌌 SLOW fade-out (lingers behind UI)
+  bgActive.style.transition = "opacity 2.2s cubic-bezier(0.22, 1, 0.36, 1)";
+  bgActive.style.opacity = "0";
+
+}, 800); // 👈 tweak this (600–1000 sweet spot)
 
 }, 7000);
 }
