@@ -33,7 +33,7 @@
   background-repeat: no-repeat;
   z-index: 0;
 
-  transition: transform 0.8s ease, opacity 0.8s ease;
+  transition: background-position 0.8s ease, opacity 0.8s ease;
 }
 
 #bgActive {
@@ -468,7 +468,7 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
       d.style.animation=`fadeOutDropdown 0.5s forwards ${i*0.05}s`;
     });
 
-    bgImage.style.transform='translateX(50%)';
+    bgImage.style.backgroundPosition = 'top right';
 
     const link=item.getAttribute('data-link');
     if(link && link!=='#'){
@@ -492,7 +492,7 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
 
 } else {
   // ✅ SKIP BOOT → soft system wake
-
+  bgImage.style.backgroundPosition = 'top center';
   const bgIdle = document.getElementById("bgImage");
   const bgActive = document.getElementById("bgActive");
 
