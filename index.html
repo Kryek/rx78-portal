@@ -465,8 +465,24 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
   const TEN_MIN = 10 * 60 * 1000;
 
   if (!lastAccess || (now - lastAccess) > TEN_MIN) {
-    overlay.style.display = "flex";
-  }
+  // ✅ SHOW BOOT
+  overlay.style.display = "flex";
+
+} else {
+  // ✅ SKIP BOOT → instantly unlock UI
+  bootComplete = true;
+
+  const buttons = document.querySelectorAll(".button-container > .panel");
+
+  buttons.forEach((btn, i) => {
+    btn.style.opacity = "0";
+    btn.style.transform = "skew(-20deg) translateX(-100px)";
+
+    setTimeout(() => {
+      btn.style.animation = `flyIn 0.7s forwards`;
+    }, i * 120);
+  });
+}
 
   btn.addEventListener("click", () => {
     startBootSequence();
