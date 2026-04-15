@@ -254,7 +254,7 @@
 }
 
 #enterBtn {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.85);  /* 👈 solid but still slightly breathable */
   border: 2px solid white;
   color: white;
   padding: 10px 20px;
@@ -327,7 +327,7 @@
 
   .ring {
   position: absolute;
-  border: 2px solid rgba(255,255,255,0.5);
+  border: 4px dashed rgba(255,255,255,0.5);
   border-radius: 50%;
   inset: 0;
 }
@@ -512,7 +512,7 @@ function startBootSequence() {
 
     bgActive.style.opacity = "1";
 
-  }, 2000);
+  }, 4000);
 
   // PHASE 3 — HOLD state
   setTimeout(() => {
@@ -520,7 +520,7 @@ function startBootSequence() {
     // keep everything stable for 2 seconds
     // (this is your “sustain moment”)
 
-  }, 600 + 4000);
+  }, 600 + 3000);
 
   // PHASE 4 — EXIT transition
   setTimeout(() => {
