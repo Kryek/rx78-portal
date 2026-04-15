@@ -33,7 +33,8 @@
   background-repeat: no-repeat;
   z-index: 0;
 
-  transition: background-position 0.8s ease, opacity 0.8s ease;
+  transition: transform 0.8s ease;
+  opacity: 0;
 }
 
 #bgActive {
@@ -468,7 +469,7 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
       d.style.animation=`fadeOutDropdown 0.5s forwards ${i*0.05}s`;
     });
 
-    bgImage.style.backgroundPosition = 'top right';
+    bgImage.style.transform='translateX(50%)';
 
     const link=item.getAttribute('data-link');
     if(link && link!=='#'){
@@ -492,22 +493,15 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
 
 } else {
   // ✅ SKIP BOOT → soft system wake
-  bgImage.style.backgroundPosition = 'top center';
+
   const bgIdle = document.getElementById("bgImage");
   const bgActive = document.getElementById("bgActive");
 
-  // 🔥 critical reset
-  bgIdle.style.transform = "translateX(0%)";
+  // 🌌 Fade in base background
+  bgIdle.style.transition = "opacity 0.8s ease";
+  bgIdle.style.opacity = "1";
 
-  // fade setup
-  bgIdle.style.opacity = "0";
-
-  setTimeout(() => {
-    bgIdle.style.transition = "opacity 0.8s ease";
-    bgIdle.style.opacity = "1";
-  }, 50);
-
-  // ⚡ subtle activation pulse (optional but safe)
+  // ⚡ Optional: quick “activation flicker”
   setTimeout(() => {
     bgActive.style.transition = "opacity 0.3s ease-out";
     bgActive.style.opacity = "1";
@@ -518,7 +512,7 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
     }, 250);
   }, 300);
 
-  // 🎛 UI comes after
+  // 🎛 Delay UI slightly so background leads
   setTimeout(() => {
     bootComplete = true;
 
