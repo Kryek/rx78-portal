@@ -33,7 +33,9 @@
   background-repeat: no-repeat;
   z-index: 0;
 
-  transition: transform 0.8s ease;
+  opacity: 0;
+
+  transition: transform 0.8s ease, opacity 0.8s ease;
 }
 
 #bgActive {
@@ -492,6 +494,13 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
 
 
   document.addEventListener("DOMContentLoaded", () => {
+    
+  const bgImage = document.getElementById("bgImage");
+
+// 👇 fade-in on every load
+setTimeout(() => {
+  bgImage.style.opacity = "1";
+}, 50);
 
   const resetZone = document.getElementById("resetBoot");
 
