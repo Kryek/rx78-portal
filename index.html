@@ -494,7 +494,24 @@ document.querySelectorAll('.panel[data-link]').forEach(item=>{
 
 
   document.addEventListener("DOMContentLoaded", () => {
-    
+
+  const fromKits = sessionStorage.getItem("fromKits");
+sessionStorage.removeItem("fromKits"); // clear immediately
+
+const bgIdle = document.getElementById("bgImage");
+
+// 🚫 Skip fade if coming from kits
+if (!fromKits) {
+  bgIdle.style.opacity = "0";
+
+  setTimeout(() => {
+    bgIdle.style.transition = "opacity 0.8s ease";
+    bgIdle.style.opacity = "1";
+  }, 50);
+} else {
+  // instant show, no fade
+  bgIdle.style.opacity = "1";
+}
   const bgImage = document.getElementById("bgImage");
 
 // 👇 fade-in on every load
