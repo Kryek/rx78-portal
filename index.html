@@ -510,6 +510,17 @@ if (!fromKits) {
   // ✅ coming from kits → instant show (no fade)
   bg.style.opacity = "1";
 }
+  // ✅ ALWAYS reset transform state so slide animation can re-trigger properly
+bg.style.transition = "none";
+bg.style.transform = "translateX(0%)";
+
+// force reflow so browser "locks in" reset state
+bg.offsetHeight;
+
+// restore transition AFTER reset
+requestAnimationFrame(() => {
+  bg.style.transition = "transform 0.8s ease";
+});
   const resetZone = document.getElementById("resetBoot");
 
 resetZone.addEventListener("click", () => {
@@ -631,22 +642,6 @@ setTimeout(() => {
 
 }, 5000);
 }
-window.addEventListener("pageshow", (event) => {
-  if (event.persisted) {
-    const bg = document.getElementById("bgImage");
-
-    // reset then re-trigger animation
-    bg.style.transition = "none";
-    bg.style.transform = "translateX(0%)";
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        bg.style.transition = "transform 0.8s ease";
-        bg.style.transform = "translateX(50%)";
-      });
-    });
-  }
-});
 </script>
 
 </body>
