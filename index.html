@@ -631,6 +631,11 @@ setTimeout(() => {
 
 }, 5000);
 }
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) {
+    location.reload();
+  }
+});
 </script>
 
 </body>
