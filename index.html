@@ -332,9 +332,13 @@
   inset: 0;
 }
 
-.r1 { animation: spin 6s linear infinite; }
-.r2 { inset: 18px; animation: spinReverse 8s linear infinite; opacity: 0.7; }
-.r3 { inset: 36px; animation: spin 10s linear infinite; opacity: 0.4; }
+.r1, .r2, .r3 {
+  animation: none;
+}
+
+.ring.active.r1 { animation: spin 6s linear infinite; }
+.ring.active.r2 { animation: spinReverse 8s linear infinite; }
+.ring.active.r3 { animation: spin 10s linear infinite; }
 
 @keyframes spin {
   from { transform: rotate(0deg); }
@@ -495,11 +499,14 @@ function startBootSequence() {
   const enterBtn = document.getElementById("enterBtn");
   const bootText = document.getElementById("bootText");
 
+  const rings = document.querySelectorAll(".ring");
+
   const bgIdle = document.getElementById("bgImage");
   const bgActive = document.getElementById("bgActive");
 
   // PHASE 1 — lock button
   enterBtn.style.opacity = "0";
+  rings.forEach(r => r.classList.add("active"));
   enterBtn.style.pointerEvents = "none";
 
   bootText.style.opacity = "1";
