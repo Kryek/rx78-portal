@@ -224,6 +224,18 @@
 
     ul { padding-left: 18px; }
 
+#qrDebugBtn {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  z-index: 9998;
+
+  /* invisible */
+  background: transparent;
+}
+
     /* ============================= */
 /* QR ENTRY OVERLAY SYSTEM */
 /* ============================= */
@@ -419,6 +431,8 @@
 
 <body>
 
+<div id="qrDebugBtn"></div>
+  
 <!-- QR OVERLAY -->
 <div id="qrEntry" style="display:none;">
   <div class="qr-center">
@@ -767,6 +781,17 @@ setTimeout(() => {
     }, i * 100); // stagger
   });
 }
+
+document.getElementById("qrDebugBtn").addEventListener("click", () => {
+  const params = new URLSearchParams(window.location.search);
+
+  const grade = params.get("grade");
+  const id = params.get("id");
+
+  if (!grade || !id) return;
+
+  window.location.href = `detail.html?grade=${grade}&id=${id}&src=qr`;
+});
 
 </script>
 
