@@ -569,14 +569,14 @@ bootText.textContent = "LOGGING IN";
   // PHASE 2 — activate background + system online
   setTimeout(() => {
   bootText.textContent = "CREDENTIAL CONFIRMED";
-}, 3000);
+}, 2000);
 
 setTimeout(() => {
   bootText.textContent = "SYSTEM ONLINE";
   bootText.classList.add("boot-green");
   bgActive.style.transition = "opacity 0.25s ease-out";
   bgActive.style.opacity = "1";
-}, 6000);
+}, 5000);
 
   // PHASE 3 — HOLD state
   setTimeout(() => {
@@ -618,7 +618,7 @@ setTimeout(() => {
   bgActive.style.transition = "opacity 2.2s cubic-bezier(0.22, 1, 0.36, 1)";
   bgActive.style.opacity = "0";
 
-}, 2000); // 👈 tweak this (600–1000 sweet spot)
+}, 4000); // 👈 tweak this (600–1000 sweet spot)
 
 }, 8500);
 }
