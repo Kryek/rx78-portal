@@ -547,6 +547,7 @@ resetZone.addEventListener("click", () => {
 } else {
   // ✅ SKIP BOOT → instantly unlock UI
   bootComplete = true;
+    bgIdle.style.transform = "translateX(0%)";
 
   const buttons = document.querySelectorAll(".button-container > .panel");
 
