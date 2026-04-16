@@ -210,7 +210,7 @@
 <body>
 
 <div id="fadeOut"></div>
-
+<div class="line">${kit.mold} (${kit.grade})</div>
 <div class="app">
   <div class="bg-image" id="bgImage"></div>
   <div class="bg-image" id="bgActive"></div>
@@ -275,7 +275,14 @@ if (current.file === "all") {
     fetch("data/sd-kits.json").then(r => r.json()),
     fetch("data/megasize-kits.json").then(r => r.json())
   ]).then(results => {
-    kits = results.flatMap(r => r.kits);
+    kits = results.flatMap((r, i) => {
+  const grades = ["HG","MG","RG","PG","SD","MEGASIZE"];
+
+  return r.kits.map(k => ({
+    ...k,
+    grade: grades[i] // 🔥 attach real grade
+  }));
+});
 
     kits = kits.filter(k => (k.status || "built") === "backlog");
 
@@ -325,7 +332,9 @@ function displayKits(list) {
   bgActive.style.opacity = "1";
 
   setTimeout(() => {
-    window.location.href = `detail.html?grade=${grade}&id=${kit.id}`;
+    const targetGrade = grade === "BACKLOG" ? kit.grade : grade;
+
+window.location.href = `detail.html?grade=${targetGrade}&id=${kit.id}`;
   }, 2000);
 });
 
