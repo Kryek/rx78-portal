@@ -245,7 +245,8 @@ const gradeMap = {
   SD: { title: "SUPER DEFORMED & GASHAPON", file: "sd-kits.json" },
   MEGASIZE: { title: "MEGA SIZE MODEL", file: "megasize-kits.json" },
   MISC: { title: "MISCELLANEOUS", file: "misc-kits.json" },
-  CUSTOM: { title: "CUSTOMS", file: "custom-kits.json" }
+  CUSTOM: { title: "CUSTOMS", file: "custom-kits.json" },
+  BACKLOG: { title: "BACKLOG", file: "all" }
 };
 
 if (!grade || !gradeMap[grade]) {
@@ -265,7 +266,33 @@ let kits = [];
 
 pageTitle.textContent = current.title;
 
-fetch(`data/${current.file}`)
+if (current.file === "all") {
+  Promise.all([
+    fetch("data/hg-kits.json").then(r => r.json()),
+    fetch("data/mg-kits.json").then(r => r.json()),
+    fetch("data/rg-kits.json").then(r => r.json()),
+    fetch("data/pg-kits.json").then(r => r.json()),
+    fetch("data/sd-kits.json").then(r => r.json()),
+    fetch("data/megasize-kits.json").then(r => r.json()),
+    fetch("data/misc-kits.json").then(r => r.json()),
+    fetch("data/custom-kits.json").then(r => r.json())
+  ]).then(results => {
+    kits = results.flatMap(r => r.kits);
+
+    kits = kits.filter(k => (k.status || "built") === "backlog");
+
+    displayKits(kits);
+  });
+
+} else {
+  fetch(`data/${current.file}`)
+    .then(res => res.json())
+    .then(data => {
+      kits = data.kits;
+
+      displayKits(kits);
+    });
+}
   .then(res => res.json())
   .then(data => {
     kits = data.kits;
