@@ -273,9 +273,7 @@ if (current.file === "all") {
     fetch("data/rg-kits.json").then(r => r.json()),
     fetch("data/pg-kits.json").then(r => r.json()),
     fetch("data/sd-kits.json").then(r => r.json()),
-    fetch("data/megasize-kits.json").then(r => r.json()),
-    fetch("data/misc-kits.json").then(r => r.json()),
-    fetch("data/custom-kits.json").then(r => r.json())
+    fetch("data/megasize-kits.json").then(r => r.json())
   ]).then(results => {
     kits = results.flatMap(r => r.kits);
 
