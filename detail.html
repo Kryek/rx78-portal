@@ -419,6 +419,18 @@
   opacity: 1 !important;
   transform: skew(-20deg) translateX(0) !important;
 }
+
+/* Disable text selection */
+body, .nav-btn, .panel, .line, .text {
+  -webkit-user-select: none; /* iOS Safari */
+  -ms-user-select: none;     /* old Edge */
+  user-select: none;         /* standard */
+}
+
+/* Optional: remove tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
   </style>
 </head>
 
