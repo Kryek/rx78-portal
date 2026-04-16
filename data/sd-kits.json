@@ -6,7 +6,7 @@
       "mold": "BB Senshi",
       "variant": "Standard",
       "year": "1999",
-      "notes": ""
+      "status": "backlog"
     },
     {
       "id": "bb-senshi-animation-color",
@@ -14,7 +14,7 @@
       "mold": "BB Senshi",
       "variant": "Animation Color Ver.",
       "year": "2009",
-      "notes": ""
+      "status": "backlog"
     },
     {
       "id": "sdex-solid-clear",
@@ -22,7 +22,7 @@
       "mold": "EX-Standard",
       "variant": "Solid Clear",
       "year": "2020",
-      "notes": ""
+      "status": "backlog"
     },
     {
       "id": "sdex-standard",
@@ -30,7 +30,7 @@
       "mold": "EX-Standard",
       "variant": "Standard",
       "year": "2015",
-      "notes": ""
+      "status": "built"
     }
   ]
 }
