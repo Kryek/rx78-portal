@@ -284,12 +284,22 @@ if (current.file === "all") {
 
 } else {
   fetch(`data/${current.file}`)
-    .then(res => res.json())
-    .then(data => {
-      kits = data.kits;
+  .then(res => res.json())
+  .then(data => {
 
-      displayKits(kits);
+    // ✅ ONLY BUILT KITS
+    kits = data.kits.filter(k => (k.status || "built") === "built");
+
+    // ✅ SORT
+    kits.sort((a, b) => {
+      const moldCompare = (a.mold || "").localeCompare(b.mold || "");
+      if (moldCompare !== 0) return moldCompare;
+
+      return (a.variant || "").localeCompare(b.variant || "");
     });
+
+    displayKits(kits);
+  });
 }
 if (current.file === "all") {
   Promise.all([
