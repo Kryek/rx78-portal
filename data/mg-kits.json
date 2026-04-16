@@ -6,7 +6,7 @@
       "mold": "Gundam The Origin Ver.",
       "variant": "Standard",
       "year": "2015",
-      "notes": "built"
+      "status": "built"
     },
     {
       "id": "mg-v3-standard",
@@ -14,7 +14,7 @@
       "mold": "Ver. 3.0",
       "variant": "Standard",
       "year": "2013",
-      "notes": "backlog"
+      "status": "backlog"
     },
     {
       "id": "verka-standard",
@@ -22,7 +22,7 @@
       "mold": "Ver. Ka",
       "variant": "Standard",
       "year": "2002",
-      "notes": "built"
+      "status": "built"
     }
   ]
 }
