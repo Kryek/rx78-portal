@@ -722,6 +722,9 @@ setTimeout(() => {
 
 }, 8500);
 }
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+}
 </script>
 
 </body>
