@@ -6,7 +6,7 @@
       "mold": "Beyond Global",
       "variant": "Standard",
       "year": "2020",
-      "notes": ""
+      "status": "built"
     },
     {
       "id": "g40-standard",
@@ -14,7 +14,7 @@
       "mold": "G40",
       "variant": "Standard",
       "year": "2019",
-      "notes": ""
+      "status": "built"
     },
     {
       "id": "revive-standard",
@@ -22,7 +22,7 @@
       "mold": "Revive Ver.",
       "variant": "Standard",
       "year": "2015",
-      "notes": ""
+      "status": "built"
     }
   ]
 }
