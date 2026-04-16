@@ -334,6 +334,16 @@
     }
   }
 
+  @keyframes systemFlash {
+  0% { filter: brightness(1); }
+  30% { filter: brightness(2.5) contrast(1.2); }
+  100% { filter: brightness(1); }
+}
+
+.system-flash {
+  animation: systemFlash 0.6s ease;
+}
+
   @keyframes flyIn {
     to { transform: skew(-20deg) translateX(0); opacity:1; }
   }
@@ -546,6 +556,24 @@ resetZone.addEventListener("click", () => {
     localStorage.setItem("lastAccessTime", Date.now());
   });
 });
+
+function typeBootText(text, speed = 50, callback) {
+  const bootText = document.getElementById("bootText");
+  let i = 0;
+  bootText.textContent = "";
+
+  function type() {
+    if (i < text.length) {
+      bootText.textContent += text[i];
+      i++;
+      setTimeout(type, speed);
+    } else {
+      if (callback) callback();
+    }
+  }
+
+  type();
+}
   
 function startBootSequence() {
   
@@ -564,19 +592,51 @@ function startBootSequence() {
   enterBtn.style.pointerEvents = "none";
 
   bootText.style.opacity = "1";
-bootText.textContent = "LOGGING IN";
 
-  // PHASE 2 — activate background + system online
-  setTimeout(() => {
-  bootText.textContent = "CREDENTIAL CONFIRMED";
-}, 2000);
+function typeBootText(text, speed, callback) {
+  let i = 0;
+  bootText.textContent = "";
 
-setTimeout(() => {
-  bootText.textContent = "SYSTEM ONLINE";
-  bootText.classList.add("boot-green");
-  bgActive.style.transition = "opacity 0.25s ease-out";
-  bgActive.style.opacity = "1";
-}, 5000);
+  const interval = setInterval(() => {
+    bootText.textContent += text[i];
+    i++;
+
+    if (i >= text.length) {
+      clearInterval(interval);
+      if (callback) setTimeout(callback, 600);
+    }
+  }, speed);
+}
+
+// PHASE 1 — LOGGING IN (typewriter)
+typeBootText("LOGGING IN", 70, () => {
+
+  // PHASE 2 — CREDENTIAL CONFIRMED (typewriter)
+  typeBootText("CREDENTIAL CONFIRMED", 55, () => {
+
+    // PHASE 3 — SYSTEM ONLINE (FLASH + background activation)
+    setTimeout(() => {
+      bootText.textContent = "SYSTEM ONLINE";
+      bootText.classList.add("boot-green");
+
+      // 🔥 FLASH EFFECT
+      bootText.style.transition = "none";
+      bootText.style.transform = "scale(1.15)";
+      bootText.style.filter = "brightness(2)";
+      
+      setTimeout(() => {
+        bootText.style.transition = "all 0.25s ease-out";
+        bootText.style.transform = "scale(1)";
+        bootText.style.filter = "brightness(1)";
+      }, 120);
+
+      // background activate
+      bgActive.style.transition = "opacity 0.25s ease-out";
+      bgActive.style.opacity = "1";
+
+    }, 300);
+  });
+});
 
   // PHASE 3 — HOLD state
   setTimeout(() => {
