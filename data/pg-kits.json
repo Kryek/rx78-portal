@@ -6,7 +6,7 @@
       "mold": "Perfect Grade",
       "variant": "Standard",
       "year": "1998",
-      "notes": ""
+      "status": "backlog"
     },
     {
       "id": "pgu-standard",
@@ -14,7 +14,7 @@
       "mold": "Perfect Grade Unleashed",
       "variant": "Standard",
       "year": "2020",
-      "notes": ""
+      "status": "backlog"
     }
   ]
 }
