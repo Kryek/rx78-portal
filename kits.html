@@ -301,50 +301,7 @@ if (current.file === "all") {
     displayKits(kits);
   });
 }
-if (current.file === "all") {
-  Promise.all([
-    fetch("data/hg-kits.json").then(r => r.json()),
-    fetch("data/mg-kits.json").then(r => r.json()),
-    fetch("data/rg-kits.json").then(r => r.json()),
-    fetch("data/pg-kits.json").then(r => r.json()),
-    fetch("data/sd-kits.json").then(r => r.json()),
-    fetch("data/megasize-kits.json").then(r => r.json())
-  ]).then(results => {
-
-    kits = results.flatMap(r => r.kits);
-
-    // ✅ FILTER backlog
-    kits = kits.filter(k => (k.status || "built") === "backlog");
-
-    // ✅ SORT
-    kits.sort((a, b) => {
-      const moldCompare = (a.mold || "").localeCompare(b.mold || "");
-      if (moldCompare !== 0) return moldCompare;
-
-      return (a.variant || "").localeCompare(b.variant || "");
-    });
-
-    displayKits(kits);
-  });
-
-} else {
-  fetch(`data/${current.file}`)
-    .then(res => res.json())
-    .then(data => {
-
-      kits = data.kits;
-
-      // ✅ SORT
-      kits.sort((a, b) => {
-        const moldCompare = (a.mold || "").localeCompare(b.mold || "");
-        if (moldCompare !== 0) return moldCompare;
-
-        return (a.variant || "").localeCompare(b.variant || "");
-      });
-
-      displayKits(kits);
-    });
-}  
+  
 
 function displayKits(list) {
   kitList.innerHTML = '';
