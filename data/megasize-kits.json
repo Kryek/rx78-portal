@@ -6,7 +6,7 @@
       "mold": "Mega Size Model",
       "variant": "ANA Original Color Ver.",
       "year": "2010",
-      "notes": ""
+      "status": "built"
     },
     {
       "id": "msm-f00",
@@ -14,7 +14,7 @@
       "mold": "1/48",
       "variant": "RX-78F00",
       "year": "2019",
-      "notes": ""
+      "status": "backlog"
     },
     {
       "id": "msm-standard",
@@ -22,7 +22,7 @@
       "mold": "Mega Size Model",
       "variant": "Standard",
       "year": "2010",
-      "notes": ""
+      "status": "built"
     }
   ]
 }
