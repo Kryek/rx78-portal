@@ -6,7 +6,7 @@
       "mold": "Ver. 1.0",
       "variant": "Standard",
       "year": "2010",
-      "notes": ""
+      "status": "built"
     },
     {
       "id": "rg-v2-standard",
@@ -14,7 +14,7 @@
       "mold": "Ver. 2.0",
       "variant": "Standard",
       "year": "2024",
-      "notes": ""
+      "status": "backlog"
     }
   ]
 }
