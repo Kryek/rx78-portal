@@ -10,10 +10,18 @@
     },
     {
       "id": "bb-senshi-animation-color",
-      "name": "BB Senshi RX-78-2 Gundam (Animation Color Ver.)",
+      "name": "SD BB Senshi RX-78-2 Gundam (Animation Color Ver.)",
       "mold": "BB Senshi",
       "variant": "Animation Color Ver.",
       "year": "2009",
+      "notes": ""
+    },
+    {
+      "id": "sdex-solid-clear",
+      "name": "SD Gundam Ex-Standard RX-78-2 Ichiban Kuji Price C (Solid Clear)",
+      "mold": "EX-Standard",
+      "variant": "Solid Clear",
+      "year": "2020",
       "notes": ""
     },
     {
