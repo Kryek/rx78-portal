@@ -272,10 +272,11 @@ fetch(`data/${current.file}`)
 
     // ✅ ADD THIS HERE
     kits.sort((a, b) => {
-      const nameA = (a.mold || "").toLowerCase();
-      const nameB = (b.mold || "").toLowerCase();
-      return nameA.localeCompare(nameB);
-    });
+  const moldCompare = (a.mold || "").localeCompare(b.mold || "");
+  if (moldCompare !== 0) return moldCompare;
+
+  return (a.variant || "").localeCompare(b.variant || "");
+});
 
     displayKits(kits);
   });
