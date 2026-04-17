@@ -17,6 +17,14 @@
       "status": "backlog"
     },
     {
+      "id": "100-f00-standard",
+      "name": "1/100 RX-78F00 Gundam",
+      "mold": "RX-78F00",
+      "variant": "Standard",
+      "year": "2020",
+      "status": "built"
+    },
+    {
       "id": "verka-standard",
       "name": "MG RX-78-2 Gundam (Ver. Ka)",
       "mold": "Ver. Ka",
