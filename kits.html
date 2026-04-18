@@ -281,6 +281,7 @@ pageTitle.textContent = current.title;
 
 if (current.file === "all") {
   Promise.all([
+    fetch("data/eg-kits.json").then(r => r.json()),
     fetch("data/hg-kits.json").then(r => r.json()),
     fetch("data/mg-kits.json").then(r => r.json()),
     fetch("data/rg-kits.json").then(r => r.json()),
