@@ -1,1 +1,20 @@
-
+{
+  "kits": [
+    {
+      "id": "eg-2020-standard",
+      "name": "Entry Grade RX-78-2 Gundam",
+      "mold": "Entry Grade (2020)",
+      "variant": "Standard",
+      "year": "2020",
+      "status": "built"
+    },
+    {
+      "id": "eg-f00-standard",
+      "name": "EG RX-78F00/E Gundam",
+      "mold": "RX-78F00",
+      "variant": "Standard",
+      "year": "2025",
+      "status": "built"
+    }
+  ]
+}
