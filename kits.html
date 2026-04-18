@@ -290,7 +290,7 @@ if (current.file === "all") {
     fetch("data/megasize-kits.json").then(r => r.json())
   ]).then(results => {
     kits = results.flatMap((r, i) => {
-  const grades = ["HG","MG","RG","PG","SD","MEGASIZE"];
+  const grades = ["EG","HG","MG","RG","PG","SD","MEGASIZE"];
 
   return r.kits.map(k => ({
     ...k,
