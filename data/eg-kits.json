@@ -10,8 +10,8 @@
     },
     {
       "id": "eg-f00-standard",
-      "name": "EG RX-78F00/E Gundam",
-      "mold": "RX-78F00",
+      "name": "Entry Grade RX-78F00/E Gundam",
+      "mold": "EG RX-78F00",
       "variant": "Standard",
       "year": "2025",
       "status": "built"
