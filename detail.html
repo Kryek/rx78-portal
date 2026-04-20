@@ -832,9 +832,16 @@ function startDetailAnimations() {
   });
 
 } else {
-  // 💻 DESKTOP → keep original behavior
+  // 💻 DESKTOP → animate panels + spin button
   if (left) left.classList.add("show");
   if (right) right.classList.add("show");
+
+  const spinBtn = document.getElementById("spinBtn");
+  if (spinBtn) {
+    setTimeout(() => {
+      spinBtn.classList.add("show");
+    }, 200);
+  }
 }
 
 // wait for box animation to finish, then nav
@@ -931,7 +938,7 @@ function startAutoSpin() {
   autoSpinInterval = setInterval(() => {
     currentFrame = (currentFrame + autoSpinDirection + frames.length) % frames.length;
     spinViewer.src = frames[currentFrame];
-  }, 100);
+  }, 50);
 }
 
 function stopAutoSpin() {
@@ -961,7 +968,6 @@ spinOverlay.addEventListener("mousedown", e => {
 
 spinOverlay.addEventListener("mouseup", () => {
   isDragging = false;
-  setTimeout(startAutoSpin, 1000);
 });
 
 spinOverlay.addEventListener("mousemove", e => {
