@@ -963,6 +963,8 @@ let startX = 0;
 let autoSpinInterval = null;
 let autoSpinDirection = 1; // 1 = right, -1 = left
 let manualSpinActive = false; // 🔥 desktop toggle mode
+let mouseDownStartedOutside = false;
+  
 const spinPath = kitPath + "spin/";
 
 /* AUTO LOAD FRAMES */
@@ -1021,6 +1023,12 @@ function stopAutoSpin() {
 }
 
 /* OPEN OVERLAY */
+/* CLICK IMAGE = STOP AUTOSPIN ONLY */
+spinViewer.addEventListener("click", () => {
+  if (frames.length === 0) return;
+  stopAutoSpin();
+});
+
 spinBtn.onclick = () => {
   spinOverlay.classList.add("open");
 
@@ -1041,34 +1049,18 @@ spinBtn.onclick = () => {
 };
 
 /* CLOSE OVERLAY */
-spinOverlay.addEventListener("click", (e) => {
-  if (e.target === spinOverlay) {
+/* CLOSE ONLY IF CLICK STARTED OUTSIDE IMAGE */
+spinOverlay.addEventListener("mousedown", (e) => {
+  mouseDownStartedOutside = (e.target === spinOverlay);
+});
+
+spinOverlay.addEventListener("mouseup", () => {
+  if (mouseDownStartedOutside) {
     spinOverlay.classList.remove("open");
   }
 });
 
-/* DRAG CONTROL */
-spinOverlay.addEventListener("click", (e) => {
 
-  // ignore arrows
-  if (e.target.closest("#spinControls")) return;
-
-  // allow overlay background click to close
-  if (e.target === spinOverlay) return;
-
-  // ONLY toggle when clicking the image
-  if (e.target !== spinViewer) return;
-
-  if (frames.length === 0) return;
-
-  manualSpinActive = !manualSpinActive;
-
-  if (manualSpinActive) {
-    stopAutoSpin();
-  } else {
-    startAutoSpin();
-  }
-});
 /* DESKTOP DRAG (TOGGLED) */
 spinOverlay.addEventListener("mousedown", e => {
 
@@ -1102,6 +1094,38 @@ spinOverlay.addEventListener("mousemove", e => {
     startX = e.clientX;
   }
 });
+
+/* DESKTOP DRAG */
+spinViewer.addEventListener("mousedown", (e) => {
+  if (frames.length === 0) return;
+
+  isDragging = true;
+  startX = e.clientX;
+
+  stopAutoSpin(); // entering manual control
+});
+
+window.addEventListener("mouseup", () => {
+  isDragging = false;
+});
+
+window.addEventListener("mousemove", (e) => {
+  if (!isDragging || frames.length === 0) return;
+
+  const delta = e.clientX - startX;
+
+  if (Math.abs(delta) > 10) {
+    if (delta > 0) {
+      currentFrame = (currentFrame - 1 + frames.length) % frames.length;
+    } else {
+      currentFrame = (currentFrame + 1) % frames.length;
+    }
+
+    spinViewer.src = frames[currentFrame];
+    startX = e.clientX;
+  }
+});
+  
 /* MOBILE TOUCH */
 spinOverlay.addEventListener("touchstart", e => {
   isDragging = true;
