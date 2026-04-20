@@ -502,6 +502,8 @@ body, .nav-btn, .panel, .line, .text {
   width: auto;
   height: auto;
   display: block;
+  user-select: none;
+  -webkit-user-drag: none; /* 🔥 stops image ghost dragging */
 }
 
 #spinControls {
@@ -960,7 +962,7 @@ let isDragging = false;
 let startX = 0;
 let autoSpinInterval = null;
 let autoSpinDirection = 1; // 1 = right, -1 = left
-
+let manualSpinActive = false; // 🔥 desktop toggle mode
 const spinPath = kitPath + "spin/";
 
 /* AUTO LOAD FRAMES */
@@ -1046,30 +1048,26 @@ spinOverlay.addEventListener("click", (e) => {
 });
 
 /* DRAG CONTROL */
-spinOverlay.addEventListener("mousedown", e => {
-  isDragging = true;
-  startX = e.clientX;
-  stopAutoSpin();
-});
+spinOverlay.addEventListener("click", (e) => {
 
-spinOverlay.addEventListener("mouseup", () => {
-  isDragging = false;
-});
+  // ignore clicks on arrows
+  if (e.target.closest("#spinControls")) return;
 
-spinOverlay.addEventListener("mousemove", e => {
-  if (!isDragging || frames.length === 0) return;
+  // ignore clicks on background (so overlay can still close)
+  if (e.target === spinOverlay) return;
 
-  const delta = e.clientX - startX;
+  if (frames.length === 0) return;
 
-  if (Math.abs(delta) > 10) {
-    if (delta > 0) {
-  currentFrame = (currentFrame - 1 + frames.length) % frames.length;
-} else {
-  currentFrame = (currentFrame + 1) % frames.length;
-}
+  manualSpinActive = !manualSpinActive;
 
+  if (manualSpinActive) {
+    stopAutoSpin();
+
+    // step forward once on activation
+    currentFrame = (currentFrame + 1) % frames.length;
     spinViewer.src = frames[currentFrame];
-    startX = e.clientX;
+  } else {
+    startAutoSpin();
   }
 });
 
