@@ -512,11 +512,14 @@ body, .nav-btn, .panel, .line, .text {
 </div>
   
 <div id="spinOverlay">
+
+  <img id="spinViewer" src="">
+  
   <div id="spinControls">
     <div class="nav-btn" id="spinLeft"><span>◀</span></div>
     <div class="nav-btn" id="spinRight"><span>▶</span></div>
   </div>
-  <img id="spinViewer" src="">
+  
 </div>
   
 <div class="nav">
@@ -1004,7 +1007,6 @@ spinOverlay.addEventListener("touchstart", e => {
 
 spinOverlay.addEventListener("touchend", () => {
   isDragging = false;
-  setTimeout(startAutoSpin, 1000);
 });
 
 spinOverlay.addEventListener("touchmove", e => {
