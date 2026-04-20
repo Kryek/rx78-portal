@@ -432,6 +432,44 @@ body, .nav-btn, .panel, .line, .text {
 * {
   -webkit-tap-highlight-color: transparent;
 }
+
+/* ============================= */
+/* 360 SPIN */
+/* ============================= */
+
+#spinBtn {
+  margin-top: 20px;
+  width: 140px;
+}
+
+/* mobile reposition */
+@media (max-width: 600px) {
+  #spinBtn {
+    order: 2; /* after boxart */
+    margin: 10px auto;
+  }
+}
+
+/* overlay */
+#spinOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+
+#spinOverlay.open {
+  display: flex;
+}
+
+#spinViewer {
+  max-width: 90vw;
+  max-height: 80vh;
+  user-select: none;
+}
   </style>
 </head>
 
@@ -448,7 +486,9 @@ body, .nav-btn, .panel, .line, .text {
     <div class="qr-text" id="qrText">QR AUTHENTICATED</div>
   </div>
 </div>
-
+<div id="spinOverlay">
+  <img id="spinViewer" src="">
+</div>
 <div class="nav">
   <div class="nav-btn" id="homeBtn"><span>HOME</span></div>
   <div class="nav-btn" id="gradesBtn"><span>KITS</span></div>
@@ -490,6 +530,7 @@ body, .nav-btn, .panel, .line, .text {
     <div class="detail-left">
       <div id="overview"></div>
       <div id="trivia"></div>
+      <div id="spinBtn" class="nav-btn"><span>360 VIEW</span></div>
     </div>
 
     <div class="detail-right">
@@ -804,6 +845,108 @@ document.getElementById("qrDebugBtn").addEventListener("click", () => {
   window.location.href = `detail.html?grade=${grade}&id=${id}&src=qr`;
 });
 
+/* ============================= */
+/* 360 SPIN SYSTEM */
+/* ============================= */
+
+const spinBtn = document.getElementById("spinBtn");
+const spinOverlay = document.getElementById("spinOverlay");
+const spinViewer = document.getElementById("spinViewer");
+
+let frames = [];
+let currentFrame = 0;
+let isDragging = false;
+let startX = 0;
+
+const spinPath = kitPath + "360/";
+
+/* AUTO LOAD FRAMES */
+let frameIndex = 1;
+
+function loadSpinFrames() {
+  const img = new Image();
+  const num = String(frameIndex).padStart(3, '0');
+  img.src = spinPath + `ezgif-frame-${num}.jpg`;
+
+  img.onload = () => {
+    frames.push(img.src);
+    frameIndex++;
+    loadSpinFrames();
+  };
+
+  img.onerror = () => {
+    console.log("Loaded frames:", frames.length);
+    if (frames.length > 0) {
+      spinViewer.src = frames[0];
+    }
+  };
+}
+
+loadSpinFrames();
+
+/* OPEN OVERLAY */
+spinBtn.onclick = () => {
+  spinOverlay.classList.add("open");
+};
+
+/* CLOSE OVERLAY */
+spinOverlay.onclick = () => {
+  spinOverlay.classList.remove("open");
+};
+
+/* DRAG CONTROL */
+spinOverlay.addEventListener("mousedown", e => {
+  isDragging = true;
+  startX = e.clientX;
+});
+
+spinOverlay.addEventListener("mouseup", () => {
+  isDragging = false;
+});
+
+spinOverlay.addEventListener("mousemove", e => {
+  if (!isDragging || frames.length === 0) return;
+
+  const delta = e.clientX - startX;
+
+  if (Math.abs(delta) > 10) {
+    if (delta > 0) {
+      currentFrame = (currentFrame + 1) % frames.length;
+    } else {
+      currentFrame = (currentFrame - 1 + frames.length) % frames.length;
+    }
+
+    spinViewer.src = frames[currentFrame];
+    startX = e.clientX;
+  }
+});
+
+/* MOBILE TOUCH */
+spinOverlay.addEventListener("touchstart", e => {
+  isDragging = true;
+  startX = e.touches[0].clientX;
+});
+
+spinOverlay.addEventListener("touchend", () => {
+  isDragging = false;
+});
+
+spinOverlay.addEventListener("touchmove", e => {
+  if (!isDragging || frames.length === 0) return;
+
+  const delta = e.touches[0].clientX - startX;
+
+  if (Math.abs(delta) > 10) {
+    if (delta > 0) {
+      currentFrame = (currentFrame + 1) % frames.length;
+    } else {
+      currentFrame = (currentFrame - 1 + frames.length) % frames.length;
+    }
+
+    spinViewer.src = frames[currentFrame];
+    startX = e.touches[0].clientX;
+  }
+});
 </script>
 
 </body>
