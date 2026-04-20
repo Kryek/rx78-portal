@@ -108,6 +108,7 @@
     @media (max-width: 600px) {
       /* MOBILE overlay animation base state */
 #boxart,
+#spinBtn,
 #overview,
 #gallery,
 #trivia {
@@ -798,6 +799,7 @@ function startDetailAnimations() {
   // 📱 MOBILE → animate sections
   const sections = [
     document.getElementById("boxart"),
+    document.getElementById("spinBtn"),
     document.getElementById("overview"),
     document.getElementById("gallery"),
     document.getElementById("trivia")
@@ -859,6 +861,7 @@ let frames = [];
 let currentFrame = 0;
 let isDragging = false;
 let startX = 0;
+let autoSpinInterval = null;
 
 const spinPath = kitPath + "spin/";
 
@@ -885,25 +888,44 @@ function loadSpinFrames() {
 }
 
 loadSpinFrames();
+  
+function startAutoSpin() {
+  if (autoSpinInterval || frames.length === 0) return;
+
+  autoSpinInterval = setInterval(() => {
+    currentFrame = (currentFrame + 1) % frames.length;
+    spinViewer.src = frames[currentFrame];
+  }, 100); // speed (lower = faster)
+}
+
+function stopAutoSpin() {
+  clearInterval(autoSpinInterval);
+  autoSpinInterval = null;
+}
 
 /* OPEN OVERLAY */
 spinBtn.onclick = () => {
   spinOverlay.classList.add("open");
+  startAutoSpin();
 };
 
 /* CLOSE OVERLAY */
-spinOverlay.onclick = () => {
-  spinOverlay.classList.remove("open");
-};
+spinOverlay.addEventListener("click", (e) => {
+  if (e.target === spinOverlay) {
+    spinOverlay.classList.remove("open");
+  }
+});
 
 /* DRAG CONTROL */
 spinOverlay.addEventListener("mousedown", e => {
   isDragging = true;
   startX = e.clientX;
+  stopAutoSpin();
 });
 
 spinOverlay.addEventListener("mouseup", () => {
   isDragging = false;
+  setTimeout(startAutoSpin, 1000);
 });
 
 spinOverlay.addEventListener("mousemove", e => {
@@ -913,10 +935,10 @@ spinOverlay.addEventListener("mousemove", e => {
 
   if (Math.abs(delta) > 10) {
     if (delta > 0) {
-      currentFrame = (currentFrame + 1) % frames.length;
-    } else {
-      currentFrame = (currentFrame - 1 + frames.length) % frames.length;
-    }
+  currentFrame = (currentFrame - 1 + frames.length) % frames.length;
+} else {
+  currentFrame = (currentFrame + 1) % frames.length;
+}
 
     spinViewer.src = frames[currentFrame];
     startX = e.clientX;
@@ -927,10 +949,12 @@ spinOverlay.addEventListener("mousemove", e => {
 spinOverlay.addEventListener("touchstart", e => {
   isDragging = true;
   startX = e.touches[0].clientX;
+  stopAutoSpin();
 });
 
 spinOverlay.addEventListener("touchend", () => {
   isDragging = false;
+  setTimeout(startAutoSpin, 1000);
 });
 
 spinOverlay.addEventListener("touchmove", e => {
@@ -940,10 +964,10 @@ spinOverlay.addEventListener("touchmove", e => {
 
   if (Math.abs(delta) > 10) {
     if (delta > 0) {
-      currentFrame = (currentFrame + 1) % frames.length;
-    } else {
-      currentFrame = (currentFrame - 1 + frames.length) % frames.length;
-    }
+  currentFrame = (currentFrame - 1 + frames.length) % frames.length;
+} else {
+  currentFrame = (currentFrame + 1) % frames.length;
+}
 
     spinViewer.src = frames[currentFrame];
     startX = e.touches[0].clientX;
