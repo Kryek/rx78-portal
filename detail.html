@@ -447,6 +447,8 @@ body, .nav-btn, .panel, .line, .text {
   #spinBtn {
     order: 2; /* after boxart */
     margin: 10px auto;
+    opacity: 1 !important;
+  transform: skew(-20deg) translateX(0) !important;
   }
 }
 
@@ -858,7 +860,7 @@ let currentFrame = 0;
 let isDragging = false;
 let startX = 0;
 
-const spinPath = kitPath + "360/";
+const spinPath = kitPath + "spin/";
 
 /* AUTO LOAD FRAMES */
 let frameIndex = 1;
