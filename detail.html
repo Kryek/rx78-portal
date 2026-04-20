@@ -923,16 +923,21 @@ const spinLeft = document.getElementById("spinLeft");
 const spinRight = document.getElementById("spinRight");
 
 const spinStatusText = document.getElementById("spinStatusText");
+const spinControls = document.getElementById("spinControls");
 
 function showSpinMessage(msg) {
   spinStatusText.textContent = msg;
-  spinStatusText.style.display = "block";
+  spinStatusText.style.display = "flex";
+
   spinViewer.style.display = "none";
+  spinControls.style.display = "none"; // 🔥 ADD THIS
 }
 
 function hideSpinMessage() {
   spinStatusText.style.display = "none";
+
   spinViewer.style.display = "block";
+  spinControls.style.display = "flex"; // 🔥 ADD THIS
 }
 
 spinLeft.onclick = (e) => {
