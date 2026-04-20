@@ -150,6 +150,7 @@
   }
 
   #boxart.show,
+  #spinBtn.show,
   #overview.show,
   #gallery.show,
   #trivia.show {
@@ -473,6 +474,18 @@ body, .nav-btn, .panel, .line, .text {
   max-width: 60vw;
   object-fit: contain;
 }
+
+#spinControls {
+  position: absolute;
+  top: 20px;
+  display: flex;
+  gap: 20px;
+  z-index: 10;
+}
+
+#spinControls .nav-btn {
+  width: 60px;
+}
   </style>
 </head>
 
@@ -489,9 +502,15 @@ body, .nav-btn, .panel, .line, .text {
     <div class="qr-text" id="qrText">QR AUTHENTICATED</div>
   </div>
 </div>
+  
 <div id="spinOverlay">
+  <div id="spinControls">
+    <div class="nav-btn" id="spinLeft"><span>◀</span></div>
+    <div class="nav-btn" id="spinRight"><span>▶</span></div>
+  </div>
   <img id="spinViewer" src="">
 </div>
+  
 <div class="nav">
   <div class="nav-btn" id="homeBtn"><span>HOME</span></div>
   <div class="nav-btn" id="gradesBtn"><span>KITS</span></div>
@@ -533,7 +552,7 @@ body, .nav-btn, .panel, .line, .text {
     <div class="detail-left">
       <div id="overview"></div>
       <div id="trivia"></div>
-      <div id="spinBtn" class="nav-btn show"><span>360 VIEW</span></div>
+      <div id="spinBtn" class="nav-btn"><span>360 VIEW</span></div>
     </div>
 
     <div class="detail-right">
@@ -856,12 +875,29 @@ document.getElementById("qrDebugBtn").addEventListener("click", () => {
 const spinBtn = document.getElementById("spinBtn");
 const spinOverlay = document.getElementById("spinOverlay");
 const spinViewer = document.getElementById("spinViewer");
+const spinLeft = document.getElementById("spinLeft");
+const spinRight = document.getElementById("spinRight");
+
+spinLeft.onclick = (e) => {
+  e.stopPropagation();
+  autoSpinDirection = -1;
+  stopAutoSpin();
+  startAutoSpin();
+};
+
+spinRight.onclick = (e) => {
+  e.stopPropagation();
+  autoSpinDirection = 1;
+  stopAutoSpin();
+  startAutoSpin();
+};
 
 let frames = [];
 let currentFrame = 0;
 let isDragging = false;
 let startX = 0;
 let autoSpinInterval = null;
+let autoSpinDirection = 1; // 1 = right, -1 = left
 
 const spinPath = kitPath + "spin/";
 
@@ -893,9 +929,9 @@ function startAutoSpin() {
   if (autoSpinInterval || frames.length === 0) return;
 
   autoSpinInterval = setInterval(() => {
-    currentFrame = (currentFrame + 1) % frames.length;
+    currentFrame = (currentFrame + autoSpinDirection + frames.length) % frames.length;
     spinViewer.src = frames[currentFrame];
-  }, 100); // speed (lower = faster)
+  }, 100);
 }
 
 function stopAutoSpin() {
