@@ -439,6 +439,14 @@ body, .nav-btn, .panel, .line, .text {
 /* 360 SPIN */
 /* ============================= */
 
+#spinStatusText {
+  position: absolute;
+  font-size: 12px;
+  letter-spacing: 2px;
+  opacity: 0.8;
+  text-align: center;
+}
+    
 #spinBtn {
   margin-top: 20px;
   width: 140px;
@@ -512,7 +520,7 @@ body, .nav-btn, .panel, .line, .text {
 </div>
   
 <div id="spinOverlay">
-
+  <div id="spinStatusText">VERIFYING DATA</div>
   <img id="spinViewer" src="">
   
   <div id="spinControls">
@@ -896,6 +904,19 @@ const spinViewer = document.getElementById("spinViewer");
 const spinLeft = document.getElementById("spinLeft");
 const spinRight = document.getElementById("spinRight");
 
+const spinStatusText = document.getElementById("spinStatusText");
+
+function showSpinMessage(msg) {
+  spinStatusText.textContent = msg;
+  spinStatusText.style.display = "block";
+  spinViewer.style.display = "none";
+}
+
+function hideSpinMessage() {
+  spinStatusText.style.display = "none";
+  spinViewer.style.display = "block";
+}
+
 spinLeft.onclick = (e) => {
   e.stopPropagation();
   autoSpinDirection = -1;
@@ -922,6 +943,8 @@ const spinPath = kitPath + "spin/";
 /* AUTO LOAD FRAMES */
 let frameIndex = 1;
 
+let spinStatus = "loading"; // loading | ready | missing
+
 function loadSpinFrames() {
   const img = new Image();
   const num = String(frameIndex).padStart(3, '0');
@@ -934,9 +957,24 @@ function loadSpinFrames() {
   };
 
   img.onerror = () => {
-    console.log("Loaded frames:", frames.length);
-    if (frames.length > 0) {
+    if (frameIndex === 1) {
+      // ❌ no spin folder
+      spinStatus = "missing";
+      console.log("Spin data missing");
+
+      showSpinMessage("DATA UNAVAILABLE");
+    } else {
+      // ✅ finished loading
+      spinStatus = "ready";
+      console.log("Spin ready:", frames.length);
+
       spinViewer.src = frames[0];
+
+      // if overlay already open → switch instantly
+      if (spinOverlay.classList.contains("open")) {
+        hideSpinMessage();
+        startAutoSpin();
+      }
     }
   };
 }
@@ -960,7 +998,21 @@ function stopAutoSpin() {
 /* OPEN OVERLAY */
 spinBtn.onclick = () => {
   spinOverlay.classList.add("open");
-  startAutoSpin();
+
+  if (spinStatus === "missing") {
+    showSpinMessage("DATA UNAVAILABLE");
+    return;
+  }
+
+  if (spinStatus === "loading") {
+    showSpinMessage("VERIFYING DATA");
+    return;
+  }
+
+  if (spinStatus === "ready") {
+    hideSpinMessage();
+    startAutoSpin();
+  }
 };
 
 /* CLOSE OVERLAY */
