@@ -441,10 +441,18 @@ body, .nav-btn, .panel, .line, .text {
 
 #spinStatusText {
   position: absolute;
+  inset: 0; /* 🔥 full center control */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   font-size: 12px;
   letter-spacing: 2px;
   opacity: 0.8;
   text-align: center;
+
+  z-index: 10; /* 🔥 ABOVE controls */
 }
     
 #spinBtn {
@@ -467,7 +475,6 @@ body, .nav-btn, .panel, .line, .text {
   background: rgba(0,0,0,0.95);
   display: none;
 
-  /* 👇 NEW */
   flex-direction: column;
 
   align-items: center;
@@ -475,6 +482,8 @@ body, .nav-btn, .panel, .line, .text {
   gap: 20px;
 
   z-index: 3000;
+
+  position: relative; /* 🔥 add this */
 }
 #spinOverlay img {
   flex-shrink: 0;
@@ -495,6 +504,11 @@ body, .nav-btn, .panel, .line, .text {
   display: flex;
   gap: 40px;
   justify-content: center;
+}
+
+#spinControls {
+  position: relative;
+  z-index: 5; /* 🔥 BELOW status text */
 }
 
 #spinControls .nav-btn {
