@@ -462,6 +462,9 @@ body, .nav-btn, .panel, .line, .text {
   justify-content: center;
   z-index: 3000;
 }
+#spinOverlay img {
+  flex-shrink: 0;
+}
 
 #spinOverlay.open {
   display: flex;
@@ -469,8 +472,9 @@ body, .nav-btn, .panel, .line, .text {
 
 #spinViewer {
   max-height: 85vh;
-  max-width: 60vw;
-  object-fit: contain;
+  width: auto;
+  height: auto;
+  display: block;
 }
 
 #spinControls {
