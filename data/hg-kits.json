@@ -16,12 +16,20 @@
       "year": "2019",
       "status": "built"
     },
-     {
+    {
       "id": "hg-origin-standard",
       "name": "HGGTO RX-78-02 Gundam",
       "mold": "GUNDAM THE ORIGIN",
       "variant": "Standard",
       "year": "2020",
+      "status": "built"
+    },
+    {
+      "id": "g30th-standard",
+      "name": "HG Ver.G30th RX-78-2 Gundam",
+      "mold": "Ver.G30th",
+      "variant": "Standard",
+      "year": "2009",
       "status": "built"
     },
     {
