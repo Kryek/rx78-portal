@@ -82,19 +82,50 @@
 .nav-btn.show {
   animation: navFlyIn 0.5s ease forwards;
 }
-@keyframes scanLine {
-  0% { clip-path: inset(0 0 100% 0); }
-  50% { clip-path: inset(0 0 0 0); }
-  100% { clip-path: inset(100% 0 0 0); }
+#spinStatusText {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  letter-spacing: 2px;
+  opacity: 0.85;
+  text-align: center;
+  z-index: 3001;
+  pointer-events: none;
 }
 
-#spinStatusText.working::before {
+/* scanning glow pulse */
+#spinStatusText.working {
+  animation: textPulse 0.9s infinite ease-in-out;
+}
+
+/* moving scan sweep behind text */
+#spinStatusText.working::after {
   content: "";
   position: absolute;
-  width: 100%;
-  height: 2px;
-  background: white;
-  animation: scanLine 1.5s infinite;
+  left: -40%;
+  top: 50%;
+  width: 180%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    white,
+    transparent
+  );
+  animation: scanSweep 1.2s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes textPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes scanSweep {
+  0% { transform: translateY(-50%) translateX(-100%); }
+  100% { transform: translateY(-50%) translateX(100%); }
 }
 @keyframes navFlyIn {
   from {
@@ -675,12 +706,8 @@ fetch(kitPath + "content.html")
   } else {
     const container = document.getElementById("trivia");
 
-    container.appendChild(section);
-
-    // 👇 add spacing after each trivia block
-    const spacer = document.createElement("div");
-    spacer.style.height = "16px"; // adjust spacing here
-    container.appendChild(spacer);
+    section.style.marginBottom = "16px";
+container.appendChild(section);
   }
 });
   });
