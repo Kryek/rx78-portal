@@ -1012,20 +1012,11 @@ function startAutoSpin() {
   if (autoSpinInterval || frames.length === 0) return;
 
   autoSpinInterval = setInterval(() => {
-    let lastUpdate = 0;
+    currentFrame =
+      (currentFrame + autoSpinDirection + frames.length) % frames.length;
 
-autoSpinInterval = setInterval(() => {
-  const now = performance.now();
-
-  // throttle rendering a bit (prevents drift lag)
-  if (now - lastUpdate < 50) return;
-  lastUpdate = now;
-
-  currentFrame =
-    (currentFrame + autoSpinDirection + frames.length) % frames.length;
-
-  spinViewer.src = frames[currentFrame];
-}, 60);
+    spinViewer.src = frames[currentFrame];
+  }, 60);
 }
 
 function stopAutoSpin() {
