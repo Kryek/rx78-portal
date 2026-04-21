@@ -1012,9 +1012,20 @@ function startAutoSpin() {
   if (autoSpinInterval || frames.length === 0) return;
 
   autoSpinInterval = setInterval(() => {
-    currentFrame = (currentFrame + autoSpinDirection + frames.length) % frames.length;
-    spinViewer.src = frames[currentFrame];
-  }, 50);
+    let lastUpdate = 0;
+
+autoSpinInterval = setInterval(() => {
+  const now = performance.now();
+
+  // throttle rendering a bit (prevents drift lag)
+  if (now - lastUpdate < 50) return;
+  lastUpdate = now;
+
+  currentFrame =
+    (currentFrame + autoSpinDirection + frames.length) % frames.length;
+
+  spinViewer.src = frames[currentFrame];
+}, 60);
 }
 
 function stopAutoSpin() {
@@ -1030,6 +1041,38 @@ spinViewer.addEventListener("click", () => {
 });
 
 spinBtn.onclick = () => {
+  /* CLEAN DESKTOP DRAG SYSTEM */
+let isDragging = false;
+let startX = 0;
+
+spinViewer.addEventListener("mousedown", (e) => {
+  if (frames.length === 0) return;
+
+  isDragging = true;
+  startX = e.clientX;
+
+  stopAutoSpin();
+});
+
+window.addEventListener("mousemove", (e) => {
+  if (!isDragging || frames.length === 0) return;
+
+  const delta = e.clientX - startX;
+
+  if (Math.abs(delta) > 8) {
+    currentFrame =
+      delta > 0
+        ? (currentFrame - 1 + frames.length) % frames.length
+        : (currentFrame + 1) % frames.length;
+
+    spinViewer.src = frames[currentFrame];
+    startX = e.clientX;
+  }
+});
+
+window.addEventListener("mouseup", () => {
+  isDragging = false;
+});
   spinOverlay.classList.add("open");
 
   if (spinStatus === "missing") {
@@ -1060,71 +1103,6 @@ spinOverlay.addEventListener("mouseup", () => {
   }
 });
 
-
-/* DESKTOP DRAG (TOGGLED) */
-spinOverlay.addEventListener("mousedown", e => {
-
-  // only allow drag if manual mode is ON
-  if (!manualSpinActive) return;
-
-  // only drag when clicking the image
-  if (e.target !== spinViewer) return;
-
-  isDragging = true;
-  startX = e.clientX;
-});
-
-spinOverlay.addEventListener("mouseup", () => {
-  isDragging = false;
-});
-
-spinOverlay.addEventListener("mousemove", e => {
-  if (!manualSpinActive || !isDragging || frames.length === 0) return;
-
-  const delta = e.clientX - startX;
-
-  if (Math.abs(delta) > 10) {
-    if (delta > 0) {
-      currentFrame = (currentFrame - 1 + frames.length) % frames.length;
-    } else {
-      currentFrame = (currentFrame + 1) % frames.length;
-    }
-
-    spinViewer.src = frames[currentFrame];
-    startX = e.clientX;
-  }
-});
-
-/* DESKTOP DRAG */
-spinViewer.addEventListener("mousedown", (e) => {
-  if (frames.length === 0) return;
-
-  isDragging = true;
-  startX = e.clientX;
-
-  stopAutoSpin(); // entering manual control
-});
-
-window.addEventListener("mouseup", () => {
-  isDragging = false;
-});
-
-window.addEventListener("mousemove", (e) => {
-  if (!isDragging || frames.length === 0) return;
-
-  const delta = e.clientX - startX;
-
-  if (Math.abs(delta) > 10) {
-    if (delta > 0) {
-      currentFrame = (currentFrame - 1 + frames.length) % frames.length;
-    } else {
-      currentFrame = (currentFrame + 1) % frames.length;
-    }
-
-    spinViewer.src = frames[currentFrame];
-    startX = e.clientX;
-  }
-});
   
 /* MOBILE TOUCH */
 spinOverlay.addEventListener("touchstart", e => {
