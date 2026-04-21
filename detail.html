@@ -1014,7 +1014,7 @@ function startAutoSpin() {
   autoSpinInterval = setInterval(() => {
     currentFrame = (currentFrame + autoSpinDirection + frames.length) % frames.length;
     spinViewer.src = frames[currentFrame];
-  }, 120);
+  }, 50);
 }
 
 function stopAutoSpin() {
