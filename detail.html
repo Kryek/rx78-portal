@@ -567,6 +567,15 @@ body, .nav-btn, .panel, .line, .text {
   transition: opacity 0.9s ease, transform 0.9s ease;
 }
 
+#spinViewer {
+  filter: blur(6px);
+}
+
+#spinOverlay.open #spinViewer {
+  filter: blur(0px);
+  transition: opacity 1.1s ease, transform 1.1s ease, filter 1.1s ease;
+}
+
 #spinControls {
   display: flex;
   gap: 40px;
@@ -587,12 +596,13 @@ body, .nav-btn, .panel, .line, .text {
 #spinViewer {
   opacity: 0;
   transform: scale(0.98);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition: opacity 1.1s ease, transform 0.4s ease;
 }
 
 #spinOverlay.open #spinViewer {
   opacity: 1;
   transform: scale(1);
+  transition-delay: 0.15s; /* slight cinematic delay */
 }
   </style>
 </head>
