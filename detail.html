@@ -82,7 +82,20 @@
 .nav-btn.show {
   animation: navFlyIn 0.5s ease forwards;
 }
+@keyframes scanLine {
+  0% { clip-path: inset(0 0 100% 0); }
+  50% { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(100% 0 0 0); }
+}
 
+#spinStatusText.working::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: white;
+  animation: scanLine 1.5s infinite;
+}
 @keyframes navFlyIn {
   from {
     opacity: 0;
@@ -655,14 +668,21 @@ fetch(kitPath + "content.html")
     const sections = temp.querySelectorAll(".section");
 
     sections.forEach(section => {
-      const title = section.querySelector("h2")?.textContent;
+  const title = section.querySelector("h2")?.textContent;
 
-      if (title?.toLowerCase().includes("overview")) {
-        document.getElementById("overview").appendChild(section);
-      } else {
-        document.getElementById("trivia").appendChild(section);
-      }
-    });
+  if (title?.toLowerCase().includes("overview")) {
+    document.getElementById("overview").appendChild(section);
+  } else {
+    const container = document.getElementById("trivia");
+
+    container.appendChild(section);
+
+    // 👇 add spacing after each trivia block
+    const spacer = document.createElement("div");
+    spacer.style.height = "16px"; // adjust spacing here
+    container.appendChild(spacer);
+  }
+});
   });
 
 /* IMAGES */
@@ -931,15 +951,21 @@ function showSpinMessage(msg) {
   spinStatusText.textContent = msg;
   spinStatusText.style.display = "flex";
 
+  // 🔥 ADD THIS
+  spinStatusText.classList.add("working");
+
   spinViewer.style.display = "none";
-  spinControls.style.display = "none"; // 🔥 ADD THIS
+  spinControls.style.display = "none";
 }
 
 function hideSpinMessage() {
   spinStatusText.style.display = "none";
 
+  // 🔥 ADD THIS
+  spinStatusText.classList.remove("working");
+
   spinViewer.style.display = "block";
-  spinControls.style.display = "flex"; // 🔥 ADD THIS
+  spinControls.style.display = "flex";
 }
 
 spinLeft.onclick = (e) => {
