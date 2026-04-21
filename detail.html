@@ -522,6 +522,9 @@ body, .nav-btn, .panel, .line, .text {
   opacity: 1 !important;
   transform: skew(-20deg) translateX(0) !important;
 }
+#spinViewer {
+  transition: opacity 0.08s linear;
+}
   </style>
 </head>
 
@@ -1013,7 +1016,12 @@ function startAutoSpin() {
 
   autoSpinInterval = setInterval(() => {
     currentFrame = (currentFrame + autoSpinDirection + frames.length) % frames.length;
-    spinViewer.src = frames[currentFrame];
+    spinViewer.style.opacity = 0;
+
+setTimeout(() => {
+  spinViewer.src = frames[currentFrame];
+  spinViewer.style.opacity = 1;
+}, 30);
   }, 75);
 }
 
@@ -1090,7 +1098,12 @@ spinOverlay.addEventListener("mousemove", e => {
       currentFrame = (currentFrame + 1) % frames.length;
     }
 
-    spinViewer.src = frames[currentFrame];
+    spinViewer.style.opacity = 0;
+
+setTimeout(() => {
+  spinViewer.src = frames[currentFrame];
+  spinViewer.style.opacity = 1;
+}, 30);
     startX = e.clientX;
   }
 });
@@ -1121,7 +1134,12 @@ window.addEventListener("mousemove", (e) => {
       currentFrame = (currentFrame + 1) % frames.length;
     }
 
-    spinViewer.src = frames[currentFrame];
+    spinViewer.style.opacity = 0;
+
+setTimeout(() => {
+  spinViewer.src = frames[currentFrame];
+  spinViewer.style.opacity = 1;
+}, 30);
     startX = e.clientX;
   }
 });
