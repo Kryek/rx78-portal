@@ -255,7 +255,18 @@
 
     .section { margin-top: 25px; }
 
-    .trivia-block { margin-bottom: 18px; }
+    .trivia-block {
+  display: block;
+  margin-bottom: 18px;
+}
+
+.trivia-block > div {
+  display: block;
+}
+
+.trivia-block h2 {
+  margin-top: 0;
+}
 
     h2 {
       font-size: 16px;
@@ -549,7 +560,11 @@ body, .nav-btn, .panel, .line, .text {
   height: auto;
   display: block;
   user-select: none;
-  -webkit-user-drag: none; /* 🔥 stops image ghost dragging */
+  -webkit-user-drag: none;
+
+  opacity: 0;
+  transform: scale(0.97);
+  transition: opacity 0.9s ease, transform 0.9s ease;
 }
 
 #spinControls {
@@ -719,11 +734,19 @@ fetch(kitPath + "content.html")
   } else {
     const container = document.getElementById("trivia");
 
-    const wrapper = document.createElement("div");
-    wrapper.className = "trivia-block";
-    wrapper.appendChild(section);
+const block = document.createElement("div");
+block.className = "trivia-block";
 
-    container.appendChild(wrapper);
+// force separation INSIDE layout flow
+block.style.display = "block";
+block.style.marginBottom = "18px";
+
+// isolate section so margins don't collapse weirdly
+const inner = document.createElement("div");
+inner.appendChild(section);
+
+block.appendChild(inner);
+container.appendChild(block);
   }
 });
   });
