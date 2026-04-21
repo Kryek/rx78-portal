@@ -255,6 +255,8 @@
 
     .section { margin-top: 25px; }
 
+    .trivia-block { margin-bottom: 18px; }
+
     h2 {
       font-size: 16px;
       border-bottom: 2px solid white;
@@ -566,6 +568,17 @@ body, .nav-btn, .panel, .line, .text {
   opacity: 1 !important;
   transform: skew(-20deg) translateX(0) !important;
 }
+
+#spinViewer {
+  opacity: 0;
+  transform: scale(0.98);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+#spinOverlay.open #spinViewer {
+  opacity: 1;
+  transform: scale(1);
+}
   </style>
 </head>
 
@@ -706,8 +719,11 @@ fetch(kitPath + "content.html")
   } else {
     const container = document.getElementById("trivia");
 
-    section.style.marginBottom = "16px";
-container.appendChild(section);
+    const wrapper = document.createElement("div");
+    wrapper.className = "trivia-block";
+    wrapper.appendChild(section);
+
+    container.appendChild(wrapper);
   }
 });
   });
@@ -987,12 +1003,19 @@ function showSpinMessage(msg) {
 
 function hideSpinMessage() {
   spinStatusText.style.display = "none";
-
-  // 🔥 ADD THIS
   spinStatusText.classList.remove("working");
 
   spinViewer.style.display = "block";
   spinControls.style.display = "flex";
+
+  // force fade-in restart
+  spinViewer.style.opacity = "0";
+  spinViewer.style.transform = "scale(0.98)";
+
+  requestAnimationFrame(() => {
+    spinViewer.style.opacity = "1";
+    spinViewer.style.transform = "scale(1)";
+  });
 }
 
 spinLeft.onclick = (e) => {
