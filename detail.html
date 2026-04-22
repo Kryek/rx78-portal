@@ -253,20 +253,7 @@
       border: 2px solid white;
     }
 
-    .section { margin-top: 25px; }
-
-    .trivia-block {
-  display: block;
-  margin-bottom: 18px;
-}
-
-.trivia-block > div {
-  display: block;
-}
-
-.trivia-block h2 {
-  margin-top: 0;
-}
+    .section { margin: 0; }
 
     h2 {
       font-size: 16px;
@@ -276,6 +263,16 @@
     }
 
     ul { padding-left: 18px; }
+
+    #trivia {
+  display: flex;
+  flex-direction: column;
+  gap: 18px; /* adjust spacing here */
+}
+
+.section h2 {
+  margin-top: 0;
+}
 
 #qrDebugBtn {
   position: fixed;
@@ -742,21 +739,7 @@ fetch(kitPath + "content.html")
   if (title?.toLowerCase().includes("overview")) {
     document.getElementById("overview").appendChild(section);
   } else {
-    const container = document.getElementById("trivia");
-
-const block = document.createElement("div");
-block.className = "trivia-block";
-
-// force separation INSIDE layout flow
-block.style.display = "block";
-block.style.marginBottom = "18px";
-
-// isolate section so margins don't collapse weirdly
-const inner = document.createElement("div");
-inner.appendChild(section);
-
-block.appendChild(inner);
-container.appendChild(block);
+    document.getElementById("trivia").appendChild(section);
   }
 });
   });
