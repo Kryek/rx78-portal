@@ -9,6 +9,14 @@
       "status": "built"
     },
     {
+      "id": "1980-standard",
+      "name": "1/144 RX-78-2 Gundam",
+      "mold": "1/144 (1980)",
+      "variant": "Standard",
+      "year": "1980",
+      "status": "built"
+    },
+    {
       "id": "eg-f00-standard",
       "name": "Entry Grade RX-78F00/E Gundam",
       "mold": "EG RX-78F00/E",
