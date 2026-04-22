@@ -1238,7 +1238,7 @@ function startInertia() {
     spinViewer.src = frames[currentFrame];
 
     // friction
-    velocity *= 0.99;
+    velocity *= 0.90;
 
     inertiaRAF = requestAnimationFrame(animate);
   }
@@ -1303,7 +1303,7 @@ window.addEventListener("mousemove", (e) => {
     spinViewer.src = frames[currentFrame];
 
     // calculate velocity
-    velocity = (dx / dt) * 0.8;
+    velocity = (dx / dt) * 1.1;
 
     lastX = e.clientX;
     lastTime = now;
