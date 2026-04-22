@@ -100,6 +100,11 @@
   font-size: 10px;
   opacity: 0.6;
   letter-spacing: 1.5px;
+
+  white-space: nowrap;       /* 🔥 no line breaks */
+  overflow: hidden;          /* hide overflow */
+  text-overflow: ellipsis;   /* add ... if too long */
+  max-width: 80vw;           /* keep it contained on mobile */
 }
 
 /* scanning glow pulse */
