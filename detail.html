@@ -1140,6 +1140,7 @@ spinRight.onclick = (e) => {
 
 let frames = [];
 let currentFrame = 0;
+let spinStep = 1; // normalized step size
 let isDragging = false;
 let startX = 0;
 let autoSpinInterval = null;
@@ -1176,6 +1177,8 @@ function loadSpinFrames() {
       // ✅ finished loading
       spinStatus = "ready";
       console.log("Spin ready:", frames.length);
+      // 🔥 normalize spin speed based on frame count
+spinStep = Math.max(1, Math.floor(frames.length / 60));
 
       spinViewer.src = frames[0];
 
@@ -1252,9 +1255,9 @@ window.addEventListener("mousemove", (e) => {
 
   if (Math.abs(delta) > 8) {
     currentFrame =
-      delta > 0
-        ? (currentFrame - 1 + frames.length) % frames.length
-        : (currentFrame + 1) % frames.length;
+  delta > 0
+    ? (currentFrame - spinStep + frames.length) % frames.length
+    : (currentFrame + spinStep) % frames.length;
 
     spinViewer.src = frames[currentFrame];
     startX = e.clientX;
@@ -1314,9 +1317,9 @@ spinOverlay.addEventListener("touchmove", e => {
 
   if (Math.abs(delta) > 10) {
     if (delta > 0) {
-  currentFrame = (currentFrame - 1 + frames.length) % frames.length;
+  currentFrame = (currentFrame - spinStep + frames.length) % frames.length;
 } else {
-  currentFrame = (currentFrame + 1) % frames.length;
+  currentFrame = (currentFrame + spinStep) % frames.length;
 }
 
     spinViewer.src = frames[currentFrame];
