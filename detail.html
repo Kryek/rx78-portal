@@ -94,6 +94,12 @@
   z-index: 3001;
   pointer-events: none;
 }
+#spinSubText {
+  margin-top: 10px;
+  font-size: 10px;
+  opacity: 0.6;
+  letter-spacing: 1.5px;
+}
 
 /* scanning glow pulse */
 #spinStatusText.working {
@@ -623,7 +629,10 @@ body, .nav-btn, .panel, .line, .text {
 </div>
   
 <div id="spinOverlay">
-  <div id="spinStatusText">VERIFYING DATA</div>
+  <div id="spinStatusText">
+  <div id="spinMainText">VERIFYING DATA</div>
+  <div id="spinSubText"></div>
+</div>
   <img id="spinViewer" src="">
   
   <div id="spinControls">
@@ -1010,15 +1019,47 @@ const spinRight = document.getElementById("spinRight");
 const spinStatusText = document.getElementById("spinStatusText");
 const spinControls = document.getElementById("spinControls");
 
-function showSpinMessage(msg) {
-  spinStatusText.textContent = msg;
-  spinStatusText.style.display = "flex";
+const loadingMessages = [
+  "assembling suit",
+  "charging turntable",
+  "calibrating optics",
+  "tightening joints",
+  "counting image frames",
+  "checking polycaps",
+  "pretending you don't have slow internet",
+  "slapping Amuro into the cockpit",
+  "it gets lonely in here without you",
+  "so how's the wife?",
+  "booting inspection mode"
+];
 
-  // 🔥 ADD THIS
+let loadingInterval = null;
+
+function showSpinMessage(msg) {
+  const main = document.getElementById("spinMainText");
+  const sub = document.getElementById("spinSubText");
+
+  main.textContent = msg;
+  spinStatusText.style.display = "flex";
   spinStatusText.classList.add("working");
 
   spinViewer.style.display = "none";
   spinControls.style.display = "none";
+
+  // start rotating sub-messages
+  clearInterval(loadingInterval);
+
+  function setRandomMessage() {
+    const random =
+      loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
+    sub.textContent = random + "...";
+  }
+
+  setRandomMessage();
+
+  loadingInterval = setInterval(() => {
+    setRandomMessage();
+  }, 1400); // change speed here
 }
 
 function hideSpinMessage() {
