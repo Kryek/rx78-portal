@@ -1104,20 +1104,38 @@ function loadSpinFrames() {
 
 loadSpinFrames();
   
+let spinRAF = null;
+
 function startAutoSpin() {
-  if (autoSpinInterval || frames.length === 0) return;
+  if (spinRAF || frames.length === 0) return;
 
-  autoSpinInterval = setInterval(() => {
-    currentFrame =
-      (currentFrame + autoSpinDirection + frames.length) % frames.length;
+  let lastTime = 0;
+  const frameDelay = 80; // ~12 FPS (smoother + lighter)
 
-    spinViewer.src = frames[currentFrame];
-  }, 60);
+  function animate(time) {
+    if (!lastTime) lastTime = time;
+
+    const delta = time - lastTime;
+
+    if (delta > frameDelay) {
+      currentFrame =
+        (currentFrame + autoSpinDirection + frames.length) % frames.length;
+
+      spinViewer.src = frames[currentFrame];
+      lastTime = time;
+    }
+
+    spinRAF = requestAnimationFrame(animate);
+  }
+
+  spinRAF = requestAnimationFrame(animate);
 }
 
 function stopAutoSpin() {
-  clearInterval(autoSpinInterval);
-  autoSpinInterval = null;
+  if (spinRAF) {
+    cancelAnimationFrame(spinRAF);
+    spinRAF = null;
+  }
 }
 
 /* OPEN OVERLAY */
@@ -1187,6 +1205,7 @@ spinOverlay.addEventListener("mousedown", (e) => {
 spinOverlay.addEventListener("mouseup", () => {
   if (mouseDownStartedOutside) {
     spinOverlay.classList.remove("open");
+    stopAutoSpin();
   }
 });
 
@@ -1216,6 +1235,14 @@ spinOverlay.addEventListener("touchmove", e => {
 
     spinViewer.src = frames[currentFrame];
     startX = e.touches[0].clientX;
+  }
+});
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    stopAutoSpin();
+  } else if (spinOverlay.classList.contains("open") && spinStatus === "ready") {
+    startAutoSpin();
   }
 });
 </script>
