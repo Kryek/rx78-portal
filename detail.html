@@ -204,11 +204,12 @@
 
 /* desired order */
 #boxart { order: 1; }
-#overview { order: 2; }
-#gallery { order: 3; }
-#trivia { order: 4; }
+#spinBtn { order: 2; }
+#overview { order: 3; }
+#gallery { order: 4; }
+#trivia { order: 5; }
 
-      #boxart,
+  #boxart,
   #overview,
   #gallery,
   #trivia {
@@ -378,6 +379,12 @@
     /* ✅ DESKTOP FIXED */
     @media (min-width: 768px) {
 
+      #spinBtn {
+  grid-column: 1 / 2;
+  width: 100%;
+  margin-top: 15px;
+}
+
       html, body {
         height: 100%;
         overflow: hidden;
@@ -416,15 +423,30 @@
   box-sizing: border-box;
 }
       .detail-body {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 30px;
 
   flex: 1;
   min-height: 0;
-
   overflow: hidden;
+  align-items: start;
+}
 
-  align-items: flex-start; /* 🔥 THIS is the missing piece */
+.detail-left {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.detail-right {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+#spinBtn {
+  grid-column: 1;
+  grid-row: 2;
+  width: 100%;
 }
       /* ===== CUSTOM SCROLLBAR (WHITE MINIMAL) ===== */
 
@@ -543,15 +565,18 @@ body, .nav-btn, .panel, .line, .text {
     
 #spinBtn {
   margin-top: 20px;
-  width: 140px;
+  width: 100%;
+  display: block;
 }
 
 /* mobile reposition */
 @media (max-width: 600px) {
   #spinBtn {
-    order: 2;
-    margin: 10px auto;
-  }
+  order: 2;
+  width: calc(100% - 40px); /* matches page padding */
+  margin: 10px auto 20px auto;
+  display: block;
+}
 }
 
 /* overlay */
@@ -699,10 +724,11 @@ body, .nav-btn, .panel, .line, .text {
   <div class="detail-body">
 
     <div class="detail-left">
-      <div id="overview"></div>
-      <div id="trivia"></div>
-      <div id="spinBtn" class="nav-btn"><span>360 VIEW</span></div>
-    </div>
+  <div id="overview"></div>
+  <div id="trivia"></div>
+</div>
+
+<div id="spinBtn" class="nav-btn"><span>360 VIEW</span></div>
 
     <div class="detail-right">
       <div id="boxart"></div>
