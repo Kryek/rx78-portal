@@ -106,6 +106,17 @@
 #spinStatusText.working {
   animation: textPulse 0.9s infinite ease-in-out;
 }
+    
+#spinClose {
+  display: none;
+}
+
+/* mobile only */
+@media (max-width: 600px) {
+  #spinClose {
+    display: block;
+  }
+}
 
 /* moving scan sweep behind text */
 #spinStatusText.working::after {
@@ -638,6 +649,7 @@ body, .nav-btn, .panel, .line, .text {
   
   <div id="spinControls">
     <div class="nav-btn" id="spinLeft"><span>◀</span></div>
+    <div class="nav-btn" id="spinClose"><span>X</span></div>
     <div class="nav-btn" id="spinRight"><span>▶</span></div>
   </div>
   
@@ -1016,10 +1028,17 @@ const spinOverlay = document.getElementById("spinOverlay");
 const spinViewer = document.getElementById("spinViewer");
 const spinLeft = document.getElementById("spinLeft");
 const spinRight = document.getElementById("spinRight");
-
+const spinClose = document.getElementById("spinClose");
 const spinStatusText = document.getElementById("spinStatusText");
 const spinControls = document.getElementById("spinControls");
 
+spinClose.onclick = (e) => {
+  e.stopPropagation();
+
+  spinOverlay.classList.remove("open");
+  stopAutoSpin();
+};
+  
 const loadingMessages = {
   common: [
     "processing",
