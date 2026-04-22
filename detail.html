@@ -1178,7 +1178,8 @@ function loadSpinFrames() {
       spinStatus = "ready";
       console.log("Spin ready:", frames.length);
       // 🔥 normalize spin speed based on frame count
-spinStep = Math.max(1, Math.floor(frames.length / 60));
+spinStep = Math.max(1, Math.floor(frames.length / 60)) * 1.5;
+spinStep = Math.round(spinStep);
 
       spinViewer.src = frames[0];
 
