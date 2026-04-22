@@ -82,6 +82,15 @@
 .nav-btn.show {
   animation: navFlyIn 0.5s ease forwards;
 }
+
+#spinBtn {
+  transform: none;
+}
+
+#spinBtn span {
+  transform: none;
+}
+
 #spinStatusText {
   position: fixed;
   top: 50%;
@@ -379,6 +388,15 @@
     /* ✅ DESKTOP FIXED */
     @media (min-width: 768px) {
 
+      .detail-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #spinBtn {
+    margin-top: auto; /* 🔥 pushes it to bottom of panel */
+  }
+
       #spinBtn {
   grid-column: 1 / 2;
   width: 100%;
@@ -564,9 +582,16 @@ body, .nav-btn, .panel, .line, .text {
 }
     
 #spinBtn {
-  margin-top: 20px;
-  width: 100%;
   display: block;
+  width: 100%;
+  margin-top: 20px;
+
+  padding: 16px 0;   /* taller */
+  font-size: 14px;
+  letter-spacing: 2px;
+
+  text-align: center;
+  border-top: 2px solid white;
 }
 
 /* mobile reposition */
