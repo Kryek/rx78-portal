@@ -1145,14 +1145,14 @@ function hideSpinMessage() {
 
 spinLeft.onclick = (e) => {
   e.stopPropagation();
-  autoSpinDirection = -1;
+  autoSpinDirection = 1;
   stopAutoSpin();
   startAutoSpin();
 };
 
 spinRight.onclick = (e) => {
   e.stopPropagation();
-  autoSpinDirection = 1;
+  autoSpinDirection = -1;
   stopAutoSpin();
   startAutoSpin();
 };
