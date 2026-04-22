@@ -1021,17 +1021,32 @@ const spinStatusText = document.getElementById("spinStatusText");
 const spinControls = document.getElementById("spinControls");
 
 const loadingMessages = [
-  "assembling suit",
-  "charging turntable",
-  "calibrating optics",
+  "processing...",
+  "loading...",
+  "working...",
+  "please wait...",
+  "assembling kit...",
+  "charging turntable...",
+  "calibrating panel lines...",
   "tightening joints",
-  "counting image frames",
+  "counting frames",
   "checking polycaps",
-  "pretending you don't have slow internet",
-  "slapping Amuro into the cockpit",
-  "it gets lonely in here without you",
-  "so how's the wife?",
-  "booting inspection mode"
+  "pretending you don't have slow internet...",
+  "slapping Amuro...",
+  "it gets lonely in here without you...",
+  "...so how's the wife?",
+  "last shooting...",
+  "optimizing nothing in particular...",
+  "...you can blink, it’s okay",
+  "scanning surface detail...",
+  "indexing frame sequence...",
+  "adjusting exposure levels...",
+  "mapping color separation...",
+  "aligning cameras...",
+  "sanding nub marks...",
+  "repositioning eye stickers...",
+  "topcoating inner frame...",
+  "don't look behind you..."
 ];
 
 let loadingInterval = null;
@@ -1053,14 +1068,14 @@ function showSpinMessage(msg) {
   function setRandomMessage() {
     const random =
       loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
-    sub.textContent = random + "...";
+    sub.textContent = "<" + random + ">";
   }
 
   setRandomMessage();
 
   loadingInterval = setInterval(() => {
     setRandomMessage();
-  }, 1400); // change speed here
+  }, 3000); // change speed here
 }
 
 function hideSpinMessage() {
