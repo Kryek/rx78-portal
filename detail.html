@@ -1020,36 +1020,47 @@ const spinRight = document.getElementById("spinRight");
 const spinStatusText = document.getElementById("spinStatusText");
 const spinControls = document.getElementById("spinControls");
 
-const loadingMessages = [
-  "processing...",
-  "loading...",
-  "working...",
-  "please wait...",
-  "assembling kit...",
-  "charging turntable...",
-  "calibrating panel lines...",
-  "tightening joints",
-  "counting frames",
-  "checking polycaps",
-  "pretending you don't have slow internet...",
-  "slapping Amuro...",
-  "it gets lonely in here without you...",
-  "...so how's the wife?",
-  "last shooting...",
-  "optimizing nothing in particular...",
-  "...you can blink, it’s okay",
-  "scanning surface detail...",
-  "indexing frame sequence...",
-  "adjusting exposure levels...",
-  "mapping color separation...",
-  "aligning cameras...",
-  "sanding nub marks...",
-  "repositioning eye stickers...",
-  "topcoating inner frame...",
-  "don't look behind you..."
-];
+const loadingMessages = {
+  common: [
+    "processing",
+    "loading",
+    "working",
+    "please wait",
+    "initializing",
+    "checking systems"
+  ],
+
+  uncommon: [
+    "assembling kit",
+    "charging turntable",
+    "calibrating panel lines",
+    "tightening joints",
+    "counting frames",
+    "checking polycaps",
+    "scanning surface detail",
+    "indexing frame sequence",
+    "adjusting exposure levels",
+    "mapping color separation",
+    "aligning cameras",
+    "sanding nub marks",
+    "repositioning eye stickers",
+    "topcoating inner frame",
+    "optimizing nothing in particular"
+    "slapping Amuro"
+  ],
+
+  rare: [
+    "pretending you don't have slow internet",
+    "it gets lonely in here without you",
+    "...so how's the wife?",
+    "...you can blink, it’s okay",
+    "don't look behind you",
+  ]
+};
 
 let loadingInterval = null;
+
+let lastMessage = "";
 
 function showSpinMessage(msg) {
   const main = document.getElementById("spinMainText");
@@ -1066,10 +1077,28 @@ function showSpinMessage(msg) {
   clearInterval(loadingInterval);
 
   function setRandomMessage() {
-    const random =
-      loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
-    sub.textContent = "<" + random + ">";
+  const roll = Math.random();
+
+  let pool;
+
+  if (roll < 0.5) {
+    pool = loadingMessages.common;
+  } else if (roll < 0.85) {
+    pool = loadingMessages.uncommon;
+  } else {
+    pool = loadingMessages.rare;
   }
+
+  let random;
+
+  // 🔥 prevent same message repeating
+  do {
+    random = pool[Math.floor(Math.random() * pool.length)];
+  } while (random === lastMessage);
+
+  lastMessage = random;
+  sub.textContent = random;
+}
 
   setRandomMessage();
 
