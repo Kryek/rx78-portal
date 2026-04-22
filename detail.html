@@ -83,12 +83,14 @@
   animation: navFlyIn 0.5s ease forwards;
 }
 
-#spinBtn {
-  transform: none;
-}
+@media (min-width: 768px) {
+  #spinBtn {
+    transform: none !important;
+  }
 
-#spinBtn span {
-  transform: none;
+  #spinBtn span {
+    transform: none !important;
+  }
 }
 
 #spinStatusText {
@@ -388,15 +390,6 @@
     /* ✅ DESKTOP FIXED */
     @media (min-width: 768px) {
 
-      .detail-left {
-    display: flex;
-    flex-direction: column;
-  }
-
-  #spinBtn {
-    margin-top: auto; /* 🔥 pushes it to bottom of panel */
-  }
-
       #spinBtn {
   grid-column: 1 / 2;
   width: 100%;
@@ -459,12 +452,6 @@
 .detail-right {
   grid-column: 2;
   grid-row: 1 / span 2;
-}
-
-#spinBtn {
-  grid-column: 1;
-  grid-row: 2;
-  width: 100%;
 }
       /* ===== CUSTOM SCROLLBAR (WHITE MINIMAL) ===== */
 
@@ -584,14 +571,16 @@ body, .nav-btn, .panel, .line, .text {
 #spinBtn {
   display: block;
   width: 100%;
+
   margin-top: 20px;
 
-  padding: 16px 0;   /* taller */
+  padding: 20px 0; /* taller */
   font-size: 14px;
   letter-spacing: 2px;
 
   text-align: center;
-  border-top: 2px solid white;
+
+  border: 2px solid white; /* full rectangle */
 }
 
 /* mobile reposition */
