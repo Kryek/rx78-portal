@@ -1140,10 +1140,6 @@ spinRight.onclick = (e) => {
 
 let frames = [];
 let currentFrame = 0;
-let velocity = 0;
-let lastX = 0;
-let lastTime = 0;
-let inertiaRAF = null;
 let isDragging = false;
 let startX = 0;
 let autoSpinInterval = null;
@@ -1221,38 +1217,6 @@ function startAutoSpin() {
   spinRAF = requestAnimationFrame(animate);
 }
 
-function startInertia() {
-  stopInertia();
-
-  function animate() {
-    if (Math.abs(velocity) < 0.01) {
-      stopInertia();
-      return;
-    }
-
-    currentFrame =
-      velocity > 0
-        ? (currentFrame - 1 + frames.length) % frames.length
-        : (currentFrame + 1) % frames.length;
-
-    spinViewer.src = frames[currentFrame];
-
-    // friction
-    velocity *= 0.95;
-
-    inertiaRAF = requestAnimationFrame(animate);
-  }
-
-  inertiaRAF = requestAnimationFrame(animate);
-}
-
-function stopInertia() {
-  if (inertiaRAF) {
-    cancelAnimationFrame(inertiaRAF);
-    inertiaRAF = null;
-  }
-}
-
 function stopAutoSpin() {
   if (spinRAF) {
     cancelAnimationFrame(spinRAF);
@@ -1278,45 +1242,28 @@ spinViewer.addEventListener("mousedown", (e) => {
   isDragging = true;
   startX = e.clientX;
 
-  velocity = 0;
-  lastX = e.clientX;
-  lastTime = performance.now();
-
   stopAutoSpin();
-  stopInertia();
 });
 
 window.addEventListener("mousemove", (e) => {
   if (!isDragging || frames.length === 0) return;
 
-  const now = performance.now();
-  const dx = e.clientX - lastX;
-  const dt = now - lastTime;
+  const delta = e.clientX - startX;
 
-  if (Math.abs(dx) > 2) {
-    // update frame
+  if (Math.abs(delta) > 8) {
     currentFrame =
-      dx > 0
+      delta > 0
         ? (currentFrame - 1 + frames.length) % frames.length
         : (currentFrame + 1) % frames.length;
 
     spinViewer.src = frames[currentFrame];
-
-    // calculate velocity
-    velocity = dx / dt;
-
-    lastX = e.clientX;
-    lastTime = now;
+    startX = e.clientX;
   }
 });
 
 window.addEventListener("mouseup", () => {
-  if (isDragging) {
-    isDragging = false;
-    startInertia();
-  }
+  isDragging = false;
 });
-  
   spinOverlay.classList.add("open");
 
   if (spinStatus === "missing") {
