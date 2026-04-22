@@ -1075,10 +1075,12 @@ const loadingMessages = {
 
   rare: [
     "pretending you don't have slow internet",
-    "it gets lonely in here without you",
+    "it gets lonely in here without you...",
     "...so how's the wife?",
     "...you can blink, it’s okay",
-    "don't look behind you"
+    "don't look behind you...",
+    "I want to be a real boy",
+    "what's for lunch?
   ]
 };
 
@@ -1105,9 +1107,9 @@ function showSpinMessage(msg) {
 
   let pool;
 
-  if (roll < 0.5) {
+  if (roll < 0.4) {
     pool = loadingMessages.common;
-  } else if (roll < 0.85) {
+  } else if (roll < 0.8) {
     pool = loadingMessages.uncommon;
   } else {
     pool = loadingMessages.rare;
