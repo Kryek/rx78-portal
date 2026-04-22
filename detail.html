@@ -1316,7 +1316,9 @@ spinOverlay.addEventListener("touchmove", e => {
 
   const delta = e.touches[0].clientX - startX;
 
-  if (Math.abs(delta) > 10) {
+ const threshold = window.innerWidth <= 600 ? 6 : 8;
+
+if (Math.abs(delta) > threshold) {
     if (delta > 0) {
   currentFrame = (currentFrame - spinStep + frames.length) % frames.length;
 } else {
