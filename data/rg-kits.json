@@ -3,7 +3,7 @@
     {
       "id": "rg-v1-standard",
       "name": "RG RX-78-2 Gundam",
-      "mold": "Ver. 1.0",
+      "mold": "RG Ver. 1.0",
       "variant": "Standard",
       "year": "2010",
       "status": "built"
@@ -11,7 +11,7 @@
     {
       "id": "rg-v2-standard",
       "name": "RG RX-78-2 Gundam (Ver. 2.0)",
-      "mold": "Ver. 2.0",
+      "mold": "RG Ver. 2.0",
       "variant": "Standard",
       "year": "2024",
       "status": "backlog"
