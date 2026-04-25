@@ -1128,7 +1128,7 @@ let loadingInterval = null;
 
 let lastMessage = "";
 
-function showSpinMessage(msg) {
+function showSpinMessage(msg, useSubMessages = true) {
   const main = document.getElementById("spinMainText");
   const sub = document.getElementById("spinSubText");
 
@@ -1139,38 +1139,37 @@ function showSpinMessage(msg) {
   spinViewer.style.display = "none";
   spinControls.style.display = "none";
 
-  // start rotating sub-messages
+  // 🔥 stop any previous intervals
   clearInterval(loadingInterval);
 
-  function setRandomMessage() {
-  const roll = Math.random();
-
-  let pool;
-
-  if (roll < 0.45) {
-    pool = loadingMessages.common;
-  } else if (roll < 0.85) {
-    pool = loadingMessages.uncommon;
-  } else {
-    pool = loadingMessages.rare;
-  }
-
-  let random;
-
-  // 🔥 prevent same message repeating
-  do {
-    random = pool[Math.floor(Math.random() * pool.length)];
-  } while (random === lastMessage);
-
-  lastMessage = random;
-  sub.textContent = random;
+  if (!useSubMessages) {
+  sub.textContent = "";
+  spinStatusText.classList.remove("working"); // 🔥 stop pulse animation
+  return;
 }
+
+  function setRandomMessage() {
+    const roll = Math.random();
+
+    let pool;
+    if (roll < 0.45) pool = loadingMessages.common;
+    else if (roll < 0.85) pool = loadingMessages.uncommon;
+    else pool = loadingMessages.rare;
+
+    let random;
+    do {
+      random = pool[Math.floor(Math.random() * pool.length)];
+    } while (random === lastMessage);
+
+    lastMessage = random;
+    sub.textContent = random;
+  }
 
   setRandomMessage();
 
   loadingInterval = setInterval(() => {
     setRandomMessage();
-  }, 3000); // change speed here
+  }, 3500);
 }
 
 function hideSpinMessage() {
@@ -1238,7 +1237,7 @@ function loadSpinFrames() {
       spinStatus = "missing";
       console.log("Spin data missing");
 
-      showSpinMessage("DATA UNAVAILABLE");
+      showSpinMessage("DATA UNAVAILABLE", false);
     } else {
       // ✅ finished loading
       spinStatus = "ready";
