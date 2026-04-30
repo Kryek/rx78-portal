@@ -1339,9 +1339,9 @@ window.addEventListener("mouseup", () => {
   spinOverlay.classList.add("open");
 
   if (spinStatus === "missing") {
-    showSpinMessage("DATA UNAVAILABLE");
-    return;
-  }
+  showSpinMessage("DATA UNAVAILABLE", false);
+  return;
+}
 
   if (spinStatus === "loading") {
     showSpinMessage("VERIFYING DATA");
