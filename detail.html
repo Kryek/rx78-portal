@@ -1132,21 +1132,26 @@ function showSpinMessage(msg, useSubMessages = true) {
   const main = document.getElementById("spinMainText");
   const sub = document.getElementById("spinSubText");
 
+  // 🔥 FULL STOP of any previous loading loop
+  if (loadingInterval) {
+    clearInterval(loadingInterval);
+    loadingInterval = null;
+  }
+
   main.textContent = msg;
+  sub.textContent = "";
+
   spinStatusText.style.display = "flex";
-  spinStatusText.classList.add("working");
 
   spinViewer.style.display = "none";
   spinControls.style.display = "none";
 
-  // 🔥 stop any previous intervals
-  clearInterval(loadingInterval);
-
   if (!useSubMessages) {
-  sub.textContent = "";
-  spinStatusText.classList.remove("working"); // 🔥 stop pulse animation
-  return;
-}
+    spinStatusText.classList.remove("working"); // stop pulse + scan
+    return;
+  }
+
+  spinStatusText.classList.add("working");
 
   function setRandomMessage() {
     const roll = Math.random();
@@ -1167,9 +1172,7 @@ function showSpinMessage(msg, useSubMessages = true) {
 
   setRandomMessage();
 
-  loadingInterval = setInterval(() => {
-    setRandomMessage();
-  }, 3500);
+  loadingInterval = setInterval(setRandomMessage, 3500);
 }
 
 function hideSpinMessage() {
